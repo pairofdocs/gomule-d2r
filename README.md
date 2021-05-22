@@ -24,7 +24,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - [Sorc](./savefiles/LamboResu.d2s)
 
 
-#### Flavie Report
+#### Flavie Grail Report
 - [Full report](./GoMuleReport.html)
 
 - Report Summary 
