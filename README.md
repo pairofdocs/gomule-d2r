@@ -10,20 +10,33 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 #### Usage
 1. Install Java Runtime Environment [JRE](https://www.oracle.com/java/technologies/javase-jre8-downloads.html#license-lightbox) and [instructions](https://docs.oracle.com/goldengate/1212/gg-winux/GDRAD/java.htm#BGBFJHAB)
-2. Download GoMule.jar
+2. Download [GoMule.jar](./GoMule.jar)
 3. Double click GoMule.jar
 
 
+#### Pics
+- ![Main](./img/gomule_lamboresu_sockitem.png)
+
+- ![Four Chars](./img/gomule_4chars_open.png)
+
+
 #### Test Save Files
-- LamboResu.d2s
-- 
+- [Sorc](./savefiles/LamboResu.d2s)
 
 
 #### Flavie Report
-- 
+- [Full report](./GoMuleReport.html)
+
+- ![Report Summary](./img/gomule_flavie_reportend.png)
+
+Report Summary
 
 
-#### Credits and Tools
+#### In Progress, Debugging
+- Moving Items around. Currently Moving items from char to char can be done with D2R's in-game shared stash
+
+
+#### Credits
 - http://gomule.sourceforge.net/ for the original app
 - https://github.com/d07RiV/d07riv.github.io for the save file converter and cracking the item Huffman encoding
 - https://github.com/dschu012/d2s for the save file converter and editor
