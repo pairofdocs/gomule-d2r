@@ -33,7 +33,13 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 #### In Progress, Debugging
 - Moving Items around. Currently Moving items from char to char can be done with D2R's in-game shared stash
-- Code will be uploaded once I clean up all the debugging printlines
+
+
+#### Building and Developing
+- To build the GoMule app install JDK (either Java SE 11 (LTS) or Java SE 16) from [here](https://www.oracle.com/java/technologies/javase-downloads.html).
+- Install [ant](https://mirrors.gigenet.com/apache//ant/binaries/apache-ant-1.10.10-bin.zip) from [here](https://ant.apache.org/bindownload.cgi) following the [instructions](https://ant.apache.org/manual/install.html). Go through the `Setup` section and set up `ANT_HOME`, `JAVA_HOME` and add `ANT_HOME/bin` to your path
+- In a terminal go to the directory  `gomule-d2r/gomule/` and run `ant Jar-BuildAllOptimezed`. This builds GoMule.jar
+- Debuggin with breakpoints using an IDE also lets you test the app (but doesn't create the java archive GoMule.jar)
 
 
 #### Credits
