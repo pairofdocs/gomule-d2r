@@ -306,17 +306,14 @@ public class D2Item implements Comparable, D2ItemInterface {
 
 			// get position of end of current item
 			int lDiff = (pFile.get_pos() - 1)/8 - pPos;   // want to go from 839 to 849 if there is an extra byte 0x00
-			if ((pFile.get_pos()%8 == 0) && (this.iSocketed) && !(this.iRuneWord) && (this.iSocketNrFilled>0))
+			if ((pFile.get_pos()%8 == 0) && (this.iSocketed) && (this.iSocketNrFilled>0))
 				lDiff = pFile.get_pos()/8 - pPos; // if no remainer when div by 8. do not subtract 1bit 
-
-			int extraByte = 0;
 
 			pFile.set_byte_pos(pPos);  // set back to start of current item
 			iItem = new D2BitReader(pFile.get_bytes(lDiff + 1));  // read len Bytes + 1 to cover end item byte
-			// if item is runeword. account for extra byte forward. if 2 sockets add 1,  if 3 sock no need to add 1?
-			if (this.iRuneWord)
-				extraByte = 1;  
-			pFile.set_byte_pos(pPos + lDiff + extraByte);   // current item ended on 848, add 1 to get to 839
+			
+			pFile.set_byte_pos(pPos + lDiff);   // current item ended on 848, add 1 to get to 839
+			// TODO:  **** check if extraByte has to be added to iItem = new D2Bitreader.   May have to complete partial bytes. items start on their own byte.
 
 		} catch (D2ItemException pEx) {
 			throw pEx;
@@ -338,6 +335,7 @@ public class D2Item implements Comparable, D2ItemInterface {
 		iRuneWord = check_flag(27);
 		iIdentified = check_flag(5);
 		// version = (short) pFile.read(8);   // read 1 byte.     do not read this for D2R
+		pFile.read(3);
 		version = 101; // default to version 101 for v1.10+
 
 		// pFile.skipBits(2);   // D2 1.14 does readbyte (8bits) then skip 2 bits --> 10bits skipped total
@@ -353,7 +351,8 @@ public class D2Item implements Comparable, D2ItemInterface {
 		}
 		// System.err.println("Hex chars: " + String.valueOf(hexChars));
 		
-		pFile.skipBits(3);      // D2R     does    '101' bits                         3bits skipped total  (item.ts  in d2s repo)
+		// TODO: are the 3 bits (for version) correctly accounted for when writing an item?
+		// pFile.skipBits(3);      // D2R     does    '101' bits          3bits skipped total  (item.ts  in d2s repo)
 		location = (short) pFile.read(3);  // loc 2 -- belt
 
 		body_position = (short) pFile.read(4);

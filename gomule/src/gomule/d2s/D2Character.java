@@ -1375,6 +1375,8 @@ public class D2Character extends D2ItemListAdapter
 		}
 		if ( iCharCursorItem != null ){
 			byte[] item_bytes = iCharCursorItem.get_bytes();
+			// debug print the byte array[].  items end on byte. beginning 4bytes are item flags.
+			// are the item bytes already in Huffman code?   since bytes are read and addItem is used
 			System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
 			lPos += item_bytes.length;
 		}
