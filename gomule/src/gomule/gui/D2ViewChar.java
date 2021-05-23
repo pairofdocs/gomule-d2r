@@ -1324,8 +1324,6 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 							if (lItemPanel.isItem())
 							{
 								D2Item lTemp = lItemPanel.getItem();
-								// System.err.println("lItemPanel.getItem() " + lTemp.get_bytes_string());
-
 
 								/**Code to remove potions when belt is removed!
 								 * Thanks to Krikke.
@@ -1350,8 +1348,6 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 								iCharacter.unmarkCharGrid(lTemp);
 								iCharacter.removeCharItem(lItemPanel.getItemIndex());
 								D2ViewClipboard.addItem(lTemp);
-								// System.err.println("D2ViewClipboard.getItem() " + D2ViewClipboard.getItem().get_bytes_string());    /// clip board item is correct -v'
-
 								setCursorDropItem();
 								if(lTemp.statModding()){
 									iCharacter.updateCharStats("P", lTemp);
@@ -1369,7 +1365,6 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 								// drop it here
 
 								D2Item lDropItem = D2ViewClipboard.getItem();
-								// System.err.println("D2ViewClipboard lDropItem " + lDropItem.get_bytes_string());
 								//		                        int lDropWidth = lDropItem.get_width();
 								//		                        int lDropHeight = lDropItem.get_height();
 								//	                        int r = 0, c = 0;
@@ -1499,7 +1494,6 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 					D2ItemPanel lItemPanel = new D2ItemPanel(pEvent, true, false, false);
 					if (lItemPanel.getPanel() != -1)
 					{
-						// System.err.println(" lItemPanel.getPanel() != -1" );
 						if (lItemPanel.isItem())
 						{
 							// This is being called too quickly possibly with D2R's stash and inventory leading to race conditions when looping over items

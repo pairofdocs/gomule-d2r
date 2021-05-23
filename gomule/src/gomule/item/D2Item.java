@@ -329,8 +329,6 @@ public class D2Item implements Comparable, D2ItemInterface {
 	private void read_item(D2BitReader pFile, int pos) throws Exception {
 		// pFile.skipBytes(2); // skip 'JM'.  JM isn't present for items in D2R
 
-		System.err.println("pFile Pos read_item(): " + String.valueOf(pos));
-
 		flags = (int) pFile.unflip(pFile.read(32), 32); // 4 bytes
 
 		iSocketed = check_flag(12);
@@ -352,7 +350,6 @@ public class D2Item implements Comparable, D2ItemInterface {
 			hexChars[j * 2] = HEX_ARRAY[v >>> 4];
 			hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
 		}
-		// System.err.println("Hex chars: " + String.valueOf(hexChars));
 		
 		// TODO: are the 3 bits (for version) correctly accounted for when writing an item?
 		// pFile.skipBits(3);      // D2R     does    '101' bits          3bits skipped total  (item.ts  in d2s repo)
@@ -427,12 +424,10 @@ public class D2Item implements Comparable, D2ItemInterface {
 		// read bytes and decode using HUFFMAN
 		for (int i = 0; i < 32; i++) {          // 4 chars * 8bits each = 32 max bits needed to encode string
 			int bitread = (int) pFile.read(1);  // convert to int
-			System.err.println(String.valueOf(i) +  " bitread: " + String.valueOf(bitread));
 			
 			if (huff[bitread].getClass().isArray())
 				huff = (Object[]) huff[bitread];
 			else {
-				System.err.println(String.valueOf(bitread) + " Char end " + huff[bitread]);
 				item_type += huff[bitread];
 				if (item_type.length() == 4){
 					item_type = item_type.stripTrailing(); // right strip ending ' '
@@ -441,8 +436,6 @@ public class D2Item implements Comparable, D2ItemInterface {
 				huff = new Object[] {huff0, huff1};
 			}
 		}
-		System.err.println("item_type: " + item_type);
-		System.err.println("============ Done with for-loop ");
 
 		// This is the old 1.14 loop to assemble item_type
 		// for (int i = 0; i < 4; i++) {
@@ -520,7 +513,6 @@ public class D2Item implements Comparable, D2ItemInterface {
 		}
 
 		String lItemName = D2TblFile.getString(item_type);
-		System.err.println("lItemName: " + lItemName);
 		if (lItemName != null) {
 			iItemName = lItemName;
 			iBaseItemName = iItemName;
@@ -1716,6 +1708,7 @@ public class D2Item implements Comparable, D2ItemInterface {
 		return iItem.getFileContent();
 	}
 
+	// helper function added to debug items' bytes
 	public String get_bytes_string() {
 		byte[] barr = iItem.getFileContent();
 		char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
@@ -1725,7 +1718,6 @@ public class D2Item implements Comparable, D2ItemInterface {
 			hexChars[j * 2] = HEX_ARRAY[v >>> 4];
 			hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
 		}
-		// System.err.println("Item hex chars: " + String.valueOf(hexChars));
 		return String.valueOf(hexChars);
 	}
 
@@ -1876,7 +1868,6 @@ public class D2Item implements Comparable, D2ItemInterface {
 	public boolean isCursorItem() {
 		if (location != 0 && location != 2) {
 			if (body_position == 0) {
-				// System.err.println("location: " + location );
 				return true;
 			}
 		}

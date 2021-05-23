@@ -1071,10 +1071,8 @@ public class D2FileManager extends JFrame
 		{
 			String lFileName = (String) lIterator.next();
 			D2ItemList lList = getItemList(lFileName);
-			D2Item gotone = (D2Item) lList.getItemList().get(124);
 			if ( lList.isModified() )
 			{
-				System.err.println("lList.isModified() saving :" + gotone.get_bytes_string());
 				lList.save(iProject);
 			}
 		}
