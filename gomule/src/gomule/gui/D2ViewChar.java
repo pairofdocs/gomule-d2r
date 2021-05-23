@@ -1104,8 +1104,7 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 			}
 			if ( iIsChar )
 			{
-				return iCharacter.getCharItem(iCharacter.getCharItemIndex(iPanel, iRow, iCol)); // TODO:  look into this. see logging 'index out of bounds'. doesn't crash
-                // is iRow, iCol reversed? or x,y for mouse not matching up with item.row and item.col				                    
+				return iCharacter.getCharItem(iCharacter.getCharItemIndex(iPanel, iRow, iCol));
 			}
 			if(iIsCorpse){
 				return iCharacter.getCorpseItem(iCharacter.getCorpseItemIndex(iPanel, iRow, iCol));
@@ -1496,7 +1495,6 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 					{
 						if (lItemPanel.isItem())
 						{
-							// This is being called too quickly possibly with D2R's stash and inventory leading to race conditions when looping over items
 							lCurrentMouse = lItemPanel.getItem();
 						}
 

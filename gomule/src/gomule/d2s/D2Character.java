@@ -1306,12 +1306,14 @@ public class D2Character extends D2ItemListAdapter
 				}
 			}
 		}else if (panel >= 10){
-			for (int i = 0; i < iCorpseItems.size(); i++){
+			for (int i = 0; i < iCharItems.size(); i++){
 				D2Item temp_item = (D2Item) iCharItems.get(i);
-				if (temp_item.get_panel() == panel)	{
-					int row = temp_item.get_col();
-					int col = temp_item.get_row();
-					if (x >= row && x <= row + temp_item.get_width() - 1 && y >= col && y <= col + temp_item.get_height() - 1)return i;
+				if (temp_item.get_location() != 0 && temp_item.get_location() != 2){
+					if (temp_item.get_panel() == 0){
+						if (temp_item.get_body_position() == panel - 10){
+							return i;
+						}
+					}
 				}
 			}
 		}else{
@@ -1376,8 +1378,7 @@ public class D2Character extends D2ItemListAdapter
 		int lCharItemCountPos = lPos - 2;      // <<<<< is this correct for D2R?  subtract 2 for JM ?
 		int lMercItemCountPos = -1;           // <<<<< is this correct for D2R?
 		for (int i = 0; i < iCharItems.size(); i++){
-			D2Item item_temp = (D2Item) iCharItems.get(i);
-			byte[] item_bytes = (item_temp).get_bytes();
+			byte[] item_bytes = ((D2Item) iCharItems.get(i)).get_bytes();
 			System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
 			
 			lPos += item_bytes.length;
