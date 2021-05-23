@@ -1031,8 +1031,8 @@ public class D2Character extends D2ItemListAdapter
 			col = (int) i.get_col();
 			width = (int) i.get_width();
 			height = (int) i.get_height();
-			if ((row + height) > 8)return false;
-			if ((col + width) > 6)return false;
+			if ((row + height) > 10)return false;     // orig > 8
+			if ((col + width) > 10)return false;      // orig > 6
 			for (j = row; j < row + height; j++){
 				for (k = col; k < col + width; k++)
 					iStashGrid[j][k] = false;
@@ -1275,7 +1275,10 @@ public class D2Character extends D2ItemListAdapter
 		return true;
 	}
 
-	public int getCharItemIndex(int panel, int x, int y){
+	public int getCharItemIndex(int panel, int x, int y){  // iRow,  iCol are input
+		// System.err.println("int panel: " + String.valueOf(panel));
+		// System.err.println("int x: " + String.valueOf(x));
+		// System.err.println("int y: " + String.valueOf(y));
 		if (panel == BODY_BELT_CONTENT){
 			for (int i = 0; i < iCharItems.size(); i++){
 				D2Item temp_item = (D2Item) iCharItems.get(i);
@@ -1298,9 +1301,14 @@ public class D2Character extends D2ItemListAdapter
 			for (int i = 0; i < iCharItems.size(); i++){
 				D2Item temp_item = (D2Item) iCharItems.get(i);
 				if (temp_item.get_panel() == panel)	{
-					int row = temp_item.get_col();
-					int col = temp_item.get_row();
-					if (x >= row && x <= row + temp_item.get_width() - 1 && y >= col && y <= col + temp_item.get_height() - 1)return i;
+					int col = temp_item.get_col();
+					int row = temp_item.get_row();
+					// System.err.println("col: " + String.valueOf(col));
+					// System.err.println("row: " + String.valueOf(row));
+					if ((x >= col) && (x <= col + temp_item.get_width() - 1) && (y >= row) && (y <= row + temp_item.get_height() - 1)) {
+						// System.err.println("found item, return item index " + String.valueOf(i));
+						return i;
+					}
 				}
 			}
 		}
@@ -1317,13 +1325,11 @@ public class D2Character extends D2ItemListAdapter
 			}
 		}else if (panel >= 10){
 			for (int i = 0; i < iCorpseItems.size(); i++){
-				D2Item temp_item = (D2Item) iCorpseItems.get(i);
-				if (temp_item.get_location() != 0 && temp_item.get_location() != 2){
-					if (temp_item.get_panel() == 0){
-						if (temp_item.get_body_position() == panel - 10){
-							return i;
-						}
-					}
+				D2Item temp_item = (D2Item) iCharItems.get(i);
+				if (temp_item.get_panel() == panel)	{
+					int row = temp_item.get_col();
+					int col = temp_item.get_row();
+					if (x >= row && x <= row + temp_item.get_width() - 1 && y >= col && y <= col + temp_item.get_height() - 1)return i;
 				}
 			}
 		}else{
