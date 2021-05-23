@@ -1,0 +1,69 @@
+<project name="GoMule" default="Jar-Build" basedir=".">
+<!-- project name="GoMule" default="Jar-BuildAll" basedir="." -->
+
+  <!-- set global properties for this build -->
+  <property name="src" location="src"/>
+  <property name="build" location="bin"/>
+  <property name="resources" location="resources"/>
+  <property name="dist" location="."/>
+	
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="clean">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete file="${dist}/GoMule.jar"/>
+  </target>
+
+  <target name="compile" depends="init">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac destdir="${build}" debug="on" source="1.6" target="1.6"  classpath="${classpath}">
+        <src path="${src}"/>
+    </javac>
+  </target>
+
+  <target name="compileDeprecated" depends="init">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac destdir="${build}" debug="on" deprecation="on" classpath="${classpath}">
+        <src path="${src}"/>
+    </javac>
+  </target>
+
+  <target name="compileOptimized" depends="init">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac destdir="${build}" optimize="on" source="1.6" target="1.6" classpath="${classpath}">
+        <src path="${src}"/>
+    </javac>
+  </target>
+
+  <target name="build" depends="compile" description="Build"/>
+    
+  <target name="buildAll" depends="clean, compile" description="Build All"/>
+
+  <target name="makeJar">
+    <!-- Put everything in ${build} into the ${dist}/GoMule.jar file -->
+    <jar jarfile="${dist}/GoMule.jar" manifest="MANIFEST.MF">
+		<fileset dir="${build}" />
+		<fileset dir="${src}" />
+    	<!-- fileset dir="${resources}" / -->
+  	</jar>
+  </target>
+
+  <target name="Jar-Build" depends="build, makeJar"
+        description="build and Jar for GoMule" >
+  </target>
+
+  <target name="Jar-BuildAll" depends="buildAll, makeJar"
+        description="build all and Jar for GoMule" >
+  </target>
+
+  <target name="Jar-BuildAllOptimezed" depends="clean,compileOptimized, makeJar" >
+  </target>
+	
+</project>
+

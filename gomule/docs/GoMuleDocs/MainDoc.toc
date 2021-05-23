@@ -1,0 +1,52 @@
+\contentsline {section}{\numberline {1}Introduction}{4}
+\contentsline {subsection}{\numberline {1.1}File Types}{4}
+\contentsline {subsubsection}{\numberline {1.1.1}D2S}{4}
+\contentsline {subsubsection}{\numberline {1.1.2}D2X}{4}
+\contentsline {subsubsection}{\numberline {1.1.3}ORG}{4}
+\contentsline {section}{\numberline {2}Obtaining and Installing GoMule}{4}
+\contentsline {subsection}{\numberline {2.1}Obtaining}{4}
+\contentsline {subsection}{\numberline {2.2}Installation}{4}
+\contentsline {section}{\numberline {3}Normal GoMule Operation}{5}
+\contentsline {subsection}{\numberline {3.1}Character (D2S) Operations}{5}
+\contentsline {subsubsection}{\numberline {3.1.1}Open Char}{5}
+\contentsline {subsubsection}{\numberline {3.1.2}Add Char}{5}
+\contentsline {subsection}{\numberline {3.2}Stash (D2X) Operations}{5}
+\contentsline {subsubsection}{\numberline {3.2.1}New Stash}{5}
+\contentsline {subsubsection}{\numberline {3.2.2}Open Stash}{5}
+\contentsline {subsubsection}{\numberline {3.2.3}Add Stash}{6}
+\contentsline {subsection}{\numberline {3.3}Save All}{6}
+\contentsline {subsection}{\numberline {3.4}Reload All}{6}
+\contentsline {subsection}{\numberline {3.5}Settings}{6}
+\contentsline {subsection}{\numberline {3.6}About}{6}
+\contentsline {subsection}{\numberline {3.7}Item Clipboard}{6}
+\contentsline {subsection}{\numberline {3.8}Char/Stash View}{6}
+\contentsline {subsubsection}{\numberline {3.8.1}All Item View}{6}
+\contentsline {section}{\numberline {4}Muling with Characters}{7}
+\contentsline {subsection}{\numberline {4.1}Character Tab}{7}
+\contentsline {subsubsection}{\numberline {4.1.1}Right Click Menu}{7}
+\contentsline {subsubsection}{\numberline {4.1.2}Delete?}{7}
+\contentsline {subsubsection}{\numberline {4.1.3}View Item}{7}
+\contentsline {subsubsection}{\numberline {4.1.4}Extended Item Info}{7}
+\contentsline {subsection}{\numberline {4.2}Stats Tab}{8}
+\contentsline {subsection}{\numberline {4.3}Quest Tab}{8}
+\contentsline {subsection}{\numberline {4.4}Corpse Tab}{8}
+\contentsline {subsection}{\numberline {4.5}Mercenary Tab}{8}
+\contentsline {subsection}{\numberline {4.6}Bank Tab}{8}
+\contentsline {subsection}{\numberline {4.7}Dump Tab}{8}
+\contentsline {subsection}{\numberline {4.8}Messages Tab}{8}
+\contentsline {subsection}{\numberline {4.9}AutoSave}{8}
+\contentsline {section}{\numberline {5}Muling with Stashes}{8}
+\contentsline {subsection}{\numberline {5.1}Item Pane}{9}
+\contentsline {subsection}{\numberline {5.2}View Pane}{9}
+\contentsline {subsection}{\numberline {5.3}Filters}{9}
+\contentsline {subsection}{\numberline {5.4}Buttons}{9}
+\contentsline {subsubsection}{\numberline {5.4.1}Pickup Button}{9}
+\contentsline {subsubsection}{\numberline {5.4.2}Drop Button}{9}
+\contentsline {subsubsection}{\numberline {5.4.3}Drop All Button}{9}
+\contentsline {subsubsection}{\numberline {5.4.4}Delete Button}{9}
+\contentsline {subsubsection}{\numberline {5.4.5}Filter... Button}{9}
+\contentsline {subsubsection}{\numberline {5.4.6}Filtering non numerical stats}{10}
+\contentsline {section}{\numberline {6}Known Issues}{11}
+\contentsline {subsection}{\numberline {6.1}Memory Issues}{11}
+\contentsline {subsection}{\numberline {6.2}Some item stats slightly wrong}{11}
+\contentsline {section}{\numberline {7}That's it.}{11}

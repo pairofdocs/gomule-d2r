@@ -1,0 +1,70 @@
+\contentsline {section}{\numberline {1}Introduction}{4}
+\contentsline {subsection}{\numberline {1.1}File Types}{4}
+\contentsline {subsubsection}{\numberline {1.1.1}D2S}{4}
+\contentsline {subsubsection}{\numberline {1.1.2}D2X}{4}
+\contentsline {subsubsection}{\numberline {1.1.3}ORG}{4}
+\contentsline {subsection}{\numberline {1.2}Project Based Muling}{4}
+\contentsline {subsubsection}{\numberline {1.2.1}Example Setup}{5}
+\contentsline {subsubsection}{\numberline {1.2.2}Example Project Layout}{5}
+\contentsline {section}{\numberline {2}Obtaining and Installing GoMule}{6}
+\contentsline {subsection}{\numberline {2.1}Obtaining}{6}
+\contentsline {subsection}{\numberline {2.2}Installation}{6}
+\contentsline {section}{\numberline {3}Normal GoMule Operation}{6}
+\contentsline {section}{\numberline {4}GoMule Tool/Menu Bar}{7}
+\contentsline {subsection}{\numberline {4.1}Character (D2S) Operations}{7}
+\contentsline {subsubsection}{\numberline {4.1.1}Open Char}{7}
+\contentsline {subsubsection}{\numberline {4.1.2}Add Char}{7}
+\contentsline {subsection}{\numberline {4.2}Stash (D2X) Operations}{7}
+\contentsline {subsubsection}{\numberline {4.2.1}New Stash}{7}
+\contentsline {subsubsection}{\numberline {4.2.2}Open Stash}{7}
+\contentsline {subsubsection}{\numberline {4.2.3}Add Stash}{7}
+\contentsline {subsection}{\numberline {4.3}Save All}{7}
+\contentsline {subsection}{\numberline {4.4}Reload All}{8}
+\contentsline {subsection}{\numberline {4.5}File Menu}{8}
+\contentsline {subsection}{\numberline {4.6}Project Menu}{8}
+\contentsline {subsubsection}{\numberline {4.6.1}Project Preferences}{8}
+\contentsline {subsection}{\numberline {4.7}About Menu}{9}
+\contentsline {section}{\numberline {5}GoMule Left Pane}{9}
+\contentsline {section}{\numberline {6}Project Selector Box}{9}
+\contentsline {subsection}{\numberline {6.1}Char/Stash View}{9}
+\contentsline {subsubsection}{\numberline {6.1.1}All Item View}{9}
+\contentsline {subsection}{\numberline {6.2}Project Controls}{10}
+\contentsline {subsubsection}{\numberline {6.2.1}Proj Flavie Report}{10}
+\contentsline {subsubsection}{\numberline {6.2.2}Proj Txt Dump}{10}
+\contentsline {section}{\numberline {7}GoMule Right Pane}{11}
+\contentsline {subsection}{\numberline {7.1}Item Clipboard}{11}
+\contentsline {subsubsection}{\numberline {7.1.1}GoMule Bank}{12}
+\contentsline {subsubsection}{\numberline {7.1.2}Item View Panel}{12}
+\contentsline {subsection}{\numberline {7.2}Item Control}{12}
+\contentsline {subsubsection}{\numberline {7.2.1}Pick All}{12}
+\contentsline {subsubsection}{\numberline {7.2.2}Drop All}{12}
+\contentsline {subsubsection}{\numberline {7.2.3}Pickup From}{12}
+\contentsline {subsubsection}{\numberline {7.2.4}Drop From}{12}
+\contentsline {subsection}{\numberline {7.3}Output Control}{12}
+\contentsline {section}{\numberline {8}Muling with Characters}{13}
+\contentsline {subsection}{\numberline {8.1}Character Tab}{13}
+\contentsline {subsubsection}{\numberline {8.1.1}Right Click Menu}{13}
+\contentsline {subsubsection}{\numberline {8.1.2}Delete?}{14}
+\contentsline {subsubsection}{\numberline {8.1.3}View Item}{14}
+\contentsline {subsection}{\numberline {8.2}Stats Tab}{14}
+\contentsline {subsection}{\numberline {8.3}Quest Tab}{14}
+\contentsline {subsection}{\numberline {8.4}Corpse Tab}{14}
+\contentsline {subsection}{\numberline {8.5}Mercenary Tab}{14}
+\contentsline {subsection}{\numberline {8.6}Bank Tab}{14}
+\contentsline {subsection}{\numberline {8.7}Dump Tab}{14}
+\contentsline {subsection}{\numberline {8.8}Messages Tab}{14}
+\contentsline {subsection}{\numberline {8.9}AutoSave}{14}
+\contentsline {section}{\numberline {9}Muling with Stashes}{15}
+\contentsline {subsection}{\numberline {9.1}Item Pane}{15}
+\contentsline {subsection}{\numberline {9.2}View Pane}{16}
+\contentsline {subsection}{\numberline {9.3}Filters}{16}
+\contentsline {subsection}{\numberline {9.4}Buttons}{16}
+\contentsline {subsubsection}{\numberline {9.4.1}Pickup Button}{16}
+\contentsline {subsubsection}{\numberline {9.4.2}Drop Button}{16}
+\contentsline {subsubsection}{\numberline {9.4.3}Delete Button}{16}
+\contentsline {subsubsection}{\numberline {9.4.4}Delete Dupes Button}{16}
+\contentsline {subsubsection}{\numberline {9.4.5}Filter... Button}{16}
+\contentsline {subsubsection}{\numberline {9.4.6}Filtering non numerical stats}{17}
+\contentsline {section}{\numberline {10}Known Issues}{18}
+\contentsline {subsection}{\numberline {10.1}None so far...}{18}
+\contentsline {section}{\numberline {11}That's it.}{18}

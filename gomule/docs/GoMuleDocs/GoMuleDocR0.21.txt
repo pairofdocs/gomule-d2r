@@ -1,0 +1,323 @@
+GoMule Kicks Ass.
+Silospen June 9, 2008
+
+1
+
+Contents
+1 Introduction 1.1 File Types . 1.1.1 D2S 1.1.2 D2X 1.1.3 ORG . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 4 4 4 4 4 4 4 4 5 5 5 6 6 6 6 6 6 6 6 6 6 7 7 7 7 8 8 8 8 8 8 8 9 9 9 9 9 9 10 10 10 10 10 10
+
+2 Obtaining and Installing GoMule 2.1 Obtaining . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 2.2 Installation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3 Normal GoMule Operation 3.1 Character (D2S) Operations 3.1.1 Open Char . . . . . 3.1.2 Add Char . . . . . . 3.2 Stash (D2X) Operations . . 3.2.1 New Stash . . . . . . 3.2.2 Open Stash . . . . . 3.2.3 Add Stash . . . . . . 3.3 Save All . . . . . . . . . . . 3.4 Reload All . . . . . . . . . . 3.5 Settings . . . . . . . . . . . 3.6 About . . . . . . . . . . . . 3.7 Item Clipboard . . . . . . . 3.8 Char/Stash View . . . . . . 3.8.1 All Item View . . . . 4 Muling with Characters 4.1 Character Tab . . . . . . . 4.1.1 Right Click Menu . . 4.1.2 Delete? . . . . . . . 4.1.3 View Item . . . . . . 4.1.4 Extended Item Info 4.2 Stats Tab . . . . . . . . . . 4.3 Quest Tab . . . . . . . . . . 4.4 Corpse Tab . . . . . . . . . 4.5 Mercenary Tab . . . . . . . 4.6 Bank Tab . . . . . . . . . . 4.7 Dump Tab . . . . . . . . . . 4.8 Messages Tab . . . . . . . . 4.9 AutoSave . . . . . . . . . . 5 Muling with Stashes 5.1 Item Pane . . . . . . . 5.2 View Pane . . . . . . . 5.3 Filters . . . . . . . . . 5.4 Buttons . . . . . . . . 5.4.1 Pickup Button 5.4.2 Drop Button . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
+2
+
+5.4.3 5.4.4 5.4.5 5.4.6 6 That’s it.
+
+Drop All Button . . . . . . . Delete Button . . . . . . . . . Filter... Button . . . . . . . . Filtering non numerical stats
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+. . . .
+
+10 10 10 11 12
+
+3
+
+1
+
+Introduction
+
+GoMule is designed as a muling application. Muling is the movement of items from one character to another, either in Diablo 2 or outside of the game. In this case, GoMule allows character items to be moved between characters without the Diablo 2 application.
+
+1.1
+
+File Types
+
+There are 3 basic ﬁle types: • D2S: Standard Diablo 2 character ﬁle • D2X: ATMA Diablo 2 stash • ORG: ATMA Diablo 2 character ﬁle backup 1.1.1 D2S
+
+The D2S ﬁle is the format created by blizzard which holds the Diablo 2 character information. This ranges from current stat and skill allocation, to quest data and item information. GoMule reads from and edits these ﬁles, resulting in transferral of items and displaying of character details. 1.1.2 D2X
+
+The Diablo 2 character has only a small amount of space to store items. Thus, a more appropriate way of storing items was devised by the creator of ATMA, resulting in the D2X ﬁle. This is commonly called a “stash”. You can think of a D2X as an unlimited extended stash for items, giving you the ability to store a much larger number of items. 1.1.3 ORG
+
+ORG ﬁles are copies made at regular intervals to ensure that any data which is lost can be restored. There should be a .ORG ﬁle for every .D2S ﬁle and restoring them simply involves renaming the ﬁles from .ORG to .D2S.
+
+2
+2.1
+
+Obtaining and Installing GoMule
+Obtaining
+
+If you have found this guide, you should also have found a link to GoMule
+
+2.2
+
+Installation
+
+GoMule requires java. If GoMule doesn’t work it is likely you need to download java from sun.java.com Download the latest.zip folder and extract it. Inside there should be a number of folders and a ﬁle named “GoMule.jar”. Double click on this folder. For the command line monkeys, run “java -jar GoMule.jar”.
+
+4
+
+3
+
+Normal GoMule Operation
+
+This is the screen which you should see when running GoMule:
+
+Welcome to the main GUI. Here’s some labels to explain what things mean a little.
+
+3.1
+3.1.1
+
+Character (D2S) Operations
+Open Char
+
+This allows a character to be opened in GoMule. Once a character has been opened, it is then accessible through the char/stash view. Multiple characters can be selected in the open ﬁle window, using standard shift + click, ctrl + click and ctrl + A methods. 5
+
+3.1.2
+
+Add Char
+
+This adds a character to the GoMule char/stash view without opening the character up. Again, multiple ﬁles can be selected. This function is useful when you wish to add a large number of characters to GoMule’s char/stash view, but don’t wish to open them all.
+
+3.2
+3.2.1
+
+Stash (D2X) Operations
+New Stash
+
+Creates a new, empty item stash and adds it to the char/stash view. 3.2.2 Open Stash
+
+Same as “Add Char”, but with stashes. 3.2.3 Add Stash
+
+Same as “Add Char”, but with stashes.
+
+3.3
+
+Save All
+
+Saves all of the currently open stashes/chars.
+
+3.4
+
+Reload All
+
+Reloads all the currently open stashes/chars.
+
+3.5
+
+Settings
+
+Bleh, they’re mostly useless or self explainatory.
+
+3.6
+
+About
+
+Something to read.
+
+3.7
+
+Item Clipboard
+
+The GoMule item clipboard is a location for items in transit. Items to be moved are picked up onto the clipboard then taken oﬀ the clipboard when they are dropped. Acts the same as the cursor in Diablo 2, but it allows multiple items to be added to it. It operates on a Last In First Out (LIFO) principle, so the next item you drop will be the last item you placed on the clipboard. To drop an item further up the clipboard, click the name of the item to drop and then that item will be dropped on the next drop operation. There is also a GoMule bank, which is an unlimited store for gold. Simply place gold from you chars to here to store gold.
+
+6
+
+3.8
+
+Char/Stash View
+
+This is a fast access panel to all of the characters and stashes which you have opened with GoMule. When you open a character or a stash, it is automatically added here. Then to open it again, simply double click on it here. 3.8.1 All Item View
+
+The GoMule all item view is intended to allow a user to easily ﬁnd items. When All is clicked on, all of the chars/stashes in the current project (shown in the Char/Stash view) are read and all of the items are placed into a stash. This stash is then displayed. The stash cannot be added to, but items can be taken from it. If an item is taken from the all item stash, it is taken from it’s location on whichever char/stash it exists in and placed on the clipboard.
+
+4
+
+Muling with Characters
+
+This is what a character window looks like in GoMule:
+
+The character is accessible through a number of tabs, which will now be explained.
+
+4.1
+
+Character Tab
+
+This is your basic item view of your character’s inventory, stash, cube and belt. You should recognise it. To view the properties of an item, hover over an item and a tooltip with the properties in it will appear.
+
+7
+
+To move an item, left click on the item. It will now be added to the clipboard. To place it down again, ﬁnd a suitable location and left click to drop it. Notice how the cursor changes when you are in a valid drop location. To access weapon switch, click the “I” “II”, just as in game. 4.1.1 Right Click Menu
+
+Right clicking on an item will bring up a new menu, containing the options: • Delete? • View Item • Extended Item Info 4.1.2 Delete?
+
+Removes the item. This is permenent once the character ﬁle is saved, so use wisely on items you really do want to delete. 4.1.3 View Item
+
+Opens a new window with the item dump in it, in the form of a text dump. This can be selected using the mouse or with ctrl + A, and copied with ctrl + C, allowing a user to show the properties of the item easily, once the dump is pasted somewhere else. 4.1.4 Extended Item Info
+
+This section is UNDER CONSTRUCTION and liable to CHANGE. For items of type “Rare” (yellow), the correct name of the rare is shown. That is it’s name with the actual preﬁxes and suﬃxes it has. For items of type “Set”, “Unique” and “Runewords”, there are 3 item dumps shown. The ﬁrst is the worst possible version of the item, the second is your item and the third is the best possible version of the item. This is useful for trying to work out if the variable stats on your item are the best possible.
+
+4.2
+
+Stats Tab
+
+Shows the current stats of your character as derived by GoMule. Also shows skill point allocations. Your experience may be negative. Don’t worry about it.
+
+4.3
+
+Quest Tab
+
+The current quest and waypoint progression of your character.
+
+4.4
+
+Corpse Tab
+
+Any items which are on your corpse or on the Diablo 2 cursor are shown here. They are not movable, you’ll have to do that in game.
+
+8
+
+4.5
+
+Mercenary Tab
+
+Shows your mercenary with some basic stats. You can give your mercenary items in the normal manner.
+
+4.6
+
+Bank Tab
+
+Simple bank interface. You can transfer gold to your char from the clipboard or from your char to the clipboard. “Gold” is the gold on the Diablo 2 character inventory screen, “Gold Stash” is the gold on the Diablo 2 stash screen.
+
+4.7
+
+Dump Tab
+
+Basic text dump of all character information. Copy and paste it if you wish.
+
+4.8
+
+Messages Tab
+
+Some tech stuﬀ. This is what you’ll see when things go wrong.
+
+4.9
+
+AutoSave
+
+Autosave is on, when you close a character using the “X”, it will be automatically saved.
+
+5
+
+Muling with Stashes
+
+This is what a stash window looks like in GoMule:
+
+Various buttons and ﬁlters will be explained later. There are 2 main panes: • Item Pane 9
+
+• View Pane
+
+5.1
+
+Item Pane
+
+The item pane is a list of all the items in the stash currently. Clicking on an item will show it’s details in the view pane. You can select multiple items using ctrl + click, shift + click or even clicking and dragging your mouse up/down the list. ctrl + A works as well. Items can be sorted by item name by clicking on the “Name” column header, level by clicking on the “lvl” column header, etc.
+
+5.2
+
+View Pane
+
+Shows the dump of the item information.
+
+5.3
+
+Filters
+
+There are various checkboxes and radiobuttons to ﬁlter the items in the item pane to allow you to ﬁnd what you’re looking for. This should be self explainatory, play with it a little and you’ll get the idea. The “MaxLvl”, “MaxDex” and “MaxStr” ﬁelds allow you to ﬁlter based on these ﬁelds. Just enter a number and the items will be ﬁltered.
+
+5.4
+5.4.1
+
+Buttons
+Pickup Button
+
+Takes the item currently selected in the item pane and moves it to the clipboard. 5.4.2 Drop Button
+
+Drops the selected item on the clipboard or the last item added to the clipboard into the stash. 5.4.3 Drop All Button
+
+Drops all of the items on the clipboard into the stash. 5.4.4 Delete Button
+
+Deletes the item currently selected in the item pane. 5.4.5 Filter... Button
+
+Opens the custom ﬁlter window. The ﬁlter looks for items with a user speciﬁed property. There are 3 parts to the custom ﬁlter, a String, a Value and Min/Max. The ﬁlter string has to match an item property. For instance, an item with “20% Enhanced Damage” will be returned when the ﬁlter string “Enhanced damage” is entered. This is also true for partial matches, “Damage”, “enhanced”, “en”, “dam” will all return lists containing items with the Enhanced damage property. The string is case insensitive. 10
+
+The value is the particular value you’re looking for. This ties in with the min/max selection. For instance, “min” and “20” with the previous ﬁlter string will return all items in the stash with 20 or greater enhanced damage. “max” and “20” will return all items in the stash with 20 or less enhanced damage. The buttons are simple, “Ok” performs the ﬁltering, “Clear” removes the current ﬁlter and “Cancel” dismisses the ﬁlter window. Let me be a little more speciﬁc about the string search. You may be familiar with a standard text string search in the form of the “ﬁnd” function in ﬁrefox/IE/Opera/whatever. Whatever you enter in the ﬁnd box it will search for, but it can only have an exact match of all of the text entered as the search string. This is the same. “MF” will not ﬁnd items with “Better Chance of Getting Magic Items”, as it is displayed as “Better Chance of Getting Magic Items”. “Better”, “getting magic”, “magic items” all of these and any other combination where the string order is preserved will work. Here’s a table: What you’re looking for Magic ﬁnd ED MF cold res ias What you should enter (case does NOT matter) Better Chance of Getting Magic Items enhanced damage Better Chance of Getting Magic Items Cold Resist Increased attack speed
+
+The table outlines the maximum you should enter as the search query. “cold res” is a partial of “cold resist” and so it will return all items with “cold resist” as a stat. “increased attack” will return items with IAS as it is a partial match on “increased attack speed”. “Increased speed” will not provide a match, because although it is a partial string of “increased attack speed”, the order has been lost! 5.4.6 Filtering non numerical stats
+
+There is also the possibility of looking for non numerical stats. If we look at the item Fortitude: Fortitude Superior Archon Plate Defense: 1515 Indestructible Required Level: 63 Required Strength: 103 Fingerprint: 0x291b495e Item Level: 90 Version: Expansion Properties: All Resistances +30 200% Enhanced Defense Then we can search for all of the following. Here’s another table (assumes “min” is selected:
+
+11
+
+What you’re looking for Fortitude Ilvl Fingerprint: 0x291b495e Version: Expansion
+
+String Fortitude Item Level 0x291b495e Expansion
+
+Value (case does NOT matter) (nothing!) (any num less than 91) (nothing!) (nothing!)
+
+Get it? So if you’re looking for something without a speciﬁc integer value, just clear the value box. Internally this sets it to -1337, so placing -1337 as the value will have the same eﬀect. For stats such as poision damage over time, where there is more than one number, GoMule will always ﬁlter based on the ﬁrst number in the property. “20% Chance to cast level 15 Chilling Armor when struck” will be performing the val search on the “20%” and ignoring the “15”. Again, this is still the maximum you should enter as the search query. “em lev”, “item l”, “m level” will all return the “item level”. “print”, “ﬁnger” will still return ﬁngerprint, “fort” will get “fortitude”. It doesn’t have to be the whole thing, only a partial string. I hope that helps you understand :) There should be a box to select stats from. But I’m too lazy to code it, as you’ve already been informed by GoMule itself.
+
+6
+
+Known Issues
+
+As GoMule is an open source project, it is entirely tested and improved by its user base. As such, there are a few issues that are currently aﬀecting GoMule.
+
+6.1
+
+Memory Issues
+
+I haven’t got round to coding a new base for the loading functions and so a lot of things are loaded which are not necessarily necessary. As such, there are a few memory overﬂow issues (since Java has a standard heap size of somewhere around 70mb. This means that if you open up a large number of characters at one, or a large number of stashes, GoMule can crash. Please be aware of this.
+
+6.2
+
+Some item stats slightly wrong
+
+Sometimes, items such as The Blade of Ali Baba report incorrect MF by 1 point in GoMule compared to Diablo 2. In this case, there is usually a tiny rounding error which has propogated through to the end result.
+
+7
+
+That’s it.
+
+I hope you enjoy GoMule. Feel free to send feedback to silospen@sourceforge.net.
+
+12
+
+
