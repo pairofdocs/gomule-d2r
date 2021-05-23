@@ -538,12 +538,17 @@ public class D2Character extends D2ItemListAdapter
 		int lCharEnd = lCharStart;
 		
 		for (int i = 0; i < num_items; i++){
+			System.err.println("IIIIIIIIIIIIIIIIIIIIIIIIII item " + String.valueOf(i) + " out of " + String.valueOf(num_items-1));
 			// TODO: D2R d2s file doesn't have JM for each item. just 1JM at stat and 1 JM at end of item list
 			
 			int lItemStart = lCharEnd;
 			//TODO: update  lItemStart for following items. use Bit position to start reading items
 
 			D2Item lItem = new D2Item(iFileName, iReader, lItemStart, iCharLevel);
+			// debugging helper function added to D2Item.java
+			System.err.println("Item hex chars: " + lItem.get_bytes_string());
+			System.err.println(" ");
+
 			lLastItemEnd = iReader.get_byte_pos(); // use itemReader for bits position
 			lCharEnd = lLastItemEnd + 1;           // add 1 to get to start nextItem byte, works for 2nd, 3rd, 4th... items
 
@@ -555,6 +560,15 @@ public class D2Character extends D2ItemListAdapter
 				markCharGrid(lItem);
 			}
 		}
+		// print 2 items with:    D2Item tt = (D2Item)iCharItems.get(1);
+		// System.err.println("Item.get(1) hex chars: " + String.valueOf(hexChars));     // both items match the hex -v'
+		// System.err.println(" ");
+		
+
+		///    ************ check how the item gets saved to the cursor in D2ViewChar.java
+
+	
+
 		iItemEnd = lCharEnd;
 		// TODO:         trace through Merc items.  disable these for now
 		int lMercStart = -1;
@@ -1345,14 +1359,19 @@ public class D2Character extends D2ItemListAdapter
 		// entire item list and insert it into
 		// the open file in place of its current item list
 		int lCharSize = 0;
+		System.err.println("lCharSize: " + String.valueOf(lCharSize));
+
 		for (int i = 0; i < iCharItems.size(); i++){
 			lCharSize += ((D2Item) iCharItems.get(i)).get_bytes().length;
 		}
+		System.err.println("lCharSize after iCharItems loop: " + String.valueOf(lCharSize));
+
 		if ( iCharCursorItem != null ){
 			lCharSize += iCharCursorItem.get_bytes().length;
 		}
 		int lMercSize = 0;
 		if (hasMerc()){
+			System.err.println("hasMerc true");
 			for (int i = 0; i < iMercItems.size(); i++)	{
 				lMercSize += ((D2Item) iMercItems.get(i)).get_bytes().length;
 			}
@@ -1362,15 +1381,24 @@ public class D2Character extends D2ItemListAdapter
 		int lPos = 0;
 		System.arraycopy(iBeforeStats, 0, lNewbytes, lPos, iBeforeStats.length);
 		lPos += iBeforeStats.length;
+		System.err.println("lPos after 1st arraycopy: " + String.valueOf(lPos));
+
 		System.arraycopy(lWritenBytes, 0, lNewbytes, lPos, lWritenBytes.length);
 		lPos += lWritenBytes.length;
+		System.err.println("lPos after 2nd arraycopy: " + String.valueOf(lPos));
+
 		System.arraycopy(iBeforeItems, 0, lNewbytes, lPos, iBeforeItems.length);
 		lPos += iBeforeItems.length;
-		int lCharItemCountPos = lPos - 2;
-		int lMercItemCountPos = -1;
+		System.err.println("lPos after 3nd arraycopy: " + String.valueOf(lPos));
+
+		int lCharItemCountPos = lPos - 2;      // <<<<< is this correct for D2R?  subtract 2 for JM ?
+		int lMercItemCountPos = -1;           // <<<<< is this correct for D2R?
 		for (int i = 0; i < iCharItems.size(); i++){
-			byte[] item_bytes = ((D2Item) iCharItems.get(i)).get_bytes();
+			D2Item item_temp = (D2Item) iCharItems.get(i);
+			byte[] item_bytes = (item_temp).get_bytes();
 			System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
+			System.err.println("item_bytes in forloop " + String.valueOf(i) + " :" + item_temp.get_bytes_string());
+			
 			lPos += item_bytes.length;
 		}
 		if ( iCharCursorItem != null ){
@@ -1381,16 +1409,24 @@ public class D2Character extends D2ItemListAdapter
 			lPos += item_bytes.length;
 		}
 		if (hasMerc()){
+			// Should this be enabled?    I never read the merc's items yet. so don't write anything
+			// Merc start jf JM ... and end is kf.        so    lMercItemCountPos = lPos + 2  -->   4A(J) 4D(M) 00 00   is the corpse.
+			System.err.println("hasMerc true after copying all items");
 			System.arraycopy(iBetweenItems, 0, lNewbytes, lPos, iBetweenItems.length);
 			lPos += iBetweenItems.length;
-			lMercItemCountPos = lPos - 2;
+			lMercItemCountPos = lPos + 2;              // lPos - 2 <<<<< is this correct for D2R?     NO!  found it!    should be +2, skip the 2'JM' chars
+			System.err.println("lMercItemCountPos: " + String.valueOf(lMercItemCountPos));
+
 			for (int i = 0; i < iMercItems.size(); i++){
 				byte[] item_bytes = ((D2Item) iMercItems.get(i)).get_bytes();
 				System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
 				lPos += item_bytes.length;
 			}
+			System.err.println("lPos after all mercitems copied: " + String.valueOf(lPos));
 		}
 		if (iAfterItems.length > 0){
+			System.err.println("iAfterItems.length > 0");
+			// This array is created up at the top, where items are read from the file
 			System.arraycopy(iAfterItems, 0, lNewbytes, lPos, iAfterItems.length);
 		}
 		iReader.setBytes(lNewbytes); // iReader.getFileContent()
@@ -1401,8 +1437,14 @@ public class D2Character extends D2ItemListAdapter
 		}
 		iReader.write(lCharItemsCount, 16);
 		if (hasMerc()){
+			System.err.println("hasMerc true after writing lCharItemsCount");
 			iReader.set_byte_pos(lMercItemCountPos);
-			iReader.write(iMercItems.size(), 16);
+			System.err.println("lMercItemCountPos :" + String.valueOf(lMercItemCountPos));
+
+			iReader.write(iMercItems.size(), 16);         // <<<<<<<<<<  could this be the issue?,  writin 00 for merc itemssize?.  Yes. this was writing 0x00 at the last item byte.
+			// Merc item reading should be fixed and this can be enabled and debugged.
+			// For now.  0x00 is written before JM _ _ jfJM  (start of Merc).  the corpse bytes
+			System.err.println("iMercItems.size() :" + String.valueOf(iMercItems.size()));
 		}
 		// get all the bytes
 		iReader.set_byte_pos(0);

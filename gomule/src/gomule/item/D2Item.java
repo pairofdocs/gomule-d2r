@@ -328,6 +328,9 @@ public class D2Item implements Comparable, D2ItemInterface {
 	// whether the item is an ear
 	private void read_item(D2BitReader pFile, int pos) throws Exception {
 		// pFile.skipBytes(2); // skip 'JM'.  JM isn't present for items in D2R
+
+		System.err.println("pFile Pos read_item(): " + String.valueOf(pos));
+
 		flags = (int) pFile.unflip(pFile.read(32), 32); // 4 bytes
 
 		iSocketed = check_flag(12);
@@ -424,10 +427,12 @@ public class D2Item implements Comparable, D2ItemInterface {
 		// read bytes and decode using HUFFMAN
 		for (int i = 0; i < 32; i++) {          // 4 chars * 8bits each = 32 max bits needed to encode string
 			int bitread = (int) pFile.read(1);  // convert to int
+			System.err.println(String.valueOf(i) +  " bitread: " + String.valueOf(bitread));
 			
 			if (huff[bitread].getClass().isArray())
 				huff = (Object[]) huff[bitread];
 			else {
+				System.err.println(String.valueOf(bitread) + " Char end " + huff[bitread]);
 				item_type += huff[bitread];
 				if (item_type.length() == 4){
 					item_type = item_type.stripTrailing(); // right strip ending ' '
@@ -435,7 +440,9 @@ public class D2Item implements Comparable, D2ItemInterface {
 				}
 				huff = new Object[] {huff0, huff1};
 			}
-		} 
+		}
+		System.err.println("item_type: " + item_type);
+		System.err.println("============ Done with for-loop ");
 
 		// This is the old 1.14 loop to assemble item_type
 		// for (int i = 0; i < 4; i++) {
@@ -513,6 +520,7 @@ public class D2Item implements Comparable, D2ItemInterface {
 		}
 
 		String lItemName = D2TblFile.getString(item_type);
+		System.err.println("lItemName: " + lItemName);
 		if (lItemName != null) {
 			iItemName = lItemName;
 			iBaseItemName = iItemName;
@@ -1610,8 +1618,8 @@ public class D2Item implements Comparable, D2ItemInterface {
 	// setter for the row
 	// necessary for moving items
 	public void set_row(short r) {
-		iItem.set_byte_pos(7);
-		iItem.skipBits(13);
+		iItem.set_byte_pos(4);      // for D2R set byte_pos at index4, vs index7 for 1.14
+		iItem.skipBits(13+1);
 		iItem.write((long) r, 4);
 		row = r;
 	}
@@ -1619,29 +1627,29 @@ public class D2Item implements Comparable, D2ItemInterface {
 	// setter for the column
 	// necessary for moving items
 	public void set_col(short c) {
-		iItem.set_byte_pos(7);
-		iItem.skipBits(9);
+		iItem.set_byte_pos(4);
+		iItem.skipBits(9+1);
 		iItem.write((long) c, 4);
 		col = c;
 	}
 
 	public void set_location(short l) {
-		iItem.set_byte_pos(7);
-		iItem.skipBits(2);
+		iItem.set_byte_pos(4);
+		iItem.skipBits(2+1);               // D2R skips 3bits instead of 2. increment the skip by 1 for each set_ func
 		iItem.write((long) l, 3);
 		location = l;
 	}
 
 	public void set_body_position(short bp) {
-		iItem.set_byte_pos(7);
-		iItem.skipBits(5);
+		iItem.set_byte_pos(4);
+		iItem.skipBits(5+1);
 		iItem.write((long) bp, 4);
 		body_position = bp;
 	}
 
 	public void set_panel(short p) {
-		iItem.set_byte_pos(7);
-		iItem.skipBits(17);
+		iItem.set_byte_pos(4);
+		iItem.skipBits(17+1);
 		iItem.write((long) p, 3);
 		panel = p;
 	}
@@ -1706,6 +1714,19 @@ public class D2Item implements Comparable, D2ItemInterface {
 
 	public byte[] get_bytes() {
 		return iItem.getFileContent();
+	}
+
+	public String get_bytes_string() {
+		byte[] barr = iItem.getFileContent();
+		char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+		char[] hexChars = new char[barr.length * 2];
+		for (int j = 0; j < barr.length; j++) {
+			int v = barr[j] & 0xFF;
+			hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+			hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+		}
+		// System.err.println("Item hex chars: " + String.valueOf(hexChars));
+		return String.valueOf(hexChars);
 	}
 
 	public int getItemLength() {
