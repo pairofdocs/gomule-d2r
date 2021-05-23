@@ -32,7 +32,17 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 
 #### In Progress, Debugging
-- Moving Items around. Currently Moving items from char to char can be done with D2R's in-game shared stash
+- Merc item reading and saving
+
+#### Fixed
+- Moving items around
+
+#### Backup Save Files
+WARNING: Back up important save files when using GoMule!
+
+GoMule automatically creates backup directories in `./GoMule.backup/` each `week` by default.
+This can be changed to each `day`, `month` or `never`. 
+Click on Preferences when the app is open to change this setting.
 
 
 #### Building and Developing
