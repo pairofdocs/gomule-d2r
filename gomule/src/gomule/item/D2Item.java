@@ -306,17 +306,14 @@ public class D2Item implements Comparable, D2ItemInterface {
 
 			// get position of end of current item
 			int lDiff = (pFile.get_pos() - 1)/8 - pPos;   // want to go from 839 to 849 if there is an extra byte 0x00
-			if ((pFile.get_pos()%8 == 0) && (this.iSocketed) && !(this.iRuneWord) && (this.iSocketNrFilled>0))
+			if ((pFile.get_pos()%8 == 0) && (this.iSocketed) && (this.iSocketNrFilled>0))
 				lDiff = pFile.get_pos()/8 - pPos; // if no remainer when div by 8. do not subtract 1bit 
-
-			int extraByte = 0;
 
 			pFile.set_byte_pos(pPos);  // set back to start of current item
 			iItem = new D2BitReader(pFile.get_bytes(lDiff + 1));  // read len Bytes + 1 to cover end item byte
-			// if item is runeword. account for extra byte forward. if 2 sockets add 1,  if 3 sock no need to add 1?
-			if (this.iRuneWord)
-				extraByte = 1;  
-			pFile.set_byte_pos(pPos + lDiff + extraByte);   // current item ended on 848, add 1 to get to 839
+			
+			pFile.set_byte_pos(pPos + lDiff);   // current item ended on 848, add 1 to get to 839
+			// TODO:  **** check if extraByte has to be added to iItem = new D2Bitreader.   May have to complete partial bytes. items start on their own byte.
 
 		} catch (D2ItemException pEx) {
 			throw pEx;
@@ -331,6 +328,7 @@ public class D2Item implements Comparable, D2ItemInterface {
 	// whether the item is an ear
 	private void read_item(D2BitReader pFile, int pos) throws Exception {
 		// pFile.skipBytes(2); // skip 'JM'.  JM isn't present for items in D2R
+
 		flags = (int) pFile.unflip(pFile.read(32), 32); // 4 bytes
 
 		iSocketed = check_flag(12);
@@ -338,6 +336,7 @@ public class D2Item implements Comparable, D2ItemInterface {
 		iRuneWord = check_flag(27);
 		iIdentified = check_flag(5);
 		// version = (short) pFile.read(8);   // read 1 byte.     do not read this for D2R
+		pFile.read(3);
 		version = 101; // default to version 101 for v1.10+
 
 		// pFile.skipBits(2);   // D2 1.14 does readbyte (8bits) then skip 2 bits --> 10bits skipped total
@@ -351,9 +350,9 @@ public class D2Item implements Comparable, D2ItemInterface {
 			hexChars[j * 2] = HEX_ARRAY[v >>> 4];
 			hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
 		}
-		// System.err.println("Hex chars: " + String.valueOf(hexChars));
 		
-		pFile.skipBits(3);      // D2R     does    '101' bits                         3bits skipped total  (item.ts  in d2s repo)
+		// TODO: are the 3 bits (for version) correctly accounted for when writing an item?
+		// pFile.skipBits(3);      // D2R     does    '101' bits          3bits skipped total  (item.ts  in d2s repo)
 		location = (short) pFile.read(3);  // loc 2 -- belt
 
 		body_position = (short) pFile.read(4);
@@ -436,7 +435,7 @@ public class D2Item implements Comparable, D2ItemInterface {
 				}
 				huff = new Object[] {huff0, huff1};
 			}
-		} 
+		}
 
 		// This is the old 1.14 loop to assemble item_type
 		// for (int i = 0; i < 4; i++) {
@@ -1611,8 +1610,8 @@ public class D2Item implements Comparable, D2ItemInterface {
 	// setter for the row
 	// necessary for moving items
 	public void set_row(short r) {
-		iItem.set_byte_pos(7);
-		iItem.skipBits(13);
+		iItem.set_byte_pos(4);      // for D2R set byte_pos at index4, vs index7 for 1.14
+		iItem.skipBits(13+1);
 		iItem.write((long) r, 4);
 		row = r;
 	}
@@ -1620,29 +1619,29 @@ public class D2Item implements Comparable, D2ItemInterface {
 	// setter for the column
 	// necessary for moving items
 	public void set_col(short c) {
-		iItem.set_byte_pos(7);
-		iItem.skipBits(9);
+		iItem.set_byte_pos(4);
+		iItem.skipBits(9+1);
 		iItem.write((long) c, 4);
 		col = c;
 	}
 
 	public void set_location(short l) {
-		iItem.set_byte_pos(7);
-		iItem.skipBits(2);
+		iItem.set_byte_pos(4);
+		iItem.skipBits(2+1);               // D2R skips 3bits instead of 2. increment the skip by 1 for each set_ func
 		iItem.write((long) l, 3);
 		location = l;
 	}
 
 	public void set_body_position(short bp) {
-		iItem.set_byte_pos(7);
-		iItem.skipBits(5);
+		iItem.set_byte_pos(4);
+		iItem.skipBits(5+1);
 		iItem.write((long) bp, 4);
 		body_position = bp;
 	}
 
 	public void set_panel(short p) {
-		iItem.set_byte_pos(7);
-		iItem.skipBits(17);
+		iItem.set_byte_pos(4);
+		iItem.skipBits(17+1);
 		iItem.write((long) p, 3);
 		panel = p;
 	}
@@ -1707,6 +1706,19 @@ public class D2Item implements Comparable, D2ItemInterface {
 
 	public byte[] get_bytes() {
 		return iItem.getFileContent();
+	}
+
+	// helper function added to debug items' bytes
+	public String get_bytes_string() {
+		byte[] barr = iItem.getFileContent();
+		char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+		char[] hexChars = new char[barr.length * 2];
+		for (int j = 0; j < barr.length; j++) {
+			int v = barr[j] & 0xFF;
+			hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+			hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
+		}
+		return String.valueOf(hexChars);
 	}
 
 	public int getItemLength() {
@@ -1856,7 +1868,6 @@ public class D2Item implements Comparable, D2ItemInterface {
 	public boolean isCursorItem() {
 		if (location != 0 && location != 2) {
 			if (body_position == 0) {
-				// System.err.println("location: " + location );
 				return true;
 			}
 		}

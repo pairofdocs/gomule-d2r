@@ -8,10 +8,10 @@ http://gomule.sourceforge.net/ all credits go to Gohanman, Randall, Silospen, co
 Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule/R0.31/GoMuleDocs.pdf
 
 
-#### Usage
-1. Install Java Runtime Environment [JRE (Windows x64 exe)](https://www.oracle.com/java/technologies/javase-jre8-downloads.html#license-lightbox) and [instructions](https://docs.oracle.com/goldengate/1212/gg-winux/GDRAD/java.htm#BGBFJHAB)
+#### Install
+1. Install Java Runtime Environment [JRE (Windows x64 exe)](https://www.oracle.com/java/technologies/javase-jre8-downloads.html#license-lightbox) following the [instructions](https://docs.oracle.com/goldengate/1212/gg-winux/GDRAD/java.htm#BGBFJHAB)
 2. Download the repo from [here](https://github.com/pairofdocs/gomule-d2r/archive/refs/heads/main.zip) and unzip it to a convenient location
-3. Double click the app in `gomule-d2r/gomule/GoMule.jar`
+3. Double click the app at `gomule-d2r-main/gomule/GoMule.jar`
 
 
 #### Pics
@@ -21,7 +21,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 
 #### Test Save Files
-- [Sorc](./savefiles/LamboResu.d2s)
+- [Sorc](./savefiles/LamboResu.d2s), [mule](./savefiles/testtt.d2s)
 
 
 #### Flavie Grail Report
@@ -32,7 +32,18 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 
 #### In Progress, Debugging
-- Moving Items around. Currently Moving items from char to char can be done with D2R's in-game shared stash
+- Merc item reading and saving
+- Update the data files to v1.14 (test anni and essenses)
+
+#### Fixed
+- Moving items between chars ([pic](https://github.com/pairofdocs/gomule-d2r/pull/1#issuecomment-846635551))
+
+#### Backup Save Files
+WARNING: Back up important save files when using GoMule!
+
+GoMule automatically creates backup directories in `GoMule.backup/` each `week` by default.
+This can be changed to each `day`, `month` or `never`. 
+Click on Preferences when the app is open to change this setting.
 
 
 #### Building and Developing
@@ -46,3 +57,4 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - http://gomule.sourceforge.net/ for the original app
 - https://github.com/d07RiV/d07riv.github.io for the save file converter and cracking the item Huffman encoding
 - https://github.com/dschu012/d2s for the save file converter and editor
+- https://user.xmission.com/~trevin/DiabloIIv1.09_File_Format.shtml for extensive details on the d2s file format

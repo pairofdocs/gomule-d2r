@@ -538,12 +538,13 @@ public class D2Character extends D2ItemListAdapter
 		int lCharEnd = lCharStart;
 		
 		for (int i = 0; i < num_items; i++){
-			// TODO: D2R d2s file doesn't have JM for each item. just 1JM at stat and 1 JM at end of item list
-			
+			// D2R d2s file doesn't have JM for each item. just 1JM at stat and 1 JM at end of item list
 			int lItemStart = lCharEnd;
-			//TODO: update  lItemStart for following items. use Bit position to start reading items
+			// update  lItemStart for following items. use Bit position to start reading items
 
 			D2Item lItem = new D2Item(iFileName, iReader, lItemStart, iCharLevel);
+			// debugging helper function added to D2Item.java    lItem.get_bytes_string()
+
 			lLastItemEnd = iReader.get_byte_pos(); // use itemReader for bits position
 			lCharEnd = lLastItemEnd + 1;           // add 1 to get to start nextItem byte, works for 2nd, 3rd, 4th... items
 
@@ -555,6 +556,7 @@ public class D2Character extends D2ItemListAdapter
 				markCharGrid(lItem);
 			}
 		}
+
 		iItemEnd = lCharEnd;
 		// TODO:         trace through Merc items.  disable these for now
 		int lMercStart = -1;
@@ -1017,8 +1019,8 @@ public class D2Character extends D2ItemListAdapter
 			col = (int) i.get_col();
 			width = (int) i.get_width();
 			height = (int) i.get_height();
-			if ((row + height) > 8)return false;
-			if ((col + width) > 6)return false;
+			if ((row + height) > 10)return false;     // orig > 8
+			if ((col + width) > 10)return false;      // orig > 6
 			for (j = row; j < row + height; j++){
 				for (k = col; k < col + width; k++)
 					iStashGrid[j][k] = false;
@@ -1261,7 +1263,7 @@ public class D2Character extends D2ItemListAdapter
 		return true;
 	}
 
-	public int getCharItemIndex(int panel, int x, int y){
+	public int getCharItemIndex(int panel, int x, int y){  // iRow,  iCol are input
 		if (panel == BODY_BELT_CONTENT){
 			for (int i = 0; i < iCharItems.size(); i++){
 				D2Item temp_item = (D2Item) iCharItems.get(i);
@@ -1284,9 +1286,11 @@ public class D2Character extends D2ItemListAdapter
 			for (int i = 0; i < iCharItems.size(); i++){
 				D2Item temp_item = (D2Item) iCharItems.get(i);
 				if (temp_item.get_panel() == panel)	{
-					int row = temp_item.get_col();
-					int col = temp_item.get_row();
-					if (x >= row && x <= row + temp_item.get_width() - 1 && y >= col && y <= col + temp_item.get_height() - 1)return i;
+					int col = temp_item.get_col();
+					int row = temp_item.get_row();
+					if ((x >= col) && (x <= col + temp_item.get_width() - 1) && (y >= row) && (y <= row + temp_item.get_height() - 1)) {
+						return i;
+					}
 				}
 			}
 		}
@@ -1302,8 +1306,8 @@ public class D2Character extends D2ItemListAdapter
 				}
 			}
 		}else if (panel >= 10){
-			for (int i = 0; i < iCorpseItems.size(); i++){
-				D2Item temp_item = (D2Item) iCorpseItems.get(i);
+			for (int i = 0; i < iCharItems.size(); i++){
+				D2Item temp_item = (D2Item) iCharItems.get(i);
 				if (temp_item.get_location() != 0 && temp_item.get_location() != 2){
 					if (temp_item.get_panel() == 0){
 						if (temp_item.get_body_position() == panel - 10){
@@ -1345,9 +1349,11 @@ public class D2Character extends D2ItemListAdapter
 		// entire item list and insert it into
 		// the open file in place of its current item list
 		int lCharSize = 0;
+
 		for (int i = 0; i < iCharItems.size(); i++){
 			lCharSize += ((D2Item) iCharItems.get(i)).get_bytes().length;
 		}
+
 		if ( iCharCursorItem != null ){
 			lCharSize += iCharCursorItem.get_bytes().length;
 		}
@@ -1362,26 +1368,35 @@ public class D2Character extends D2ItemListAdapter
 		int lPos = 0;
 		System.arraycopy(iBeforeStats, 0, lNewbytes, lPos, iBeforeStats.length);
 		lPos += iBeforeStats.length;
+
 		System.arraycopy(lWritenBytes, 0, lNewbytes, lPos, lWritenBytes.length);
 		lPos += lWritenBytes.length;
+
 		System.arraycopy(iBeforeItems, 0, lNewbytes, lPos, iBeforeItems.length);
 		lPos += iBeforeItems.length;
-		int lCharItemCountPos = lPos - 2;
-		int lMercItemCountPos = -1;
+
+		int lCharItemCountPos = lPos - 2;      // <<<<< is this correct for D2R?  subtract 2 for JM ?
+		int lMercItemCountPos = -1;           // <<<<< is this correct for D2R?
 		for (int i = 0; i < iCharItems.size(); i++){
 			byte[] item_bytes = ((D2Item) iCharItems.get(i)).get_bytes();
 			System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
+			
 			lPos += item_bytes.length;
 		}
 		if ( iCharCursorItem != null ){
 			byte[] item_bytes = iCharCursorItem.get_bytes();
+			// debug print the byte array[].  items end on byte. beginning 4bytes are item flags.
+			// are the item bytes already in Huffman code?   since bytes are read and addItem is used
 			System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
 			lPos += item_bytes.length;
 		}
 		if (hasMerc()){
+			// Should this be enabled?    I never read the merc's items yet. so don't write anything
+			// Merc start jf JM ... and end is kf.        so    lMercItemCountPos = lPos + 2  -->   4A(J) 4D(M) 00 00   is the corpse.
 			System.arraycopy(iBetweenItems, 0, lNewbytes, lPos, iBetweenItems.length);
 			lPos += iBetweenItems.length;
-			lMercItemCountPos = lPos - 2;
+			lMercItemCountPos = lPos + 2;              // lPos - 2 <<<<< is this correct for D2R?     NO!  found it!    should be +2, skip the 2'JM' chars
+
 			for (int i = 0; i < iMercItems.size(); i++){
 				byte[] item_bytes = ((D2Item) iMercItems.get(i)).get_bytes();
 				System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
@@ -1389,6 +1404,7 @@ public class D2Character extends D2ItemListAdapter
 			}
 		}
 		if (iAfterItems.length > 0){
+			// This array is created up at the top, where items are read from the file
 			System.arraycopy(iAfterItems, 0, lNewbytes, lPos, iAfterItems.length);
 		}
 		iReader.setBytes(lNewbytes); // iReader.getFileContent()
@@ -1400,7 +1416,9 @@ public class D2Character extends D2ItemListAdapter
 		iReader.write(lCharItemsCount, 16);
 		if (hasMerc()){
 			iReader.set_byte_pos(lMercItemCountPos);
-			iReader.write(iMercItems.size(), 16);
+			iReader.write(iMercItems.size(), 16);         // <<<<<<<<<<  could this be the issue?,  writin 00 for merc itemssize?.  Yes. this was writing 0x00 at the last item byte.
+			// Merc item reading should be fixed and this can be enabled and debugged.
+			// For now.  0x00 is written before JM _ _ jfJM  (start of Merc).  the corpse bytes
 		}
 		// get all the bytes
 		iReader.set_byte_pos(0);
