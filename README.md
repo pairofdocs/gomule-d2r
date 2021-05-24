@@ -19,6 +19,9 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 - ![Four Chars](./img/gomule_4chars_open.png)
 
+- ![Gems, runes, uniques](https://i.imgur.com/1De14PT.png)
+- Gems moved to the gems mule, runes to the runes mule and uniques to the uniques mule
+
 
 #### Test Save Files
 - [Sorc](./savefiles/LamboResu.d2s), [mule](./savefiles/testtt.d2s)
