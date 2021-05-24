@@ -36,7 +36,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - Update the data files to v1.14 (test anni and essenses)
 
 #### Fixed
-- Moving items between chars
+- Moving items between chars ([pic](https://github.com/pairofdocs/gomule-d2r/pull/1#issuecomment-846635551))
 
 #### Backup Save Files
 WARNING: Back up important save files when using GoMule!
