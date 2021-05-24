@@ -10,7 +10,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 #### Usage
 1. Install Java Runtime Environment [JRE (Windows x64 exe)](https://www.oracle.com/java/technologies/javase-jre8-downloads.html#license-lightbox) and [instructions](https://docs.oracle.com/goldengate/1212/gg-winux/GDRAD/java.htm#BGBFJHAB)
-2. Download [GoMule.jar](https://github.com/pairofdocs/gomule-d2r/releases)
+2. Download the repo from [here](https://github.com/pairofdocs/gomule-d2r/archive/refs/heads/main.zip) and unzip it to a convenient location
 3. Double click GoMule.jar
 
 
