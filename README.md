@@ -33,7 +33,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 #### In Progress, Debugging
 - Merc item reading and saving
-- Update the data files to v1.14 (test anni and essenses)
+- Update the data files to v1.14 (test anni and essences)
 
 #### Fixed
 - Moving items between chars ([pic](https://github.com/pairofdocs/gomule-d2r/pull/1#issuecomment-846635551))
