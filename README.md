@@ -17,10 +17,11 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 #### Pics
 - ![Main](./img/gomule_lamboresu_sockitem.png)
 
-- ![Four Chars](./img/gomule_4chars_open.png)
-
 - ![Gems, runes, uniques](https://i.imgur.com/1De14PT.png)
 - Gems moved to the gems mule, runes to the runes mule and uniques to the uniques mule
+
+- ![Multi items](./img/move_runes_multiclick.gif)
+- Moving multiple items
 
 
 #### Test Save Files
