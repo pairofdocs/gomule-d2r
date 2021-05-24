@@ -15,13 +15,14 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 
 #### Pics
-- ![Main](./img/gomule_lamboresu_sockitem.png)
+- *Main Char*  
+![Main](./img/gomule_lamboresu_sockitem.png)
 
-- ![Gems, runes, uniques](https://i.imgur.com/1De14PT.png)
-- Gems moved to the gems mule, runes to the runes mule and uniques to the uniques mule
+- *Gems moved to the gems mule, runes to the runes mule and uniques to the uniques mule*  
+![Gems, runes, uniques](https://i.imgur.com/1De14PT.png)
 
-- ![Multi items](./img/move_runes_multiclick.gif)
-- Moving multiple items
+- *Moving&#160;multiple&#160;items*  
+![Multi items](./img/move_runes_multiclick.gif)
 
 
 #### Test Save Files
@@ -31,16 +32,18 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 #### Flavie Grail Report
 - [Full report](https://pairofdocs.github.io/gomule-d2r/GoMuleReport.html)
 
-- Report Summary 
-- ![Report Summary](./img/gomule_flavie_reportend.png) 
+- Report Summary  
+![Report Summary](./img/gomule_flavie_reportend.png) 
 
 
 #### In Progress, Debugging
 - Merc item reading and saving
 - Update the data files to v1.14 (test anni and essences)
 
+
 #### Fixed
 - Moving items between chars ([pic](https://github.com/pairofdocs/gomule-d2r/pull/1#issuecomment-846635551))
+
 
 #### Backup Save Files
 WARNING: Back up important save files when using GoMule!
