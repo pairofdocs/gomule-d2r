@@ -29,7 +29,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 
 #### Flavie Grail Report
-- [Full report](./GoMuleReport.html)
+- [Full report](https://pairofdocs.github.io/gomule-d2r/GoMuleReport.html)
 
 - Report Summary 
 - ![Report Summary](./img/gomule_flavie_reportend.png) 
