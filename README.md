@@ -57,3 +57,4 @@ Click on Preferences when the app is open to change this setting.
 - http://gomule.sourceforge.net/ for the original app
 - https://github.com/d07RiV/d07riv.github.io for the save file converter and cracking the item Huffman encoding
 - https://github.com/dschu012/d2s for the save file converter and editor
+- https://user.xmission.com/~trevin/DiabloIIv1.09_File_Format.shtml for extensive details on the d2s file format
