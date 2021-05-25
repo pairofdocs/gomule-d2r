@@ -802,6 +802,12 @@ public class D2Item implements Comparable, D2ItemInterface {
 			if (s.compareTo("") != 0) {
 				image_file = s;
 			}
+			// if unique charm small or large, set image file for Anni or Torch
+			if (iItemName.compareTo("Small Charm") == 0) {
+				image_file = "invmss";
+			} else if (iItemName.compareTo("Large Charm") == 0) {
+				image_file = "invtrch";
+			}
 
 			D2TxtFileItemProperties lUnique = D2TxtFile.UNIQUES
 			.getRow(unique_id);
