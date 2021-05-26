@@ -97,6 +97,12 @@ public class D2FileManager extends JFrame
 	private JButton dumpBut;
 
 	private JButton flavieSingle;
+	
+	int windowWidth = 1080;
+	int windowHeight = 768;
+	// from D2ViewChar
+	int BG_WIDTH = 626;
+	int BG_HEIGHT = 435;
 
 	public static D2FileManager getInstance()
 	{
@@ -125,12 +131,12 @@ public class D2FileManager extends JFrame
 		JSplitPane rSplit = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, lSplit, iRightPane);
 
 		lSplit.setDividerLocation(200);
-		rSplit.setDividerLocation(1024 - 210);
+		rSplit.setDividerLocation(windowWidth - 210);
 		rSplit.setResizeWeight(1.0);
 		iContentPane.add(rSplit, BorderLayout.CENTER);
 
 		setContentPane(iContentPane);
-		setSize(1024,768);
+		setSize(windowWidth,windowHeight);              // orig: setSize(1024,768);
 		setTitle("GoMule " + CURRENT_VERSION);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.getGlassPane().setVisible(false);
@@ -431,7 +437,7 @@ public class D2FileManager extends JFrame
 	private void createRightPane() {
 
 		iRightPane = new JPanel();
-		iRightPane.setPreferredSize(new Dimension(190,768));
+		iRightPane.setPreferredSize(new Dimension(190,windowHeight));
 		iRightPane.setMinimumSize(new Dimension(190,0));
 		iRightPane.setLayout(new BoxLayout(iRightPane, BoxLayout.Y_AXIS));
 		try
@@ -1253,7 +1259,21 @@ public class D2FileManager extends JFrame
 			else
 			{
 				D2ViewChar lCharView = new D2ViewChar(D2FileManager.this, pCharName);
-				lCharView.setLocation(10 + (iOpenWindows.size() * 10), 10+ (iOpenWindows.size() * 10));
+				if (iOpenWindows.size() == 0) {
+					lCharView.setLocation(0, 0);  // orig had: 10+ x,  10+ y
+				} else if (iOpenWindows.size() == 1) {
+					//BG_WIDTH         = 626; //550;  // TODO: update to 626  // from D2ViewChar
+					//BG_HEIGHT        = 435; //383;  // TODO: update to 457
+
+					lCharView.setLocation((BG_WIDTH + 16), 0); 
+				} else if (iOpenWindows.size() == 2) {
+					lCharView.setLocation(0, BG_HEIGHT + 48);
+				} else if (iOpenWindows.size() == 3) {         // will this be appropriate for 1920x1080 displays?. having the 3,4th windows go under 1st and 2nd
+					lCharView.setLocation((BG_WIDTH + 16), BG_HEIGHT + 48);
+				} else {
+					// lCharView.setLocation(20 + (iOpenWindows.size() * 10), 20 + (iOpenWindows.size() * 10));  // orig had: 10+ x,  10+ y
+					lCharView.setLocation(((iOpenWindows.size()-4 +1) * 20), BG_HEIGHT + 48 + ((iOpenWindows.size()-4 +1) * 20));
+				}
 				addToOpenWindows(lCharView);
 				internalWindowForward(lCharView);
 			}
