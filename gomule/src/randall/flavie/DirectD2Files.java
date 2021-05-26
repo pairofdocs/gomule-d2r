@@ -119,6 +119,15 @@ public class DirectD2Files
 						errStr = errStr + ("Error with stash "+lD2FileName + "\n");
 					}
 				}
+				else if ( lD2FileName.endsWith(".d2i") )
+				{
+					try{
+						D2Stash lStash = new D2Stash(lD2FileName);
+						lItems = lStash.getItemList();
+					}catch(Exception e){
+						errStr = errStr + ("Error with stash "+lD2FileName + "\n");
+					}
+				}
 
 				if ( lItems != null )
 				{

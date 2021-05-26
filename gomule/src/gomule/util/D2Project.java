@@ -119,6 +119,7 @@ public class D2Project
 		iStashDialog = new JFileChooser(lStashDir);
 		RandallFileFilter lStashFilter = new RandallFileFilter(".d2x files");
 		lStashFilter.addExtension("d2x");
+		lStashFilter.addExtension("d2i");
 		iStashDialog.setFileFilter(lStashFilter);
 		iStashDialog.setFileHidingEnabled(true);
 

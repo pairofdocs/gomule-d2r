@@ -409,7 +409,8 @@ public class D2FileManager extends JFrame
 					reportName = (((D2ViewChar)iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getChar().getCharName() + iProject.getReportName());
 				}else{
 					reportName = ((((D2ViewStash)iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame())))).getStashName() + iProject.getReportName());
-					reportName = reportName.replace(".d2x", "");
+					// reportName = reportName.replace(".d2x", "");  // orig
+					reportName = reportName.replace(".d2i", "");
 				}
 			}else{
 				reportName = iProject.getProjectName() + iProject.getReportName();
@@ -1313,6 +1314,14 @@ public class D2FileManager extends JFrame
 					dropAll.setEnabled(true);
 					flavieSingle.setEnabled(true);
 					dumpBut.setEnabled(true);
+				}else if(((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith(".d2i")){
+					pickFrom.setEnabled(true);
+					pickChooser.setEnabled(true);
+					dropTo.setEnabled(true);
+					dropChooser.setEnabled(true);
+					dropAll.setEnabled(true);
+					flavieSingle.setEnabled(true);
+					dumpBut.setEnabled(true);
 				}else if(((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith(".d2s")){
 					pickFrom.setEnabled(true);
 					pickChooser.setEnabled(true);
@@ -1407,8 +1416,10 @@ public class D2FileManager extends JFrame
 				String lFilename = lFile.getAbsolutePath();
 				if (!lFilename.endsWith(".d2x"))
 				{
-					// force stash name to end with .d2x
-					lFilename += ".d2x";
+					if (!lFilename.endsWith(".d2i")) {
+						// force stash name to end with .d2x
+						lFilename += ".d2x";
+					}
 				}
 
 				openStash(lFilename, load);
@@ -1493,6 +1504,23 @@ public class D2FileManager extends JFrame
 			iViewProject.notifyItemListRead(pFileName);
 		}
 		else if ( pFileName.toLowerCase().endsWith(".d2x") )
+		{
+			lList = new D2Stash(pFileName);
+
+			int lType = getProject().getType();
+			if ( lType == D2Project.TYPE_SC && (!lList.isSC() || lList.isHC()) )
+			{
+				throw new Exception("Stash is not Softcore (SC), this is a project requirement");
+			}
+			if ( lType == D2Project.TYPE_HC && (lList.isSC() || !lList.isHC()) )
+			{
+				throw new Exception("Stash is not Hardcore (HC), this is a project requirement");
+			}
+			System.err.println("Add Stash: " + pFileName );
+			iItemLists.put(pFileName, lList);
+			iViewProject.notifyItemListRead(pFileName);
+		}
+		else if ( pFileName.toLowerCase().endsWith(".d2i") )
 		{
 			lList = new D2Stash(pFileName);
 
