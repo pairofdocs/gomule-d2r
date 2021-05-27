@@ -1026,7 +1026,6 @@ public class D2FileManager extends JFrame
 		if ( lList != null && lFileName != null ){
 			try{
 				File lFile = new File(lFileName);
-				System.err.println("File: " + lFile.getCanonicalPath() );
 
 				PrintWriter lWriter = new PrintWriter(new FileWriter( lFile.getCanonicalPath() ));
 
@@ -1499,7 +1498,6 @@ public class D2FileManager extends JFrame
 				throw new Exception("Character is not Hardcore (HC), this is a project requirement");
 			}
 
-			System.err.println("Add Char: " + pFileName );
 			iItemLists.put(pFileName, lList);
 			iViewProject.notifyItemListRead(pFileName);
 		}
@@ -1516,7 +1514,6 @@ public class D2FileManager extends JFrame
 			{
 				throw new Exception("Stash is not Hardcore (HC), this is a project requirement");
 			}
-			System.err.println("Add Stash: " + pFileName );
 			iItemLists.put(pFileName, lList);
 			iViewProject.notifyItemListRead(pFileName);
 		}
@@ -1533,7 +1530,6 @@ public class D2FileManager extends JFrame
 			{
 				throw new Exception("Stash is not Hardcore (HC), this is a project requirement");
 			}
-			System.err.println("Add Stash: " + pFileName );
 			iItemLists.put(pFileName, lList);
 			iViewProject.notifyItemListRead(pFileName);
 		}
@@ -1567,7 +1563,6 @@ public class D2FileManager extends JFrame
 		}
 		if ( !lList.hasD2ItemListListener() )
 		{
-			System.err.println("Remove file: " + pFileName );
 			iItemLists.remove(pFileName);
 			iViewProject.notifyItemListClosed(pFileName);
 		}

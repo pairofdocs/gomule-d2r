@@ -289,7 +289,6 @@ public class D2ViewProject extends JPanel
 				return lNode;
 			}
 		}
-		System.err.println("D2ViewProject.searchNode() Not Found " + pFileName );
 		return null;
 	}
 
