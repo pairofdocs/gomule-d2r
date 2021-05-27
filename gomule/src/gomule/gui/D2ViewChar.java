@@ -58,34 +58,36 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 	private static final int         BG_CURSOR_WIDTH  = 78;
 	private static final int         BG_CURSOR_HEIGHT = 135;
 
-	private static final int         STASH_X          = 327;
+	// change only the X positions for stash-left + inv-right.     (add ~300 to inv,  and subtract ~300 for stash)
+	// also search for hard coded pixel values
+	private static final int         STASH_X          = 7;         // 327 - 320  --> 7
 	private static final int         STASH_Y          = 9;
-	private static final int         INV_X            = 18;
+	private static final int         INV_X            = 18 + 308;        // 18 + 308  --> 326
 	private static final int         INV_Y            = 255;
-	private static final int         HEAD_X           = 135;
+	private static final int         HEAD_X           = 135 + 308;
 	private static final int         HEAD_Y           = 3;
-	private static final int         NECK_X           = 205;
+	private static final int         NECK_X           = 205 + 308;
 	private static final int         NECK_Y           = 30;
-	private static final int         BODY_X           = 135;
+	private static final int         BODY_X           = 135 + 308;
 	private static final int         BODY_Y           = 75;
-	private static final int         L_ARM_X          = 250;
+	private static final int         L_ARM_X          = 250 + 308;
 	private static final int         L_ARM_Y          = 50;
-	private static final int         R_ARM_X          = 20;
+	private static final int         R_ARM_X          = 20 + 308;
 	private static final int         R_ARM_Y          = 50;
-	private static final int         GLOVES_X         = 18;
+	private static final int         GLOVES_X         = 18 + 308;
 	private static final int         GLOVES_Y         = 175;
-	private static final int         BELT_X           = 135;
+	private static final int         BELT_X           = 135 + 308;
 	private static final int         BELT_Y           = 175;
-	private static final int         BOOTS_X          = 250;
+	private static final int         BOOTS_X          = 250 + 308;
 	private static final int         BOOTS_Y          = 175;
-	private static final int         L_RING_X         = 91;
+	private static final int         L_RING_X         = 91 + 308;
 	private static final int         L_RING_Y         = 175;
-	private static final int         R_RING_X         = 205;
+	private static final int         R_RING_X         = 205 + 308;
 	private static final int         R_RING_Y         = 175;
-	private static final int         BELT_GRID_X      = 426;
-	private static final int         BELT_GRID_Y      = 309; //250;   // TODO: update to 314
-	private static final int         CUBE_X           = 328;
-	private static final int         CUBE_Y           = 310; //251;  // TODO: update pixel position to  314
+	private static final int         BELT_GRID_X      = 106;  // 426 - 320 --> 106
+	private static final int         BELT_GRID_Y      = 309; //250;  
+	private static final int         CUBE_X           = 8; // 328 - 320  --> 8
+	private static final int         CUBE_Y           = 310; //251;
 	private static final int         GRID_SIZE        = 28;
 	private static final int         GRID_SPACER      = 1;
 	private static final int         CURSOR_X         = 12;
@@ -1166,6 +1168,7 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 				}
 			}
 
+			// golem?
 			if((!iIsChar && !iIsCorpse) && x>= 258 && x<=314 && y>=223 && y<= 335){
 				return 1337;
 			}
