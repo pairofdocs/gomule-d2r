@@ -52,7 +52,6 @@ public class D2Stash extends D2ItemListAdapter
     public D2Stash(String pFileName) throws Exception
     {
         super(pFileName);
-        System.err.println("pFileName : "+ pFileName);
         if ( iFileName == null || !iFileName.toLowerCase().endsWith(".d2x"))  // orig: .d2x
         {
             if (!iFileName.toLowerCase().endsWith(".d2i")) {
@@ -79,7 +78,6 @@ public class D2Stash extends D2ItemListAdapter
 	        iBR.set_byte_pos(0);
 	        byte lBytes[] = iBR.get_bytes(2);  // orig:  iBR.get_bytes(3)
 	        String lStart = new String(lBytes);
-            System.err.println("lStart: " + lStart);
             
 	        if ( "JM".equals(lStart) ) // orig: "D2X"
 	        {
@@ -179,13 +177,9 @@ public class D2Stash extends D2ItemListAdapter
 	//     }
         
 	    
-        
         long lNumItems = iBR.read(16);
-        System.err.println("lNumItems : " + String.valueOf(lNumItems));
         // long lVersionNr = iBR.read(16);
         readItems(lNumItems);
-        System.err.println("ReadItems done.");
-	    
     }
     
     private long calculateAtmaCheckSum()
@@ -280,7 +274,7 @@ public class D2Stash extends D2ItemListAdapter
         //     System.err.println("Incorrect CheckSum");
         // }
         iBR.save();
-	    setModified(false);
+        setModified(false);
     }
     
     public void fullDump(PrintWriter pWriter)
