@@ -268,6 +268,10 @@ public class D2ViewProject extends JPanel
 		{
 			return searchSingleNode(iStashes, pFileName);
 		}
+		else if ( pFileName.toLowerCase().endsWith(".d2i") )
+		{
+			return searchSingleNode(iStashes, pFileName);
+		}
 		else if ( pFileName.equalsIgnoreCase("all") )
 		{
 			return iAll;
@@ -440,6 +444,10 @@ public class D2ViewProject extends JPanel
 				iFileManager.openChar(iFileName, true);
 			}
 			else if ( iFileName.toLowerCase().endsWith(".d2x") )
+			{
+				iFileManager.openStash(iFileName, true);
+			}
+			else if ( iFileName.toLowerCase().endsWith(".d2i") )
 			{
 				iFileManager.openStash(iFileName, true);
 			}

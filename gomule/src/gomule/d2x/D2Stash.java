@@ -52,9 +52,11 @@ public class D2Stash extends D2ItemListAdapter
     public D2Stash(String pFileName) throws Exception
     {
         super(pFileName);
-        if ( iFileName == null || !iFileName.toLowerCase().endsWith(".d2x") )
+        if ( iFileName == null || !iFileName.toLowerCase().endsWith(".d2x"))  // orig: .d2x
         {
-            throw new Exception("Incorrect Stash file name");
+            if (!iFileName.toLowerCase().endsWith(".d2i")) {
+                throw new Exception("Incorrect Stash file name");    
+            }
         }
         iItems = new ArrayList();
         
@@ -74,10 +76,12 @@ public class D2Stash extends D2ItemListAdapter
         if ( !iBR.isNewFile() )
         {
 	        iBR.set_byte_pos(0);
-	        byte lBytes[] = iBR.get_bytes(3);
+	        byte lBytes[] = iBR.get_bytes(2);  // orig:  iBR.get_bytes(3)
 	        String lStart = new String(lBytes);
-	        if ( "D2X".equals(lStart) )
+            
+	        if ( "JM".equals(lStart) ) // orig: "D2X"
 	        {
+                // keeping the function name as is. The stash is a D2R stash (.d2i), not an Atma stash
 	            readAtmaItems();
 	        }
 	        // clear status
@@ -151,26 +155,31 @@ public class D2Stash extends D2ItemListAdapter
     private void readAtmaItems() throws Exception
     {
         
-		iBR.set_byte_pos( 7 );
-		long lOriginal = iBR.read( 32 );
+		iBR.set_byte_pos(2);    // iBR.set_byte_pos( 7 );
+		// long lOriginal = iBR.read( 32 );
         
-	    long lCalculated = calculateAtmaCheckSum();
+	    // long lCalculated = calculateAtmaCheckSum();
 
-	   if ( lOriginal == lCalculated )
-	    {
-		    iBR.set_byte_pos(3);
+	//    if ( lOriginal == lCalculated )
+	//     {
+	// 	    iBR.set_byte_pos(3);
 	        
-	        long lNumItems = iBR.read(16);
+	//         long lNumItems = iBR.read(16);
 	        
-	        long lVersionNr = iBR.read(16);
+	//         long lVersionNr = iBR.read(16);
 	        
-	        if ( lVersionNr == 97 )
-	        {
-	            readItems(lNumItems);
-	        }else{
-	        	throw new Exception("Stash Version Incorrect!");
-	        }
-	    }
+	//         if ( lVersionNr == 97 )
+	//         {
+	//             readItems(lNumItems);
+	//         }else{
+	//         	throw new Exception("Stash Version Incorrect!");
+	//         }
+	//     }
+        
+	    
+        long lNumItems = iBR.read(16);
+        // long lVersionNr = iBR.read(16);
+        readItems(lNumItems);
     }
     
     private long calculateAtmaCheckSum()
@@ -200,11 +209,12 @@ public class D2Stash extends D2ItemListAdapter
 	    
     private void readItems(long pNumItems) throws Exception
     {
-        int lLastItemEnd = 11;
+        int lLastItemEnd = 4; // 11;
         
         for ( int i = 0 ; i < pNumItems ; i++ )
         {
-            int lItemStart = iBR.findNextFlag("JM", lLastItemEnd);
+            // int lItemStart = iBR.findNextFlag("JM", lLastItemEnd);
+            int lItemStart = lLastItemEnd;
             
             D2Item lItem = new D2Item(iFileName, iBR, lItemStart, iCharLvl);
             lLastItemEnd = lItemStart + lItem.getItemLength();
@@ -220,46 +230,51 @@ public class D2Stash extends D2ItemListAdapter
         int size = 0;
         for (int i = 0; i < iItems.size(); i++)
             size += ((D2Item) iItems.get(i)).get_bytes().length;
-        byte[] newbytes = new byte[size+11];
-        newbytes[0] = 'D';
-        newbytes[1] = '2';
-        newbytes[2] = 'X';
-        int pos = 11;
+        byte[] newbytes = new byte[size+4]; // orig +11.  for D2R, there are 2bytes for JM and 2bytes for numItems
+        // newbytes[0] = 'D';
+        // newbytes[1] = '2';
+        // newbytes[2] = 'X';
+        newbytes[0] = 'J';     // for D2R, set first two bytes as 'JM'
+        newbytes[1] = 'M';
+        int pos = 4;  // orig 11
         for (int i = 0; i < iItems.size(); i++)
         {
             byte[] item_bytes = ((D2Item) iItems.get(i)).get_bytes();
+            // write bytes starting at index 4. This works. index0,1,2,3 are JM and numItems
             for (int j = 0; j < item_bytes.length; j++)
                 newbytes[pos++] = item_bytes[j];
         }
         
         iBR.setBytes(newbytes);
         
-        iBR.set_byte_pos(3);
+        iBR.set_byte_pos(2);  // orig 3
         iBR.write(iItems.size(), 16);
-        iBR.write(97,16); // version 96 for 1.14
+        // iBR.write(97,16); // version 96 for 1.14      // Not needed for D2R
 //        iBR.replace_bytes(11, iBR.get_length(), newbytes);
         
-        long lCheckSum1 = calculateAtmaCheckSum();
+        // long lCheckSum1 = calculateAtmaCheckSum();
 //        System.err.println("CheckSum at saving: " + lCheckSum1 );
         
-        iBR.set_byte_pos(7);
-        iBR.write(lCheckSum1, 32);
+        // iBR.set_byte_pos(7);
+        // iBR.write(lCheckSum1, 32);
 
-        iBR.set_byte_pos(7);
-        long lCheckSum2 = iBR.read(32);
+        // iBR.set_byte_pos(7);
+        // long lCheckSum2 = iBR.read(32);
         
 //        long lCheckSum3 = calculateGoMuleCheckSum();
 //        System.err.println("CheckSum after insert: " + lCheckSum3 );
         
-        if ( lCheckSum1 == lCheckSum2 )
-        {
-            iBR.save();
-	        setModified(false);
-        }
-        else
-        {
-            System.err.println("Incorrect CheckSum");
-        }
+        // if ( lCheckSum1 == lCheckSum2 )
+        // {
+        //     iBR.save();
+	    //     setModified(false);
+        // }
+        // else
+        // {
+        //     System.err.println("Incorrect CheckSum");
+        // }
+        iBR.save();
+        setModified(false);
     }
     
     public void fullDump(PrintWriter pWriter)
