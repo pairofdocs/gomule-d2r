@@ -1027,6 +1027,7 @@ public class D2FileManager extends JFrame
 			try{
 				File lFile = new File(lFileName);
 				System.err.println("File: " + lFile.getCanonicalPath() );
+
 				PrintWriter lWriter = new PrintWriter(new FileWriter( lFile.getCanonicalPath() ));
 
 				lList.fullDump(lWriter);
@@ -1497,6 +1498,7 @@ public class D2FileManager extends JFrame
 			{
 				throw new Exception("Character is not Hardcore (HC), this is a project requirement");
 			}
+			
 			System.err.println("Add Char: " + pFileName );
 			iItemLists.put(pFileName, lList);
 			iViewProject.notifyItemListRead(pFileName);
