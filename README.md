@@ -27,7 +27,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 
 #### Test Save Files
-- [Sorc](./savefiles/LamboResu.d2s), [mule](./savefiles/testtt.d2s)
+- [Sorc](./savefiles/LamboResu.d2s), [mule](./savefiles/testtt.d2s), [shared stash](./savefiles/SharedStash_SoftCore.d2i)
 
 
 #### Flavie Grail Report
@@ -44,6 +44,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 #### Fixed
 - Moving items between chars ([pic](https://github.com/pairofdocs/gomule-d2r/pull/1#issuecomment-846635551))
 - Annihilus and Torch charms inventory graphics fixed
+- Reading + writing a shared stash .d2i file ([pic](https://github.com/pairofdocs/gomule-d2r/pull/2#issuecomment-849347933))
 
 
 #### Backup Save Files
