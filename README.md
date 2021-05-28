@@ -20,7 +20,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 ![Main](./img/gomule_lamboresu_sockitem.png)
 
 - *Gems moved to the gems mule, runes to the runes mule and uniques to the uniques mule*  
-![Gems, runes, uniques](https://i.imgur.com/1De14PT.png)
+![Gems, runes, uniques](https://i.imgur.com/X5EZ3Tp.png)
 
 - *Moving&#160;multiple&#160;items*  
 ![Multi items](./img/move_runes_multiclick.gif)
