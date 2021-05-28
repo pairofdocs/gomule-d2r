@@ -49,6 +49,7 @@ import java.util.Vector;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JEditorPane;
@@ -250,7 +251,10 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
         iTable.getColumnModel().getColumn(1).setPreferredWidth(11);
         iTable.getColumnModel().getColumn(2).setPreferredWidth(11);
         iTable.getColumnModel().getColumn(3).setPreferredWidth(15);
+
+        // left section is the list of items iTable
         JScrollPane lPane = new JScrollPane(iTable);
+        // lPane = new JScrollPane(iTable);  // from d2viewclipboard
         lPane.setPreferredSize(new Dimension(257, 100));
         
         JSplitPane stashConts = new JSplitPane();
@@ -300,7 +304,7 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
 
         iContentPane.add(lTopPanel, BorderLayout.NORTH);
 
-        JPanel lItemPanel = new JPanel();
+        // JPanel lItemPanel = new JPanel();
         iItemText = new JEditorPane();
         iItemText.setContentType("text/html");
         
@@ -311,21 +315,52 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
         iItemText.putClientProperty("Nimbus.Overrides.InheritDefaults", Boolean.TRUE);
         iItemText.setBackground(bgColor);        
         
-        JScrollPane lItemScroll = new JScrollPane(iItemText);
-        lItemPanel.setLayout(new BorderLayout());
-        lItemPanel.add(lItemScroll, BorderLayout.CENTER);
-        lItemPanel.setPreferredSize(new Dimension(250, 100));
+        JScrollPane lItemScroll = new JScrollPane(iItemText);       // lPane = new JScrollPane(iTable);  from d2viewclipb
+        lItemScroll.setPreferredSize(new Dimension(247, 292));
+        lItemScroll.setMaximumSize(new Dimension(247, 292));
+        lItemScroll.setMinimumSize(new Dimension(247, 292));
+        // lItemPanel.setLayout(new BorderLayout());
+
+        
+        // image section
+        final ImageIcon iIcon = new ImageIcon();
+        final JLabel iIconLabel = new JLabel();
+        
+        iIconLabel.setPreferredSize(new Dimension(239, 126)); // orig size 190, 112
+        // iIconLabel.setSize(new Dimension(190, 112));
+        iIconLabel.setMaximumSize(new Dimension(239, 126));
+        iIconLabel.setMinimumSize(new Dimension(239, 126));
+        iIconLabel.setIcon(iIcon);
+        iIconLabel.setHorizontalAlignment(JLabel.CENTER);
+        iIconLabel.setOpaque(true);
+        iIconLabel.setBackground(Color.black);
+        
+        // lItemPanel.add(iIconLabel, BorderLayout.CENTER);
+
+        // add itemScroll for itemText
+        // lItemPanel.add(lItemScroll, BorderLayout.CENTER);
+        // lItemPanel.setPreferredSize(new Dimension(250, 100));
 
 //        iContentPane.add(lItemPanel, BorderLayout.CENTER);
         
-        stashConts.setRightComponent(lItemPanel);
-        stashConts.setDividerSize(3);
+        // want a new panel and then do panel.addtopanel for iconimage and itemscroll
+        RandallPanel lIconItemPanel = new RandallPanel();
+        // lIconItemPanel.addToPanel(lButtonPanel, 0, 0, 1, RandallPanel.HORIZONTAL);
+        // addToPanel(lPane,0,3,2,RandallPanel.BOTH);
+        // addToPanel(iIconLabel,0,4,2,RandallPanel.BOTH); // from d2viewclipb
+        
+        lIconItemPanel.addToPanel(iIconLabel,0,0,2,RandallPanel.VERTICAL);
+        lIconItemPanel.addToPanel(lItemScroll,0,1,2,RandallPanel.BOTH);
+
+
+        stashConts.setRightComponent(lIconItemPanel);
+        stashConts.setDividerSize(3);  // 3
         stashConts.setDividerLocation(257);
         iContentPane.add(stashConts);
         setContentPane(iContentPane);
 
         pack();
-        setSize(514, 500);
+        setSize(514, 556);  // setSize(514, 500);  250+257
         setVisible(true);
         
         
@@ -347,6 +382,28 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
 				public void mouseReleased(MouseEvent arg0) {}
         	});
         	
+            // iTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+
+			// 	public void valueChanged(ListSelectionEvent arg0) {
+
+			// 		if(!arg0.getValueIsAdjusting()){
+			// 			if(iTable.getSelectedRow() > -1){
+			// 				D2Item iItem = (D2Item)iItems.get(iTable.getSelectedRow());
+			// 				iIcon.setImage(D2ImageCache.getDC6Image(iItem));     // 
+			// 				if(iIconLabel.getIcon() == null){
+			// 					iIconLabel.setIcon(iIcon);
+			// 				}
+			// 				iIconLabel.setToolTipText(iItem.itemDumpHtml(false));
+			// 				iIconLabel.repaint();
+			// 			}else{
+			// 				iIconLabel.setIcon(null);
+			// 				iIconLabel.setToolTipText("");
+			// 				iIconLabel.repaint();
+			// 			}
+			// 		}
+			// 	}
+			// });
+            
             iTable.getSelectionModel().addListSelectionListener(
                     new ListSelectionListener()
                     {
@@ -354,6 +411,16 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
                         {
                             if (iTable.getSelectedRowCount() == 1)
                             {
+                                
+                                // D2Item iItem = (D2Item)iItems.get(iTable.getSelectedRow());
+                                D2Item iItem = iItemModel.getItem(iTable.getSelectedRow());
+                                iIcon.setImage(D2ImageCache.getDC6Image(iItem));     // 
+                                if(iIconLabel.getIcon() == null){
+                                    iIconLabel.setIcon(iIcon);
+                                }
+                                // // iIconLabel.setToolTipText(iItem.itemDumpHtml(false));
+                                // iIconLabel.setToolTipText("");
+                                // iIconLabel.repaint();
                             	
                             	String dispStr = iItemModel.getItem(iTable.getSelectedRow()).itemDumpHtml(true).replaceAll("<[/]*html>", "");
                                 if(!isStash()){
@@ -363,10 +430,16 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
                                     
                                 }
                                 iItemText.setCaretPosition(0);
+                                // iIconLabel.setToolTipText(iItem.itemDumpHtml(false));
+                                iIconLabel.setToolTipText("");
+                                iIconLabel.repaint();
                             }
                             else
                             {
                                 iItemText.setText("");
+                                iIconLabel.setIcon(null);
+                                iIconLabel.setToolTipText("");
+                                iIconLabel.repaint();
                             }
                         }
                     });
