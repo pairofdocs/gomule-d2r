@@ -117,7 +117,7 @@ public class D2ViewClipboard extends RandallPanel implements D2ItemContainer, D2
 					if(!arg0.getValueIsAdjusting()){
 						if(iTable.getSelectedRow() > -1){
 							D2Item iItem = (D2Item)iItems.get(iTable.getSelectedRow());
-							iIcon.setImage(D2ImageCache.getDC6Image(iItem));     // 
+							iIcon.setImage(D2ImageCache.getDC6Image(iItem));
 							if(iIconLabel.getIcon() == null){
 								iIconLabel.setIcon(iIcon);
 							}

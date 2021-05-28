@@ -301,10 +301,8 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
         lTopPanel.addToPanel(lCategoryPanel, 0, 3, 1, RandallPanel.HORIZONTAL);
         lTopPanel.addToPanel(iRequerementFilter, 0, 4, 1, RandallPanel.HORIZONTAL);
         
-
         iContentPane.add(lTopPanel, BorderLayout.NORTH);
 
-        // JPanel lItemPanel = new JPanel();
         iItemText = new JEditorPane();
         iItemText.setContentType("text/html");
         
@@ -319,9 +317,7 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
         lItemScroll.setPreferredSize(new Dimension(247, 292));
         lItemScroll.setMaximumSize(new Dimension(247, 292));
         lItemScroll.setMinimumSize(new Dimension(247, 292));
-        // lItemPanel.setLayout(new BorderLayout());
 
-        
         // image section
         final ImageIcon iIcon = new ImageIcon();
         final JLabel iIconLabel = new JLabel();
@@ -334,21 +330,11 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
         iIconLabel.setHorizontalAlignment(JLabel.CENTER);
         iIconLabel.setOpaque(true);
         iIconLabel.setBackground(Color.black);
-        
-        // lItemPanel.add(iIconLabel, BorderLayout.CENTER);
-
-        // add itemScroll for itemText
-        // lItemPanel.add(lItemScroll, BorderLayout.CENTER);
-        // lItemPanel.setPreferredSize(new Dimension(250, 100));
 
 //        iContentPane.add(lItemPanel, BorderLayout.CENTER);
         
         // want a new panel and then do panel.addtopanel for iconimage and itemscroll
         RandallPanel lIconItemPanel = new RandallPanel();
-        // lIconItemPanel.addToPanel(lButtonPanel, 0, 0, 1, RandallPanel.HORIZONTAL);
-        // addToPanel(lPane,0,3,2,RandallPanel.BOTH);
-        // addToPanel(iIconLabel,0,4,2,RandallPanel.BOTH); // from d2viewclipb
-        
         lIconItemPanel.addToPanel(iIconLabel,0,0,2,RandallPanel.VERTICAL);
         lIconItemPanel.addToPanel(lItemScroll,0,1,2,RandallPanel.BOTH);
 
@@ -382,28 +368,6 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
 				public void mouseReleased(MouseEvent arg0) {}
         	});
         	
-            // iTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
-
-			// 	public void valueChanged(ListSelectionEvent arg0) {
-
-			// 		if(!arg0.getValueIsAdjusting()){
-			// 			if(iTable.getSelectedRow() > -1){
-			// 				D2Item iItem = (D2Item)iItems.get(iTable.getSelectedRow());
-			// 				iIcon.setImage(D2ImageCache.getDC6Image(iItem));     // 
-			// 				if(iIconLabel.getIcon() == null){
-			// 					iIconLabel.setIcon(iIcon);
-			// 				}
-			// 				iIconLabel.setToolTipText(iItem.itemDumpHtml(false));
-			// 				iIconLabel.repaint();
-			// 			}else{
-			// 				iIconLabel.setIcon(null);
-			// 				iIconLabel.setToolTipText("");
-			// 				iIconLabel.repaint();
-			// 			}
-			// 		}
-			// 	}
-			// });
-            
             iTable.getSelectionModel().addListSelectionListener(
                     new ListSelectionListener()
                     {
@@ -414,14 +378,10 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
                                 
                                 // D2Item iItem = (D2Item)iItems.get(iTable.getSelectedRow());
                                 D2Item iItem = iItemModel.getItem(iTable.getSelectedRow());
-                                iIcon.setImage(D2ImageCache.getDC6Image(iItem));     // 
+                                iIcon.setImage(D2ImageCache.getDC6Image(iItem));
                                 if(iIconLabel.getIcon() == null){
                                     iIconLabel.setIcon(iIcon);
                                 }
-                                // // iIconLabel.setToolTipText(iItem.itemDumpHtml(false));
-                                // iIconLabel.setToolTipText("");
-                                // iIconLabel.repaint();
-                            	
                             	String dispStr = iItemModel.getItem(iTable.getSelectedRow()).itemDumpHtml(true).replaceAll("<[/]*html>", "");
                                 if(!isStash()){
                                 	iItemText.setText("<html><font size=3 face=Dialog><font color = white>Item From: "+(((D2ItemListAll) iStash).getFilename(iItemModel.getItem(iTable.getSelectedRow())))+"</font><br><br>"+dispStr+"</font></html>");
