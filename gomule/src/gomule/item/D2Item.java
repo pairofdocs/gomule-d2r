@@ -430,7 +430,7 @@ public class D2Item implements Comparable, D2ItemInterface {
 			else {
 				item_type += huff[bitread];
 				if (item_type.length() == 4){
-					item_type = item_type.stripTrailing(); // right strip ending ' '
+					item_type = item_type.trim(); // right strip ending ' '
 					break;
 				}
 				huff = new Object[] {huff0, huff1};
