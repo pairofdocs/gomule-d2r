@@ -25,6 +25,9 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - *Moving&#160;multiple&#160;items*  
 ![Multi items](./img/move_runes_multiclick.gif)
 
+- *Searching for items using the All stash filter*  
+![Item Search](./img/gomule_allitems_search.png)
+
 
 ### Test Save Files
 - [Sorc](./savefiles/LamboResu.d2s), [mule](./savefiles/testtt.d2s), [shared stash](./savefiles/SharedStash_SoftCore.d2i)
@@ -46,6 +49,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - Annihilus and Torch charms inventory graphics fixed
 - Reading + writing a shared stash .d2i file ([pic](https://github.com/pairofdocs/gomule-d2r/pull/2#issuecomment-849347933))
 - Changed from original gomule: stash is moved to the left hand side and char + inventory to the right hand side, consistent with how it appears in-game
+- Changed from original gomule: an item icon now appears for a selected row in the stash view ([pic](./img/gomule_allitems_search.png))
 
 
 ### Backup Save Files

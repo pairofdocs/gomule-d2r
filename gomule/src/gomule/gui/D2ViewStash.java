@@ -338,7 +338,6 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
         lIconItemPanel.addToPanel(iIconLabel,0,0,2,RandallPanel.VERTICAL);
         lIconItemPanel.addToPanel(lItemScroll,0,1,2,RandallPanel.BOTH);
 
-
         stashConts.setRightComponent(lIconItemPanel);
         stashConts.setDividerSize(3);  // 3
         stashConts.setDividerLocation(257);
