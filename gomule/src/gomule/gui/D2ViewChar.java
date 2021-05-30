@@ -1310,11 +1310,11 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 					{
 						int lX = pEvent.getX();
 						int lY = pEvent.getY();
-						if (((lX >= 16 && lX <= 45) || (lX >= 247 && lX <= 276)) && (lY >= 24 && lY <= 44))
+						if (((lX >= 16 + 308 && lX <= 45 + 308) || (lX >= 247 + 308 && lX <= 276 + 308)) && (lY >= 24 && lY <= 44))
 						{
 							setWeaponSlot(1);
 						}
-						else if (((lX >= 51 && lX <= 80) || (lX >= 282 && lX <= 311)) && (lY >= 24 && lY <= 44))
+						else if (((lX >= 51 + 308 && lX <= 80 + 308) || (lX >= 282 + 308 && lX <= 311 + 308)) && (lY >= 24 && lY <= 44))
 						{
 							setWeaponSlot(2);
 						}
