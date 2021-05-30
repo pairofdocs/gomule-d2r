@@ -41,7 +41,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 
 ### In Progress, Debugging
-- Merc item reading and saving
+- Test corpse reading when a savefile has one
 
 
 #### Fixed
@@ -50,6 +50,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - Reading + writing a shared stash .d2i file ([pic](https://github.com/pairofdocs/gomule-d2r/pull/2#issuecomment-849347933))
 - Changed from original gomule: stash is moved to the left hand side and char + inventory to the right hand side, consistent with how it appears in-game
 - Changed from original gomule: an item icon now appears for a selected row in the stash view ([pic](./img/gomule_allitems_search.png))
+- Merc item reading and editing
 
 
 ### Backup Save Files
