@@ -506,7 +506,9 @@ public class D2Character extends D2ItemListAdapter
 
 	private void readCorpse() throws Exception {
 
-		int corpseStart = iReader.findNextFlag("JM", iItemEnd+2);
+		// iItemEnd is at the start of JM, the corpselist for D2R
+		// int corpseStart = iReader.findNextFlag("JM", iItemEnd+2);  // corpseStart 3016
+		int corpseStart = iReader.findNextFlag("JM", iItemEnd);
 		if(corpseStart < 0 || corpseStart > iKF || corpseStart > iJF)return;
 		iReader.set_byte_pos(corpseStart);
 		iReader.skipBytes(2);
@@ -558,35 +560,34 @@ public class D2Character extends D2ItemListAdapter
 		}
 
 		iItemEnd = lCharEnd;
-		// TODO:         trace through Merc items.  disable these for now
 		int lMercStart = -1;
 		int lMercEnd = -1;
 		lFirstPos = iReader.findNextFlag("jfJM", lCharEnd);
 		
-		// TODO:  add merc huffman decoding
-		// if (lFirstPos != -1){
-		// 	lLastItemEnd = lFirstPos + 4;
-		// 	iReader.set_byte_pos(lLastItemEnd);
-		// 	num_items = (int) iReader.read(16);
-		// 	lMercStart = lFirstPos + 6;
-		// 	lMercEnd = lMercStart;
-		// 	for (int i = 0; i < num_items; i++){
-		// 		int lItemStart = iReader.findNextFlag("JM", lLastItemEnd);
-		// 		if (lItemStart == -1)throw new Exception("Merc item " + (i + 1) + " not found.");
-		// 		D2Item lItem = new D2Item(iFileName, iReader, lItemStart, iCharLevel);
-		// 		lLastItemEnd = lItemStart + lItem.getItemLength();
-		// 		lMercEnd = lLastItemEnd;
-		// 		addMercItem(lItem);
-		// 		markMercGrid(lItem);
-		// 	}
-		// }
+		if (lFirstPos != -1){
+			lLastItemEnd = lFirstPos + 4;
+			iReader.set_byte_pos(lLastItemEnd);
+			num_items = (int) iReader.read(16);
+			lMercStart = lFirstPos + 6;
+			lMercEnd = lMercStart;
+			for (int i = 0; i < num_items; i++){
+				// int lItemStart = iReader.findNextFlag("JM", lLastItemEnd);
+				int lItemStart = lMercEnd;
+				if (lItemStart == -1)throw new Exception("Merc item " + (i + 1) + " not found.");
+				D2Item lItem = new D2Item(iFileName, iReader, lItemStart, iCharLevel);
+				lLastItemEnd = lItemStart + lItem.getItemLength();
+				lMercEnd = lLastItemEnd;
+				addMercItem(lItem);
+				markMercGrid(lItem);
+			}
+		}
 		iReader.set_byte_pos(0); // iReader.getFileContent()
 		// before stats
 		iBeforeStats = iReader.get_bytes(iGF);
 		// goto after stats
 		iReader.set_byte_pos(iIF);
 		// before items
-		iBeforeItems = iReader.get_bytes(lCharStart-iIF);
+		iBeforeItems = iReader.get_bytes(lCharStart-iIF); // iBeforeItems is correct
 		if (lMercStart == -1){
 			// between
 			iBetweenItems = new byte[0];
@@ -1377,6 +1378,7 @@ public class D2Character extends D2ItemListAdapter
 
 		int lCharItemCountPos = lPos - 2;      // <<<<< is this correct for D2R?  subtract 2 for JM ?
 		int lMercItemCountPos = -1;           // <<<<< is this correct for D2R?
+		// Start writing Items after 'JMxx' (JM and numItems)
 		for (int i = 0; i < iCharItems.size(); i++){
 			byte[] item_bytes = ((D2Item) iCharItems.get(i)).get_bytes();
 			System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
@@ -1391,11 +1393,10 @@ public class D2Character extends D2ItemListAdapter
 			lPos += item_bytes.length;
 		}
 		if (hasMerc()){
-			// Should this be enabled?    I never read the merc's items yet. so don't write anything
-			// Merc start jf JM ... and end is kf.        so    lMercItemCountPos = lPos + 2  -->   4A(J) 4D(M) 00 00   is the corpse.
-			System.arraycopy(iBetweenItems, 0, lNewbytes, lPos, iBetweenItems.length);
+			// Merc start jf JM ... and end is kf.
+			System.arraycopy(iBetweenItems, 0, lNewbytes, lPos, iBetweenItems.length); // iBetweenitems is correct (the corpse data)
 			lPos += iBetweenItems.length;
-			lMercItemCountPos = lPos + 2;              // lPos - 2 <<<<< is this correct for D2R?     NO!  found it!    should be +2, skip the 2'JM' chars
+			lMercItemCountPos = lPos - 2;     // lPos -2 is right when reading merc items.  iBetweenItems contains 'JMxx' for merc numItems
 
 			for (int i = 0; i < iMercItems.size(); i++){
 				byte[] item_bytes = ((D2Item) iMercItems.get(i)).get_bytes();

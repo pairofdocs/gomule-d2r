@@ -53,7 +53,7 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 
 	private static final int         BG_WIDTH         = 626; //550;  // TODO: update to 626
 	private static final int         BG_HEIGHT        = 435; //383;  // TODO: update to 457
-	private static final int         BG_MERC_WIDTH    = 323;
+	private static final int         BG_MERC_WIDTH    = 323 + 308 -5;  // update with +308 pixels like the char inventory and equip. -5 to make width=626 like bg_width
 	private static final int         BG_MERC_HEIGHT   = 187;
 	private static final int         BG_CURSOR_WIDTH  = 78;
 	private static final int         BG_CURSOR_HEIGHT = 135;
@@ -283,7 +283,7 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 		V1.add(B1);
 		B1.add(iCharCursorPainter);
 		B1.add(Box.createRigidArea(new Dimension(40, 0)));
-		lCursorPanel.add(V1, BorderLayout.EAST);
+		lCursorPanel.add(V1, BorderLayout.AFTER_LAST_LINE);  // orig: EAST
 
 //		lCursorPanel.add(Box.createRigidArea(new Dimension(10, 0)), BorderLayout.EAST);
 
@@ -1973,11 +1973,11 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 						{
 						// head (assume 2x2)
 						case 1:
-							lGraphics.drawImage(lImage, HEAD_X, HEAD_Y, D2MercPainterPanel.this);
+							lGraphics.drawImage(lImage, HEAD_X - 5, HEAD_Y, D2MercPainterPanel.this);  // subtract 5 like with BG_MERC_WIDTH
 							break;
 						case 3:
 							// body (assume 2x3
-							lGraphics.drawImage(lImage, BODY_X, BODY_Y, D2MercPainterPanel.this);
+							lGraphics.drawImage(lImage, BODY_X - 5 , BODY_Y, D2MercPainterPanel.this);
 							break;
 							// right arm (give the whole 2x4)
 							// biases are to center non-2x4 items
@@ -1994,7 +1994,7 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 									hbias += GRID_SIZE / 2;
 								else if (h == 2)
 									hbias += GRID_SIZE;
-								lGraphics.drawImage(lImage, R_ARM_X + wbias, R_ARM_Y + hbias, D2MercPainterPanel.this);
+								lGraphics.drawImage(lImage, R_ARM_X - 5 + wbias, R_ARM_Y + hbias, D2MercPainterPanel.this);
 							}
 							break;
 							// left arm (give the whole 2x4)
@@ -2011,8 +2011,22 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 									hbias += GRID_SIZE / 2;
 								else if (h == 2)
 									hbias += GRID_SIZE;
-								lGraphics.drawImage(lImage, L_ARM_X + wbias, L_ARM_Y + hbias, D2MercPainterPanel.this);
+								lGraphics.drawImage(lImage, L_ARM_X - 5 + wbias, L_ARM_Y + hbias, D2MercPainterPanel.this);
 							}
+							break;
+						case 8:
+							// Belt.  TODO. draw this correctly if merc has a belt equipped with some mods and code edits
+							// lGraphics.drawImage(lImage, BELT_X, BELT_Y, D2MercPainterPanel.this);
+							break;
+						case 9:
+							// Boots. TODO. draw this correctly if merc has
+							// lGraphics.drawImage(lImage, BOOTS_X, BOOTS_Y, D2MercPainterPanel.this);
+							break;
+						case 10:
+							// Gloves. TODO. draw this correctly if merc has
+							// lGraphics.drawImage(lImage, GLOVES_X, GLOVES_Y, D2MercPainterPanel.this);
+							break;
+						default:
 							break;
 						}
 					}
@@ -2050,8 +2064,8 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 
 		public D2DeathPainterPanel()
 		{
-			setSize(318, 247);
-			Dimension lSize = new Dimension(318, 247);
+			setSize(318 + 308, 247);  // Set these to new size +308 move inventory to the right side
+			Dimension lSize = new Dimension(318 + 308, 247);
 			setPreferredSize(lSize);
 
 			addMouseListener(new MouseAdapter()
@@ -2072,11 +2086,11 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 					{
 						int lX = pEvent.getX();
 						int lY = pEvent.getY();
-						if (((lX >= 16 && lX <= 45) || (lX >= 247 && lX <= 276)) && (lY >= 24 && lY <= 44))
+						if (((lX >= 16 + 308 && lX <= 45 + 308) || (lX >= 247 + 308 && lX <= 276 + 308)) && (lY >= 24 && lY <= 44))
 						{
 							setWeaponSlot(1);
 						}
-						else if (((lX >= 51 && lX <= 80) || (lX >= 282 && lX <= 311)) && (lY >= 24 && lY <= 44))
+						else if (((lX >= 51 + 308 && lX <= 80 + 308) || (lX >= 282 + 308 && lX <= 311 + 308)) && (lY >= 24 && lY <= 44))
 						{
 							setWeaponSlot(2);
 						}
