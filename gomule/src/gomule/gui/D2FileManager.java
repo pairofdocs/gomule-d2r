@@ -1468,7 +1468,7 @@ public class D2FileManager extends JFrame
 	public void displayAbout()
 	{
 		JOptionPane.showMessageDialog(this, "A java-based Diablo II muling application\n\noriniginally created by Andy Theuninck (Gohanman)\nVersion 0.1a"
-				+ "\n\ncurrent release by Randall & Silospen\nVersion " + CURRENT_VERSION + "\n\nAnd special thanks to:" + "\n\tHakai_no_Tenshi & Gohanman for helping me out with the file formats"
+				+ "\n\nnext released by Randall & Silospen\nVersion " + CURRENT_VERSION + "\n\ncurrently released by pairofdocs\n\nAnd special thanks to:" + "\n\tHakai_no_Tenshi & Gohanman for helping me out with the file formats"
 				+ "\nRTB for all his help.\n\tThe Super Beta Testers:\nSkinhead On The MBTA\nnubikon\nOscuro\nThyiad\nMoiselvus\nPurpleLocust\nAnd anyone else I've forgotten..!", "About", JOptionPane.PLAIN_MESSAGE);
 	}
 
