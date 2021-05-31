@@ -1,0 +1,135 @@
+{
+    "jewelry": {
+        "found-nr": 4,
+        "found-perc": 12.5,
+        "notfound-perc": 87.5,
+        "total-nr": 32,
+        "notfound-nr": 28
+    },
+    "1.10 runewords(rwm)": {
+        "found-nr": 2,
+        "found-perc": 8.7,
+        "notfound-perc": 91.3,
+        "total-nr": 23,
+        "notfound-nr": 21
+    },
+    "all set items": {
+        "found-nr": 1,
+        "found-perc": 0.79,
+        "notfound-perc": 99.21,
+        "total-nr": 127,
+        "notfound-nr": 126
+    },
+    "miscellaneous": {
+        "found-nr": 13,
+        "found-perc": 44.83,
+        "notfound-perc": 55.17,
+        "total-nr": 29,
+        "notfound-nr": 16
+    },
+    "runewords": {
+        "found-nr": 3,
+        "found-perc": 12.5,
+        "notfound-perc": 87.5,
+        "total-nr": 24,
+        "notfound-nr": 21
+    },
+    "class-specific items": {
+        "found-nr": 0,
+        "found-perc": 0,
+        "notfound-perc": 100,
+        "total-nr": 27,
+        "notfound-nr": 27
+    },
+    "all items": {
+        "found-nr": 15,
+        "found-perc": 2.96,
+        "notfound-perc": 97.04,
+        "total-nr": 506,
+        "notfound-nr": 491
+    },
+    "expansion sets": {
+        "found-nr": 1,
+        "found-perc": 1.54,
+        "notfound-perc": 98.46,
+        "total-nr": 65,
+        "notfound-nr": 64
+    },
+    "runes semi rare": {
+        "found-nr": 7,
+        "found-perc": 63.64,
+        "notfound-perc": 36.36,
+        "total-nr": 11,
+        "notfound-nr": 4
+    },
+    "runes common": {
+        "found-nr": 8,
+        "found-perc": 72.73,
+        "notfound-perc": 27.27,
+        "total-nr": 11,
+        "notfound-nr": 3
+    },
+    "runes extremely rare": {
+        "found-nr": 0,
+        "found-perc": 0,
+        "notfound-perc": 100,
+        "total-nr": 11,
+        "notfound-nr": 11
+    },
+    "1.10 runewords": {
+        "found-nr": 0,
+        "found-perc": 0,
+        "notfound-perc": 100,
+        "total-nr": 24,
+        "notfound-nr": 24
+    },
+    "normal uniques": {
+        "found-nr": 7,
+        "found-perc": 6.03,
+        "notfound-perc": 93.97,
+        "total-nr": 116,
+        "notfound-nr": 109
+    },
+    "1.11 runewords": {
+        "found-nr": 0,
+        "found-perc": 0,
+        "notfound-perc": 100,
+        "total-nr": 7,
+        "notfound-nr": 7
+    },
+    "gems": {
+        "found-nr": 20,
+        "found-perc": 57.14,
+        "notfound-perc": 42.86,
+        "total-nr": 35,
+        "notfound-nr": 15
+    },
+    "all unique items": {
+        "found-nr": 14,
+        "found-perc": 3.69,
+        "notfound-perc": 96.31,
+        "total-nr": 379,
+        "notfound-nr": 365
+    },
+    "normal sets": {
+        "found-nr": 0,
+        "found-perc": 0,
+        "notfound-perc": 100,
+        "total-nr": 62,
+        "notfound-nr": 62
+    },
+    "elite uniques": {
+        "found-nr": 1,
+        "found-perc": 1.18,
+        "notfound-perc": 98.82,
+        "total-nr": 85,
+        "notfound-nr": 84
+    },
+    "exceptional uniques": {
+        "found-nr": 2,
+        "found-perc": 1.68,
+        "notfound-perc": 98.32,
+        "total-nr": 119,
+        "notfound-nr": 117
+    }
+}

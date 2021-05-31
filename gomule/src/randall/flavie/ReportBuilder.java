@@ -22,6 +22,8 @@ package randall.flavie;
 
 import java.io.*;
 import java.util.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * @author Marco
@@ -349,7 +351,9 @@ public class ReportBuilder
 		}
 		
 		lOutReport.println("</table>");
-		
+		// also store summary report in json
+		JSONObject summaryReport = new JSONObject();
+
 		if ( lShowCounters && lPercentages.size() > 0 )
 		{
 		    lOutReport.println("<br>");
@@ -374,10 +378,33 @@ public class ReportBuilder
 			    lOutReport.println("<td class="+lPerc.getStyle()+">" + lPerc.getNotFoundNr() + "</td>");
 			    lOutReport.println("<td class="+lPerc.getStyle()+">" + lPerc.getNotFoundPerc() + "%</td>");
 			    lOutReport.println("</tr>");
+
+				// add details to json summary report. Skip class skillers
+				if (!lPerc.getName().contains("Skillers"))
+				{
+					JSONObject details = new JSONObject();
+					details.put("total-nr", lPerc.getTotalNr());
+					details.put("found-nr", lPerc.getFoundNr());
+					details.put("found-perc", lPerc.getFoundPerc());
+					details.put("notfound-nr", lPerc.getNotFoundNr());
+					details.put("notfound-perc", lPerc.getNotFoundPerc());
+					summaryReport.put(lPerc.getName().toLowerCase(), details);   // e.g  {"All items" : {total-nr: 506, foundnd: 15, found-perc: 2.96%, notfound-nr: 491, notfound-perc: 97.04%} }
+				}
 		    }
 		    
 		    lOutReport.println("</table>");
 		}
+
+        // write json summary report
+        try (FileWriter file = new FileWriter("GoMuleSummary.json")) 
+		{
+            file.write(summaryReport.toJSONString()); 
+            file.flush();
+        } 
+		catch (IOException e) 
+		{
+            e.printStackTrace();
+        }
 		
 	    lOutReport.println("<br>");
 		String lColors = "<table><tr><td class=cat>Colors: </td>";

@@ -39,6 +39,8 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - Report Summary  
 ![Report Summary](./img/gomule_flavie_reportend.png) 
 
+- [Report Summary Json](./gomule/GoMuleSummary.json)
+
 
 ### In Progress, Debugging
 - Test corpse reading when a savefile has one

@@ -152,7 +152,8 @@ public class DirectD2Files
 			}else{
 				
 				JOptionPane.showMessageDialog(D2FileManager.getInstance().getContentPane(),
-						"Flavie says reports generated successfully.\nFile: " + System.getProperty("user.dir") + File.separatorChar + iFlavie.getReportName() + ".html", 
+						"Flavie says reports generated successfully.\nFile: " + System.getProperty("user.dir") + File.separatorChar + iFlavie.getReportName() + ".html" 
+						+ "\nJson file: " + System.getProperty("user.dir") + File.separatorChar + "GoMuleSummary.json", 
 						"Success!", JOptionPane.INFORMATION_MESSAGE);			
 			}
 		}
