@@ -8,6 +8,17 @@
   <property name="dist" location="."/>
   <property name="dependencies" location="dependencies"/>
 	
+  <!-- Define the CLASSPATH -->
+  <path id="compile.classpath">
+      <fileset dir="${build}">
+          <include name="*.jar" />
+      </fileset>
+      <pathelement location="${dependencies}" />
+      <fileset dir="${dependencies}">
+          <include name="*.jar" />
+      </fileset>
+  </path>
+
   <target name="init">
     <!-- Create the time stamp -->
     <tstamp/>
@@ -25,9 +36,7 @@
     <!-- Compile the java code from ${src} into ${build} -->
     <javac destdir="${build}" debug="on" source="1.6" target="1.6"  classpath="${classpath}">
         <src path="${src}"/>
-        <classpath>
-            <pathelement path="${dependencies}/json-20201115.jar"/>
-        </classpath>
+        <classpath refid="compile.classpath" />
     </javac>
   </target>
 
@@ -35,9 +44,7 @@
     <!-- Compile the java code from ${src} into ${build} -->
     <javac destdir="${build}" debug="on" deprecation="on" classpath="${classpath}">
         <src path="${src}"/>
-        <classpath>
-            <pathelement path="${dependencies}/json-20201115.jar"/>
-        </classpath>
+        <classpath refid="compile.classpath" />
     </javac>
   </target>
 
@@ -45,9 +52,7 @@
     <!-- Compile the java code from ${src} into ${build} -->
     <javac destdir="${build}" optimize="on" source="1.6" target="1.6" classpath="${classpath}">
         <src path="${src}"/>
-        <classpath>
-            <pathelement path="${dependencies}/json-20201115.jar"/>
-        </classpath>
+        <classpath refid="compile.classpath" />
     </javac>
   </target>
 
@@ -57,8 +62,20 @@
 
   <target name="makeJar">
     <!-- Put everything in ${build} into the ${dist}/GoMule.jar file -->
-    <jar jarfile="${dist}/GoMule.jar" manifest="MANIFEST.MF">
-    <zipgroupfileset dir="${dependencies}" includes="${dependencies}/json-20201115.jar" />
+    <!-- TODO: MANIFEST.MF not used since manifestclasspath was added -->
+    <!-- <jar jarfile="${dist}/GoMule.jar" manifest="MANIFEST.MF"> -->      
+    <manifestclasspath property="jar.classpath" jarfile="${dist}/GoMule.jar">
+      <classpath>
+          <fileset dir="${dependencies}" includes="*.jar"/>
+      </classpath>
+    </manifestclasspath>
+
+    <jar jarfile="${dist}/GoMule.jar">
+    <manifest>
+        <attribute name="Main-Class" value="gomule.GoMule" />
+        <attribute name="Class-Path" value="${jar.classpath}" />
+    </manifest>
+		<!-- <zipgroupfileset dir="${dependencies}" includes="${dependencies}/json-20201115.jar" /> -->
 		<fileset dir="${build}" />
 		<fileset dir="${src}" />
     	<!-- fileset dir="${resources}" / -->
