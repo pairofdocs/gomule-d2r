@@ -6,6 +6,7 @@
   <property name="build" location="bin"/>
   <property name="resources" location="resources"/>
   <property name="dist" location="."/>
+  <property name="dependencies" location="dependencies"/>
 	
   <target name="init">
     <!-- Create the time stamp -->
@@ -24,6 +25,9 @@
     <!-- Compile the java code from ${src} into ${build} -->
     <javac destdir="${build}" debug="on" source="1.6" target="1.6"  classpath="${classpath}">
         <src path="${src}"/>
+        <classpath>
+            <pathelement path="${dependencies}/json-20201115.jar"/>
+        </classpath>
     </javac>
   </target>
 
@@ -31,6 +35,9 @@
     <!-- Compile the java code from ${src} into ${build} -->
     <javac destdir="${build}" debug="on" deprecation="on" classpath="${classpath}">
         <src path="${src}"/>
+        <classpath>
+            <pathelement path="${dependencies}/json-20201115.jar"/>
+        </classpath>
     </javac>
   </target>
 
@@ -38,6 +45,9 @@
     <!-- Compile the java code from ${src} into ${build} -->
     <javac destdir="${build}" optimize="on" source="1.6" target="1.6" classpath="${classpath}">
         <src path="${src}"/>
+        <classpath>
+            <pathelement path="${dependencies}/json-20201115.jar"/>
+        </classpath>
     </javac>
   </target>
 
@@ -48,6 +58,7 @@
   <target name="makeJar">
     <!-- Put everything in ${build} into the ${dist}/GoMule.jar file -->
     <jar jarfile="${dist}/GoMule.jar" manifest="MANIFEST.MF">
+    <zipgroupfileset dir="${dependencies}" includes="${dependencies}/json-20201115.jar" />
 		<fileset dir="${build}" />
 		<fileset dir="${src}" />
     	<!-- fileset dir="${resources}" / -->

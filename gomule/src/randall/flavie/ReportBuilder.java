@@ -22,8 +22,7 @@ package randall.flavie;
 
 import java.io.*;
 import java.util.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 /**
  * @author Marco
@@ -395,16 +394,18 @@ public class ReportBuilder
 		    lOutReport.println("</table>");
 		}
 
-        // write json summary report
-        try (FileWriter file = new FileWriter("GoMuleSummary.json")) 
+		// write json summary report
+		try 
 		{
-            file.write(summaryReport.toJSONString()); 
-            file.flush();
-        } 
+		    FileWriter file = new FileWriter("GoMuleSummary.json");
+		    file.write(summaryReport.toString(4));
+		    file.flush();
+		    file.close();
+		}
 		catch (IOException e) 
 		{
-            e.printStackTrace();
-        }
+		    e.printStackTrace();
+		}
 		
 	    lOutReport.println("<br>");
 		String lColors = "<table><tr><td class=cat>Colors: </td>";
