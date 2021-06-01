@@ -10,8 +10,8 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 ### Install
 1. Install Java Runtime Environment [JRE (Windows x64 exe)](https://javadl.oracle.com/webapps/download/AutoDL?BundleId=244584_d7fc238d0cbf4b0dac67be84580cfb4b) following the [instructions](https://docs.oracle.com/goldengate/1212/gg-winux/GDRAD/java.htm#BGBFJHAB)
-2. Download the repo from [here](https://github.com/pairofdocs/gomule-d2r/archive/refs/heads/main.zip) and unzip it to a convenient location
-3. Double click the app at `gomule-d2r-main/gomule/GoMule.jar`
+2. Download the latest [release zip](https://github.com/pairofdocs/gomule-d2r/releases/latest) and unzip it to a convenient location
+3. Double click the app at `gomule-d2r-version/gomule/GoMule.jar`
 - Alara Shade made this useful video on the installation and usage of the LoD version of GoMule https://youtu.be/ZyRUlZhZU0E?t=55
 
 
@@ -52,7 +52,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - Reading + writing a shared stash .d2i file ([pic](https://github.com/pairofdocs/gomule-d2r/pull/2#issuecomment-849347933))
 - Changed from original gomule: stash is moved to the left hand side and char + inventory to the right hand side, consistent with how it appears in-game
 - Changed from original gomule: an item icon now appears for a selected row in the stash view ([pic](./img/gomule_allitems_search.png))
-- Merc item reading and editing
+- Merc item reading and moving
 
 
 ### Backup Save Files
