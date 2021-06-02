@@ -304,7 +304,7 @@ public class D2FileManager extends JFrame
 			}
 		});
 
-		JButton lFlavie = new JButton("Proj Flavie Report");
+		JButton lFlavie = new JButton("Proj Flavie Report + Grail");
 
 		lFlavie.addActionListener(new ActionListener()
 		{

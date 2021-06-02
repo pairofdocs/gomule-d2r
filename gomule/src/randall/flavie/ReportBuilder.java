@@ -22,6 +22,8 @@ package randall.flavie;
 
 import java.io.*;
 import java.util.*;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -406,6 +408,100 @@ public class ReportBuilder
 		{
 		    e.printStackTrace();
 		}
+
+		// check for layoutsConfig.json and write Grail Track text to the path, e.g. D:\\D2R\\Data\\global\\ui\\Layouts\\MainMenuPanelHD.json
+		File layoutsConfFile = new File("layoutsConfig.json");
+		if (layoutsConfFile.exists()) {
+			System.err.println("LayoutsConfig exists!");
+
+			// read config
+			String layoutsConfigStr = readFile("layoutsConfig.json");
+			System.err.println("layoutsConfigStr: " + layoutsConfigStr);
+			
+			JSONObject layoutsConfig = new JSONObject(layoutsConfigStr);
+			System.err.println("layoutsConfig json: " + layoutsConfig.toString());
+
+			System.err.println("menuPanelHDPath in layoutsConfig: " + String.valueOf(layoutsConfig.has("menuPanelHDPath")));
+
+			if (layoutsConfig.has("menuPanelHDPath")) {
+				// read path
+				String mainMenuPath = layoutsConfig.getString("menuPanelHDPath");
+				System.err.println("mainMenuPath: " + mainMenuPath);
+
+				// read panel file from path
+				String mainMenuJsonStr = readFile(mainMenuPath);
+				// System.err.println("mainMenuJsonStr: " + mainMenuJsonStr);
+
+				JSONObject mainMenuJson = new JSONObject(mainMenuJsonStr);
+				// System.err.println("mainMenuJson.children: " + mainMenuJson.getJSONArray("children"));
+
+
+				// loop through elements to remove the old textWidgets
+				int menuChildrenLen = mainMenuJson.getJSONArray("children").length();
+				for (int i = menuChildrenLen-1; i > -1 ; i--) {
+					if (mainMenuJson.getJSONArray("children").getJSONObject(i).get("name").equals("Grail Track")) {
+						mainMenuJson.getJSONArray("children").remove(i);
+						System.err.println("removed Grail Track");
+					}
+					else if (mainMenuJson.getJSONArray("children").getJSONObject(i).get("name").equals("Grail Uniques")) {
+						mainMenuJson.getJSONArray("children").remove(i);
+						System.err.println("removed Grail Uniques");
+					}
+					else if (mainMenuJson.getJSONArray("children").getJSONObject(i).get("name").equals("Grail Sets")) {
+						mainMenuJson.getJSONArray("children").remove(i);
+						System.err.println("removed Grail Sets");
+					}
+					else if (mainMenuJson.getJSONArray("children").getJSONObject(i).get("name").equals("Grail Runes")) {
+						mainMenuJson.getJSONArray("children").remove(i);
+						System.err.println("removed Grail Sets");
+					}
+				}
+				
+				// template textWidget
+				String templateText = "{\"type\": \"TextBoxWidget\", \"name\": \"Grail TEMPLATE\",\"fields\": {\"rect\": { \"x\": 650, \"y\": 25, \"width\": 800, \"height\": 55 },\"fontType\": \"50pt\",\"text\": \"Grail Track TEMPLATE\",\"style\": {\"fontColor\": \"$FontColorLightGold\",\"spacing\": \"$ReducedSpacing\",\"pointSize\": \"$MediumFontSize\",\"alignment\": { \"h\": \"center\" }}}}";
+				
+				// Add header "Grail Track"
+				JSONObject templateJson = new JSONObject(templateText);
+				templateJson.put("name", "Grail Track");
+				templateJson.getJSONObject("fields").put("text", "Grail Track");
+
+				System.err.println("templateJson json: " + templateJson.toString());
+
+				// update the children array of mainMenu with added text templates
+				mainMenuJson.getJSONArray("children").put(templateJson);
+
+				// track uniques
+				JSONObject templateJsonUni= new JSONObject(templateText);
+				templateJsonUni.put("name", "Grail Uniques");
+				templateJsonUni.getJSONObject("fields").put("text", "All Uniques: " + String.valueOf(summaryReport.getJSONObject("all unique items").get("found-nr")) + "/" + String.valueOf(summaryReport.getJSONObject("all unique items").get("total-nr")));
+				templateJsonUni.getJSONObject("fields").getJSONObject("rect").put("y", 25+55);
+				templateJsonUni.getJSONObject("fields").getJSONObject("style").put("fontColor", "$FontColorGoldYellow");
+				mainMenuJson.getJSONArray("children").put(templateJsonUni);
+
+				// track sets
+				JSONObject templateJsonSet= new JSONObject(templateText);
+				templateJsonSet.put("name", "Grail Sets");
+				templateJsonSet.getJSONObject("fields").put("text", "All Sets: " + String.valueOf(summaryReport.getJSONObject("all set items").get("found-nr")) + "/" +  String.valueOf(summaryReport.getJSONObject("all set items").get("total-nr")));
+				templateJsonSet.getJSONObject("fields").getJSONObject("rect").put("y", 25+55+55);
+				templateJsonSet.getJSONObject("fields").getJSONObject("style").put("fontColor", "$FontColorGreen");
+				mainMenuJson.getJSONArray("children").put(templateJsonSet);
+
+				// track runes
+				JSONObject templateJsonRune= new JSONObject(templateText);
+				templateJsonRune.put("name", "Grail Runes");
+				int allRunesFound = summaryReport.getJSONObject("runes common").getInt("found-nr") + summaryReport.getJSONObject("runes semi rare").getInt("found-nr") + summaryReport.getJSONObject("runes extremely rare").getInt("found-nr");
+				templateJsonRune.getJSONObject("fields").put("text", "All Runes: " + String.valueOf(allRunesFound) + "/33");
+				templateJsonRune.getJSONObject("fields").getJSONObject("rect").put("y", 25+55+55+55);
+				templateJsonRune.getJSONObject("fields").getJSONObject("style").put("fontColor", "$FontColorGray");
+				mainMenuJson.getJSONArray("children").put(templateJsonRune);
+
+				// write the final mainMenu json
+				FileWriter menuJsonFile = new FileWriter(mainMenuPath);
+				menuJsonFile.write(mainMenuJson.toString(4));
+				menuJsonFile.flush();
+				menuJsonFile.close();
+			}
+		}
 		
 	    lOutReport.println("<br>");
 		String lColors = "<table><tr><td class=cat>Colors: </td>";
@@ -434,6 +530,31 @@ public class ReportBuilder
 		lOutReport.println("</html>");
 		
 		lOutReport.close();
+	}
+
+	// credit to https://www.thepolyglotdeveloper.com/2015/03/parse-json-file-java/
+	public static String readFile(String filename) {
+		String result = "";
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(filename));
+			StringBuilder sb = new StringBuilder();
+			String line = br.readLine();
+			while (line != null) {
+				// skip comment lines that begin with slashes
+				if (!line.strip().startsWith("//")) {
+					sb.append(line);
+					line = br.readLine();
+				}
+				else {
+					line = br.readLine();
+				}
+			}
+			result = sb.toString();
+			br.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	private static String getReportDisplayNr(int pNr)
