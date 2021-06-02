@@ -412,48 +412,30 @@ public class ReportBuilder
 		// check for layoutsConfig.json and write Grail Track text to the path, e.g. D:\\D2R\\Data\\global\\ui\\Layouts\\MainMenuPanelHD.json
 		File layoutsConfFile = new File("layoutsConfig.json");
 		if (layoutsConfFile.exists()) {
-			System.err.println("LayoutsConfig exists!");
-
 			// read config
 			String layoutsConfigStr = readFile("layoutsConfig.json");
-			System.err.println("layoutsConfigStr: " + layoutsConfigStr);
-			
 			JSONObject layoutsConfig = new JSONObject(layoutsConfigStr);
-			System.err.println("layoutsConfig json: " + layoutsConfig.toString());
-
-			System.err.println("menuPanelHDPath in layoutsConfig: " + String.valueOf(layoutsConfig.has("menuPanelHDPath")));
 
 			if (layoutsConfig.has("menuPanelHDPath")) {
-				// read path
+				// read path and panel file from path
 				String mainMenuPath = layoutsConfig.getString("menuPanelHDPath");
-				System.err.println("mainMenuPath: " + mainMenuPath);
-
-				// read panel file from path
 				String mainMenuJsonStr = readFile(mainMenuPath);
-				// System.err.println("mainMenuJsonStr: " + mainMenuJsonStr);
-
 				JSONObject mainMenuJson = new JSONObject(mainMenuJsonStr);
-				// System.err.println("mainMenuJson.children: " + mainMenuJson.getJSONArray("children"));
-
-
+				
 				// loop through elements to remove the old textWidgets
 				int menuChildrenLen = mainMenuJson.getJSONArray("children").length();
 				for (int i = menuChildrenLen-1; i > -1 ; i--) {
 					if (mainMenuJson.getJSONArray("children").getJSONObject(i).get("name").equals("Grail Track")) {
 						mainMenuJson.getJSONArray("children").remove(i);
-						System.err.println("removed Grail Track");
 					}
 					else if (mainMenuJson.getJSONArray("children").getJSONObject(i).get("name").equals("Grail Uniques")) {
 						mainMenuJson.getJSONArray("children").remove(i);
-						System.err.println("removed Grail Uniques");
 					}
 					else if (mainMenuJson.getJSONArray("children").getJSONObject(i).get("name").equals("Grail Sets")) {
 						mainMenuJson.getJSONArray("children").remove(i);
-						System.err.println("removed Grail Sets");
 					}
 					else if (mainMenuJson.getJSONArray("children").getJSONObject(i).get("name").equals("Grail Runes")) {
 						mainMenuJson.getJSONArray("children").remove(i);
-						System.err.println("removed Grail Runes");
 					}
 				}
 				
