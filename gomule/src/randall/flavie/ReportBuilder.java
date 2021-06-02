@@ -453,7 +453,7 @@ public class ReportBuilder
 					}
 					else if (mainMenuJson.getJSONArray("children").getJSONObject(i).get("name").equals("Grail Runes")) {
 						mainMenuJson.getJSONArray("children").remove(i);
-						System.err.println("removed Grail Sets");
+						System.err.println("removed Grail Runes");
 					}
 				}
 				
@@ -464,9 +464,6 @@ public class ReportBuilder
 				JSONObject templateJson = new JSONObject(templateText);
 				templateJson.put("name", "Grail Track");
 				templateJson.getJSONObject("fields").put("text", "Grail Track");
-
-				System.err.println("templateJson json: " + templateJson.toString());
-
 				// update the children array of mainMenu with added text templates
 				mainMenuJson.getJSONArray("children").put(templateJson);
 
