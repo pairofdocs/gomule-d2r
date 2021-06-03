@@ -1141,7 +1141,7 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 			{
 				return D2Character.BODY_INV_CONTENT;
 			}
-			if (iIsChar && x >= CUBE_X && x < CUBE_X + 3 * GRID_SIZE + 3 * GRID_SPACER && y >= CUBE_Y && y < INV_Y + 4 * GRID_SIZE + 4 * GRID_SPACER)
+			if (iIsChar && x >= CUBE_X && x < CUBE_X + 3 * GRID_SIZE + 3 * GRID_SPACER && y >= CUBE_Y && y < CUBE_Y + 4 * GRID_SIZE + 4 * GRID_SPACER)
 			{
 				return D2Character.BODY_CUBE_CONTENT;
 			}
