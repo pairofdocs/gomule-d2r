@@ -844,10 +844,14 @@ public class D2Item implements Comparable, D2ItemInterface {
 		short rare_name_2 = (short) pFile.read(8);
 		D2TxtFileItemProperties lRareName1 = D2TxtFile.RAREPREFIX
 		.getRow(rare_name_1 - 156);
-		D2TxtFileItemProperties lRareName2 = D2TxtFile.RARESUFFIX
-		.getRow(rare_name_2 - 1);
-		iItemName = D2TblFile.getString(lRareName1.get("name")) + " "
-		+ D2TblFile.getString(lRareName2.get("name"));
+
+		// address case of rare_name_2 is 0. there is no 2nd rare item name. item name is then just one word "death" instead of "death whorl"
+		if (rare_name_2 > 0) {
+			D2TxtFileItemProperties lRareName2 = D2TxtFile.RARESUFFIX.getRow(rare_name_2 - 1);
+			iItemName = D2TblFile.getString(lRareName1.get("name")) + " " + D2TblFile.getString(lRareName2.get("name"));
+		} else {
+			iItemName = D2TblFile.getString(lRareName1.get("name"));
+		}
 
 		rare_prefixes = new short[3];
 		rare_suffixes = new short[3];
