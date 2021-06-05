@@ -46,7 +46,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 
 ### In Progress, Debugging
-- Test corpse reading when a savefile has one
+- Displaying tooltips for corpse items
 
 
 #### Fixed/Changed
@@ -57,6 +57,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - Changed from original gomule: an item icon now appears for a selected row in the stash view ([pic](./img/gomule_allitems_search.png))
 - Merc item reading and moving
 - Add grail stats to D2R's main menu panel json so stats appear in-game ([details here](https://github.com/pairofdocs/gomule-d2r/releases/tag/v0.12))
+- Reading a character corpse when the savefile has one
 
 
 ### Backup Save Files
