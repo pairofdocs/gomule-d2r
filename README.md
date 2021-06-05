@@ -79,3 +79,15 @@ Click on Preferences when the app is open to change this setting.
 - https://github.com/d07RiV/d07riv.github.io for the save file converter and cracking the item Huffman encoding
 - https://github.com/dschu012/d2s for the save file converter and editor
 - https://user.xmission.com/~trevin/DiabloIIv1.09_File_Format.shtml for extensive details on the d2s file format
+
+
+### Copyrights
+Diablo II and Diablo II: Resurrected are [copyrighted](https://www.blizzard.com/en-us/legal/9c9cb70b-d1ed-4e17-998a-16c6df46be7b/copyright-notices) by Blizzard Entertainment, Inc. All rights reserved. Diablo II, Diablo II: Resurrected and Blizzard Entertainment are [trademarks](https://www.blizzard.com/en-us/legal/9c9cb70b-d1ed-4e17-998a-16c6df46be7b/copyright-notices) or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries.  
+All trademarks referenced here are the properties of their respective owners.
+
+[Note](https://github.com/pairofdocs/gomule-d2r/blob/main/gomule/LICENSE.txt): For the sake of convenience some text files and dc6 image files that gomule requires are provided in the resources directory.
+These files are part of the Diablo II game series and are copyrighted by Blizzard Entertainment.
+They are provided only to save you the trouble of extracting them from the Diablo II game files.
+If you did not purchase a copy of Diablo II and Diablo II: Resurrected be advised that you may not have perimission to use these files.
+
+This project and its maintainers are not associated with or endorsed by Blizzard Entertainment, Inc. 
