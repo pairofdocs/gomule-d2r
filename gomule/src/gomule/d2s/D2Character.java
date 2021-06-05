@@ -514,11 +514,18 @@ public class D2Character extends D2ItemListAdapter
 		iReader.skipBytes(2);
 		int num_items = (int) (iReader.read(8));
 		int lLastItemEnd = iReader.get_byte_pos();
+		if (num_items == 1) {
+			// num_items is 0 or 1 here. if 1 follows JM, there is a corpse present. skip bytes
+			iReader.skipBytes(15);
+			num_items = (int) (iReader.read(8));
+			iReader.set_byte_pos(lLastItemEnd);    // set position to before JM where corpse list starts
+		}
+		int lItemStart = lLastItemEnd + 17;   // skip 12 unknown bytes, then JM and 2 bytes for num_items
 		for (int i = 0; i < num_items; i++){
-			int lItemStart = iReader.findNextFlag("JM", lLastItemEnd);
+			// int lItemStart = iReader.findNextFlag("JM", lLastItemEnd); // fir D2R the item doesn't include JM
 			if (lItemStart == -1)throw new Exception("Corpse item " + (i + 1) + " not found.");
 			D2Item lItem = new D2Item(iFileName, iReader, lItemStart, iCharLevel);
-			lLastItemEnd = lItemStart + lItem.getItemLength();
+			lItemStart = lItemStart + lItem.getItemLength();
 			if ( lItem.isCursorItem() ){
 				if ( iCharCursorItem != null )throw new Exception("Double cursor item found");
 				iCharCursorItem = lItem;
