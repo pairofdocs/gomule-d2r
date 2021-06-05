@@ -1314,8 +1314,8 @@ public class D2Character extends D2ItemListAdapter
 				}
 			}
 		}else if (panel >= 10){
-			for (int i = 0; i < iCharItems.size(); i++){
-				D2Item temp_item = (D2Item) iCharItems.get(i);
+			for (int i = 0; i < iCorpseItems.size(); i++){
+				D2Item temp_item = (D2Item) iCorpseItems.get(i);
 				if (temp_item.get_location() != 0 && temp_item.get_location() != 2){
 					if (temp_item.get_panel() == 0){
 						if (temp_item.get_body_position() == panel - 10){
