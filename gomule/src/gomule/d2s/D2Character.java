@@ -1424,9 +1424,7 @@ public class D2Character extends D2ItemListAdapter
 		iReader.write(lCharItemsCount, 16);
 		if (hasMerc()){
 			iReader.set_byte_pos(lMercItemCountPos);
-			iReader.write(iMercItems.size(), 16);         // <<<<<<<<<<  could this be the issue?,  writin 00 for merc itemssize?.  Yes. this was writing 0x00 at the last item byte.
-			// Merc item reading should be fixed and this can be enabled and debugged.
-			// For now.  0x00 is written before JM _ _ jfJM  (start of Merc).  the corpse bytes
+			iReader.write(iMercItems.size(), 16);
 		}
 		// get all the bytes
 		iReader.set_byte_pos(0);

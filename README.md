@@ -45,11 +45,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 ![Grail Track](./img/grail_track_uni_set_rune_16by9.jpg)
 
 
-### In Progress, Debugging
-- Displaying tooltips for corpse items
-
-
-#### Fixed/Changed
+### Fixed/Changed
 - Moving items between chars ([pic](https://github.com/pairofdocs/gomule-d2r/pull/1#issuecomment-846635551))
 - Annihilus and Torch charms inventory graphics fixed
 - Reading + writing a shared stash .d2i file ([pic](https://github.com/pairofdocs/gomule-d2r/pull/2#issuecomment-849347933))
@@ -58,6 +54,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - Merc item reading and moving
 - Add grail stats to D2R's main menu panel json so stats appear in-game ([details here](https://github.com/pairofdocs/gomule-d2r/releases/tag/v0.12))
 - Reading a character corpse when the savefile has one
+- Displaying tooltips for corpse items
 
 
 ### Backup Save Files
