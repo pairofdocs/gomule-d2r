@@ -4,7 +4,8 @@ language: shell
 
 env:
   global:
-    - JAVA_HOME="/c/Program Files/AdoptOpenJDK/jdk-11.0.8.10-hotspot"
+    # TODO: avoid having this jdk version is hard-coded here
+    - JAVA_HOME="/c/Program Files/AdoptOpenJDK/jdk-11.0.11.9-hotspot"
     - ANT_HOME="/c/Users/travis/apache-ant"
     - PATH="$JAVA_HOME/bin:$ANT_HOME/bin:$PATH"
 
