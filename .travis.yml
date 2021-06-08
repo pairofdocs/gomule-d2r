@@ -13,7 +13,7 @@ before_install:
   - choco install adoptopenjdk11
   - ls "/c/Program Files/AdoptOpenJDK" # Check JAVA_HOME is correct :(
   # Install ant at $ANT_HOME (chosen in env: section)
-  - curl https://downloads.apache.org/ant/binaries/apache-ant-1.10.8-bin.zip -o apache-ant.zip
+  - curl https://downloads.apache.org/ant/binaries/apache-ant-1.10.10-bin.zip -o apache-ant.zip
   - unzip -q apache-ant.zip
   - rm apache-ant.zip
   - mv apache-ant-1.10.8 $ANT_HOME
