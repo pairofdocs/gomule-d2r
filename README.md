@@ -45,6 +45,10 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 ![Grail Track](./img/grail_track_uni_set_rune_16by9.jpg)
 
 
+### In Progress, Debugging
+- Add keyboard shortcuts for save-all, open character file
+
+
 ### Fixed/Changed
 - Moving items between chars ([pic](https://github.com/pairofdocs/gomule-d2r/pull/1#issuecomment-846635551))
 - Annihilus and Torch charms inventory graphics fixed
