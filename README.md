@@ -1,4 +1,4 @@
-## Gomule-d2r
+## Gomule-d2r [![Build Status](https://travis-ci.com/pairofdocs/gomule-d2r.svg?branch=main)](https://travis-ci.com/pairofdocs/gomule-d2r)
 GoMule enabled for D2R
 
 

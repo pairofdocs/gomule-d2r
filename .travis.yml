@@ -13,7 +13,8 @@ before_install:
   - pwd # /c/Users/travis/build/<github-user>/<repo-name>
   # Install the required JDK (must match JAVA_HOME in env: section)
   - choco install adoptopenjdk11
-  - ls "/c/Program Files/AdoptOpenJDK" # Check JAVA_HOME is correct :(
+  # Check JAVA_HOME is correct
+  - ls "/c/Program Files/AdoptOpenJDK"
   # Install ant at $ANT_HOME (chosen in env: section)
   - curl https://downloads.apache.org/ant/binaries/apache-ant-1.10.10-bin.zip -o apache-ant.zip
   - unzip -q apache-ant.zip
