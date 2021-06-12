@@ -727,6 +727,16 @@ public class D2FileManager extends JFrame
 			}
 		});
 
+		// add ctrl+o shortcut to open char file
+        Action openAction = new AbstractAction("OpenChar") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openChar(true);
+            }
+        };
+        openAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
+        openChar.setAction(openAction);
+
 		newStash.addMouseListener(new MouseAdapter(){
 
 			public void mouseReleased(MouseEvent e){
@@ -750,6 +760,16 @@ public class D2FileManager extends JFrame
 
 			}
 		});
+
+		// add ctrl+s shortcut to save all files
+        Action saveAction = new AbstractAction("SaveAll") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveAll();
+            }
+        };
+        saveAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
+        saveAll.setAction(saveAction);
 
 		exitProg.addMouseListener(new MouseAdapter(){
 

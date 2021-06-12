@@ -45,10 +45,6 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 ![Grail Track](./img/grail_track_uni_set_rune_16by9.jpg)
 
 
-### In Progress, Debugging
-- Add keyboard shortcuts for save-all, open character file
-
-
 ### Fixed/Changed
 - Moving items between chars ([pic](https://github.com/pairofdocs/gomule-d2r/pull/1#issuecomment-846635551))
 - Annihilus and Torch charms inventory graphics fixed
@@ -59,6 +55,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - Add grail stats to D2R's main menu panel json so stats appear in-game ([details here](https://github.com/pairofdocs/gomule-d2r/releases/tag/v0.12))
 - Reading a character corpse when the savefile has one
 - Displaying tooltips for corpse items
+- Add keyboard shortcuts for save-all (ctrl+s) and open-character-file (ctrl+o)
 
 
 ### Backup Save Files
@@ -73,7 +70,7 @@ Click on Preferences when the app is open to change this setting.
 - To build the GoMule app install JDK (either Java SE 11 (LTS) or Java SE 16) from [here](https://www.oracle.com/java/technologies/javase-downloads.html).
 - Install [ant](https://mirrors.gigenet.com/apache//ant/binaries/apache-ant-1.10.10-bin.zip) from [here](https://ant.apache.org/bindownload.cgi) following the [instructions](https://ant.apache.org/manual/install.html). Go through the `Setup` section and set up `ANT_HOME`, `JAVA_HOME` and add `ANT_HOME/bin` to your path
 - In a terminal go to the directory  `gomule-d2r/gomule/` and run `ant Jar-BuildAllOptimezed`. This builds GoMule.jar
-- Debuggin with breakpoints using an IDE also lets you test the app (but doesn't create the java archive GoMule.jar)
+- Debugging with breakpoints using an IDE also lets you test the app (but doesn't create the java archive GoMule.jar)
 
 
 ### Credits
