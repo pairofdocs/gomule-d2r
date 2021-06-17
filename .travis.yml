@@ -5,14 +5,14 @@ language: shell
 env:
   global:
     # TODO: avoid having this jdk version is hard-coded here
-    - JAVA_HOME="/c/Program Files/AdoptOpenJDK/jdk-11.0.11.9-hotspot"
+    - JAVA_HOME="/c/Program Files/AdoptOpenJDK/jdk-8.0.292.10-hotspot"
     - ANT_HOME="/c/Users/travis/apache-ant"
     - PATH="$JAVA_HOME/bin:$ANT_HOME/bin:$PATH"
 
 before_install:
   - pwd # /c/Users/travis/build/<github-user>/<repo-name>
   # Install the required JDK (must match JAVA_HOME in env: section)
-  - choco install adoptopenjdk11
+  - choco install adoptopenjdk8
   # Check JAVA_HOME is correct
   - ls "/c/Program Files/AdoptOpenJDK"
   # Install ant at $ANT_HOME (chosen in env: section)
