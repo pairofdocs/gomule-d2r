@@ -520,7 +520,7 @@ public class ReportBuilder
 			String line = br.readLine();
 			while (line != null) {
 				// skip comment lines that begin with slashes
-				if (!line.strip().startsWith("//")) {
+				if (!line.trim().startsWith("//")) {
 					sb.append(line);
 					line = br.readLine();
 				}
