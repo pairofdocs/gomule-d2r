@@ -9,7 +9,7 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 
 
 ### Install
-1. Install Java Runtime Environment [JRE (Windows x64 exe)](https://javadl.oracle.com/webapps/download/AutoDL?BundleId=244584_d7fc238d0cbf4b0dac67be84580cfb4b) following the [instructions here](https://docs.oracle.com/goldengate/1212/gg-winux/GDRAD/java.htm#BGBFJHAB) or [here with pics](https://www.poftut.com/how-to-set-java-jre-and-jdk-home-path-and-environment-variables-on-windows/)
+1. Install Java Runtime Environment [JRE (Windows x64 exe)](https://javadl.oracle.com/webapps/download/AutoDL?BundleId=244584_d7fc238d0cbf4b0dac67be84580cfb4b) following the [instructions here](https://www.ics.uci.edu/~pattis/common/handouts/pythoneclipsejava/java.html) or [here for setting environment variables](https://www.poftut.com/how-to-set-java-jre-and-jdk-home-path-and-environment-variables-on-windows/)
 2. Download the latest [release zip](https://github.com/pairofdocs/gomule-d2r/releases/latest) and unzip it to a convenient location
 3. Double click the app at `gomule-d2r-version/gomule/GoMule.jar`
 - Alara Shade made this useful video on the installation and usage of the LoD version of GoMule https://youtu.be/ZyRUlZhZU0E?t=55
