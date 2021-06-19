@@ -166,7 +166,7 @@ public class Monster {
 				initTCRow = new D2TxtFileItemProperties(D2TxtFile.TCS, initTCRow.getRowNum()+1);
 			}else{
 				if(Integer.parseInt(initTCRow.get("level"))>lvl){
-					return new D2TxtFileItemProperties(D2TxtFile.TCS, initTCRow.getRowNum()).get("Treasure Class");
+					return new D2TxtFileItemProperties(D2TxtFile.TCS, initTCRow.getRowNum()-1).get("Treasure Class");
 				}else{
 					return initTCRow.get("Treasure Class");
 				}
