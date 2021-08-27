@@ -58,6 +58,8 @@ Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule
 - Add keyboard shortcuts for save-all (ctrl+s) and open-character-file (ctrl+o)
 - Drop Calculator bug fixes (Colab with etale#9303 on discord) for super uniques ([details on diabloii.net](https://www.diabloii.net/forums/threads/how-the-1-10-pindleskin-nerf-failed-and-snapchip-suffered.965773/))
 - Fixed rune drop chances. Thanks to `7551mn` on reddit for pointing this out
+- Add a darktheme option to the GUI. To enable, set line1 in `gomule/arguments.txt` to `-darktheme`
+
 
 ### Backup Save Files
 WARNING: Back up important save files when using GoMule!

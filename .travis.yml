@@ -19,7 +19,7 @@ before_install:
   - curl https://downloads.apache.org/ant/binaries/apache-ant-1.10.11-bin.zip -o apache-ant.zip
   - unzip -q apache-ant.zip
   - rm apache-ant.zip
-  - mv apache-ant-1.10.10 $ANT_HOME
+  - mv apache-ant-1.10.11 $ANT_HOME
 
 install:
   # Confirm versions and paths
