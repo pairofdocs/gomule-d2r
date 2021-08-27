@@ -16,7 +16,7 @@ before_install:
   # Check JAVA_HOME is correct
   - ls "/c/Program Files/AdoptOpenJDK"
   # Install ant at $ANT_HOME (chosen in env: section)
-  - curl https://downloads.apache.org/ant/binaries/apache-ant-1.10.10-bin.zip -o apache-ant.zip
+  - curl https://downloads.apache.org/ant/binaries/apache-ant-1.10.11-bin.zip -o apache-ant.zip
   - unzip -q apache-ant.zip
   - rm apache-ant.zip
   - mv apache-ant-1.10.10 $ANT_HOME
