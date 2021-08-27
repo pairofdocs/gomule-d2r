@@ -92,7 +92,7 @@ public class D2ViewClipboard extends RandallPanel implements D2ItemContainer, D2
 			iTable.setDefaultRenderer(String.class, new D2CellStringRenderer() );
 			lPane = new JScrollPane(iTable);
 			setBorder((new TitledBorder(null, ("GoMule Clipboard"), 
-					TitledBorder.LEFT, TitledBorder.TOP, this.getFont(), Color.gray)));
+					TitledBorder.LEFT, TitledBorder.TOP, this.getFont(), Color.black)));
 			final ImageIcon iIcon = new ImageIcon();
 			final JLabel iIconLabel = new JLabel();
 			

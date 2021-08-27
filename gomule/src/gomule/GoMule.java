@@ -65,6 +65,22 @@ public class GoMule
 					if ( lArgs[i].equalsIgnoreCase("-system") )
 					{
 						lLookAndFeel = UIManager.getSystemLookAndFeelClassName();
+					} else if ( lArgs[i].equalsIgnoreCase("-darktheme") ) {
+						UIManager.put( "control", new Color(111, 112, 114) );
+						UIManager.put( "nimbusBase", new Color(111, 112, 114) );
+						UIManager.put( "nimbusAlertYellow", new Color( 248, 187, 0) );
+						UIManager.put( "nimbusDisabledText", new Color( 16, 16, 16) );
+						UIManager.put( "nimbusFocus", new Color(115,164,209) );
+						UIManager.put( "nimbusGreen", new Color(176,179,50) );
+						UIManager.put( "nimbusInfoBlue", new Color( 66, 139, 221) );
+						UIManager.put( "nimbusLightBackground", new Color(111, 112, 114) );
+						UIManager.put( "nimbusOrange", new Color(191,98,4) );
+						UIManager.put( "nimbusRed", new Color(169,46,34) );
+						UIManager.put( "nimbusSelectedText", new Color( 255, 255, 255) );
+						UIManager.put("TitledBorder.border", new Insets(0, 0, 0, 0));
+						UIManager.put( "text", new Color(16, 16, 16) );
+						
+						lLookAndFeel = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
 					} else if ( lArgs[i] != null ) {
 						LookAndFeelInfo[] lList = UIManager.getInstalledLookAndFeels();
 						for ( int j = 0 ; j < lList.length ; j++ ) {
@@ -78,7 +94,21 @@ public class GoMule
 					
 				}
 			}
-			UIManager.setLookAndFeel(lLookAndFeel);
+			try {
+				UIManager.setLookAndFeel(lLookAndFeel);
+			}
+			catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (javax.swing.UnsupportedLookAndFeelException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 			UIManager.put ("ToolTip.background", Color.black);
 			UIManager.put ("ToolTip.foreground", Color.white);
 			UIManager.put("info", Color.black);

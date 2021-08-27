@@ -221,8 +221,8 @@ public class D2FileManager extends JFrame
 		});
 
 		RandallPanel projControl = new RandallPanel();
-		projControl.setPreferredSize(new Dimension(190, 150));
-		projControl.setBorder(new TitledBorder(null, ("Project Control"),	TitledBorder.LEFT, TitledBorder.TOP, iLeftPane.getFont(), Color.gray));
+		projControl.setPreferredSize(new Dimension(190, 140));
+		projControl.setBorder(new TitledBorder(null, ("Project Control"),	TitledBorder.CENTER, TitledBorder.TOP, iLeftPane.getFont(), Color.black));
 
 		JButton newProj = new JButton("New Proj");
 
@@ -464,7 +464,7 @@ public class D2FileManager extends JFrame
 		}
 
 		RandallPanel itemControl = new RandallPanel();
-		itemControl.setBorder(new TitledBorder(null, ("Item Control"),	TitledBorder.LEFT, TitledBorder.TOP, iRightPane.getFont(), Color.gray));
+		itemControl.setBorder(new TitledBorder(null, ("Item Control"),	TitledBorder.CENTER, TitledBorder.TOP, iRightPane.getFont(), Color.black));
 
 		itemControl.setPreferredSize(new Dimension(190, 160));
 		itemControl.setSize(new Dimension(190, 160));
@@ -611,7 +611,7 @@ public class D2FileManager extends JFrame
 
 
 		RandallPanel charControl = new RandallPanel();
-		charControl.setBorder(new TitledBorder(null, ("Output Control"),	TitledBorder.LEFT, TitledBorder.TOP, iRightPane.getFont(), Color.gray));
+		charControl.setBorder(new TitledBorder(null, ("Output Control"),	TitledBorder.CENTER, TitledBorder.TOP, iRightPane.getFont(), Color.black));
 		charControl.setPreferredSize(new Dimension(190, 80));
 		charControl.setSize(new Dimension(190, 80));
 		charControl.setMaximumSize(new Dimension(190, 80));
