@@ -84,6 +84,8 @@ public class D2FileManager extends JFrame
 
 	private JButton dropAll;
 
+	private JButton deleteAll;
+
 	private JButton pickFrom;
 
 	private JComboBox pickChooser;
@@ -466,10 +468,10 @@ public class D2FileManager extends JFrame
 		RandallPanel itemControl = new RandallPanel();
 		itemControl.setBorder(new TitledBorder(null, ("Item Control"),	TitledBorder.CENTER, TitledBorder.TOP, iRightPane.getFont(), Color.black));
 
-		itemControl.setPreferredSize(new Dimension(190, 160));
-		itemControl.setSize(new Dimension(190, 160));
-		itemControl.setMaximumSize(new Dimension(190, 160));
-		itemControl.setMinimumSize(new Dimension(190, 160));
+		itemControl.setPreferredSize(new Dimension(190, 160+30));
+		itemControl.setSize(new Dimension(190, 160+30));
+		itemControl.setMaximumSize(new Dimension(190, 160+30));
+		itemControl.setMinimumSize(new Dimension(190, 160+30));
 		
 		pickAll = new JButton("Pick All");
 		pickAll.addActionListener(new ActionListener(){
@@ -528,6 +530,16 @@ public class D2FileManager extends JFrame
 						iList.listenItemListEvents();
 						iList.fireD2ItemListEvent();
 					}
+				}
+			}
+		});
+
+		deleteAll = new JButton("Delete All");
+		deleteAll.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				// confirm dialog, then remove items
+				if( JOptionPane.showConfirmDialog(null, "Click YES to Delete All from the Clipboard.") == 0 ){
+					ArrayList lItemList = D2ViewClipboard.removeAllItems();
 				}
 			}
 		});
@@ -599,14 +611,15 @@ public class D2FileManager extends JFrame
 
 		itemControl.addToPanel(pickAll,0,0,1,RandallPanel.HORIZONTAL);
 		itemControl.addToPanel(dropAll,1,0,1,RandallPanel.HORIZONTAL);
+		itemControl.addToPanel(deleteAll,0,1,2,RandallPanel.HORIZONTAL);
+
+		itemControl.addToPanel(pickFrom,0,2,2,RandallPanel.HORIZONTAL);
 		
-		itemControl.addToPanel(pickFrom,0,1,2,RandallPanel.HORIZONTAL);
-			
-		itemControl.addToPanel(pickChooser,0,2,2,RandallPanel.HORIZONTAL);
+		itemControl.addToPanel(pickChooser,0,3,2,RandallPanel.HORIZONTAL);
 		
-		itemControl.addToPanel(dropTo,0,3,2,RandallPanel.HORIZONTAL);
+		itemControl.addToPanel(dropTo,0,4,2,RandallPanel.HORIZONTAL);
 		
-		itemControl.addToPanel(dropChooser,0,4,2,RandallPanel.HORIZONTAL);
+		itemControl.addToPanel(dropChooser,0,5,2,RandallPanel.HORIZONTAL);
 
 
 
