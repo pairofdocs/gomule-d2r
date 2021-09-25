@@ -5,7 +5,8 @@ GoMule enabled for D2R
 ### Original GoMule App
 http://gomule.sourceforge.net/ all credits go to Gohanman, Randall, Silospen, collaborators, ...
 
-Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule/R0.31/GoMuleDocs.pdf
+Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule/R0.31/GoMuleDocs.pdf  
+***WARNING***: Close D2R when using GoMule. D2R keeps save files open even in the menus since it displays character gear and this prevents GoMule from saving files and moving items properly.
 
 
 ### Install

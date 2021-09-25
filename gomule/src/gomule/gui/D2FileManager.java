@@ -927,6 +927,17 @@ public class D2FileManager extends JFrame
 		});
 		iToolbar.add(lCancelAll);
 
+		// add textPanel and TextField warning for closing D2R when using GoMule
+		JPanel textPanel = new JPanel();
+        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.X_AXIS));
+        textPanel.setMaximumSize(new Dimension(610, 40));
+        
+		JTextField warnText = new JTextField(" *WARNING*: Close D2R when using GoMule. This allows GoMule to save files and move items properly.", 100);
+		warnText.setFont(warnText.getFont().deriveFont(Font.BOLD, 12f));
+		warnText.setEditable(false);
+		textPanel.add(warnText);
+		iToolbar.add(textPanel);
+
 		iToolbar.addSeparator();
 
 		iContentPane.add(iToolbar, BorderLayout.NORTH);
