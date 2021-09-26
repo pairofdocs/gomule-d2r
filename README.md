@@ -6,8 +6,8 @@ GoMule enabled for D2R
 http://gomule.sourceforge.net/ all credits go to Gohanman, Randall, Silospen, collaborators, ...
 
 Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule/R0.31/GoMuleDocs.pdf  
-***WARNING***: Close D2R when using GoMule. D2R keeps save files open even in the menus since it displays character gear and this prevents GoMule from saving files and moving items properly.
-
+***WARNING***: Close D2R when using GoMule. D2R keeps save files open even in the menus since it displays character gear and this prevents GoMule from saving files and moving items properly.  
+***NOTE***: A work-in-progress Atma .d2x stash to D2R .d2i stash converter  is available here https://pairofdocs.github.io/atma-stash-d2r/ and discussions are [here](https://github.com/pairofdocs/gomule-d2r/issues/5)  
 
 ### Install
 1. Install Java Runtime Environment [JRE (Windows x64 exe)](https://javadl.oracle.com/webapps/download/AutoDL?BundleId=244584_d7fc238d0cbf4b0dac67be84580cfb4b) following the [instructions here](https://www.ics.uci.edu/~pattis/common/handouts/pythoneclipsejava/java.html) or [here for setting environment variables](https://www.poftut.com/how-to-set-java-jre-and-jdk-home-path-and-environment-variables-on-windows/)
