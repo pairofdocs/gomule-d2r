@@ -615,7 +615,6 @@ public class D2Character extends D2ItemListAdapter
 	}
 
 	private void readGolem() throws Exception {
-
 		iReader.set_byte_pos(iKF);
 		iReader.skipBytes(2);
 		switch((int)iReader.read(8)){
@@ -623,7 +622,8 @@ public class D2Character extends D2ItemListAdapter
 			golemItem = null;
 			return;		
 		}
-		int lItemStart = iReader.findNextFlag("JM", iKF);
+		// int lItemStart = iReader.findNextFlag("JM", iKF);   // JM is not used for D2R items
+		int lItemStart = iKF + 3; // e.g iKF 1876 + skip2 + skip1byte(8bits for golem) 
 		if (lItemStart != -1) {
 //			throw new Exception("Golem item not found.");
 			// Just do as if there is no golem item
