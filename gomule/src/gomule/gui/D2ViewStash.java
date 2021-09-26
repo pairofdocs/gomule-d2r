@@ -358,7 +358,9 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
 
 				public void mouseClicked(MouseEvent arg0) {
 					if(arg0.getButton() == MouseEvent.BUTTON1 && arg0.getClickCount() == 2){
-						pickupSelected();
+                        if (!((D2Stash) iStash).d2rStash) {
+                            pickupSelected();
+                        }
 					}
 				}
 				public void mouseEntered(MouseEvent arg0) {}
@@ -436,11 +438,13 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
             
             if ( isStash() )
             {
-	            iPickup.setEnabled(true);
-	            iDropOne.setEnabled(true);
-	            iDropAll.setEnabled(true);
-	            iDropOne.setVisible(true);
-	            iDropAll.setVisible(true);
+                boolean isEnabled = true;
+                if (((D2Stash) iStash).d2rStash) { isEnabled = false; };
+	            iPickup.setEnabled(isEnabled);
+	            iDropOne.setEnabled(isEnabled);
+	            iDropAll.setEnabled(isEnabled);
+	            iDropOne.setVisible(isEnabled);
+	            iDropAll.setVisible(isEnabled);
             }
             else
             {
@@ -545,34 +549,36 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
         {
             public void actionPerformed(ActionEvent pEvent)
             {
-                Vector lItemList = new Vector();
+                if (!((D2Stash) iStash).d2rStash) {
+                    Vector lItemList = new Vector();
 
-                int lRows[] = iTable.getSelectedRows();
+                    int lRows[] = iTable.getSelectedRows();
 
-                if (lRows.length > 0)
-                {
-                    for (int i = 0; i < lRows.length; i++)
+                    if (lRows.length > 0)
                     {
-                        lItemList.add(iItemModel.getItem(lRows[i]));
+                        for (int i = 0; i < lRows.length; i++)
+                        {
+                            lItemList.add(iItemModel.getItem(lRows[i]));
+                        }
+                        try
+                        {
+                            iStash.ignoreItemListEvents();
+                            for (int i = 0; i < lItemList.size(); i++)
+                            {				
+                        int check = JOptionPane.showConfirmDialog(null, "Delete " + ((D2Item) lItemList.get(i)).getName() + "?");
+                            
+                            if(check == 0){
+                                iStash.removeItem((D2Item) lItemList.get(i));
+                            }
+                            }
+                            
+                        }
+                        finally
+                        {
+                            iStash.listenItemListEvents();
+                        }
+                        itemListChanged();
                     }
-                    try
-                    {
-                    	iStash.ignoreItemListEvents();
-                        for (int i = 0; i < lItemList.size(); i++)
-                        {				
-                       int check = JOptionPane.showConfirmDialog(null, "Delete " + ((D2Item) lItemList.get(i)).getName() + "?");
-                        
-						if(check == 0){
-                            iStash.removeItem((D2Item) lItemList.get(i));
-						}
-						}
-                        
-                    }
-                    finally
-                    {
-                    	 iStash.listenItemListEvents();
-                    }
-                    itemListChanged();
                 }
             }
         });

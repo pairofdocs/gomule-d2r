@@ -45,6 +45,8 @@ public class D2Stash extends D2ItemListAdapter
     private int			iCharLvl = 75; // default char lvl for properties
 
 	private File lFile;
+
+    public boolean     d2rStash;
     
 //    private int iItemlistStart;
 //    private int iItemlistEnd;
@@ -75,6 +77,7 @@ public class D2Stash extends D2ItemListAdapter
         
         if ( !iBR.isNewFile() )
         {
+            // System.err.println("FileName: " + iFileName);
 	        iBR.set_byte_pos(0);
 	        byte lBytes[] = iBR.get_bytes(2);  // orig:  iBR.get_bytes(3)
 	        String lStart = new String(lBytes);
@@ -83,7 +86,10 @@ public class D2Stash extends D2ItemListAdapter
 	        {
                 // keeping the function name as is. The stash is a D2R stash (.d2i), not an Atma stash
 	            readAtmaItems();
-	        }
+	        }else if ("[85, -86]".equals(Arrays.toString(lBytes))) { // file begins with hex 55 aa 55 aa  (each stash tab begins like that)
+                // System.err.println("D2R SharedStash file");
+                readD2RStashItems();  // this function sets d2rStash = true
+            }
 	        // clear status
 	        setModified(false);
         }
@@ -116,7 +122,7 @@ public class D2Stash extends D2ItemListAdapter
     
     public void addItem(D2Item pItem)
     {
-        if ( pItem != null )
+        if ( pItem != null && !d2rStash)
         {
             iItems.add(pItem);
             pItem.setCharLvl(iCharLvl);
@@ -131,12 +137,15 @@ public class D2Stash extends D2ItemListAdapter
     
     public void removeItem(D2Item pItem)
     {
-        iItems.remove(pItem);
+        if (!d2rStash) {
+            iItems.remove(pItem);
         setModified(true);
+        }
     }
     
     public ArrayList removeAllItems()
     {
+        // item removal is disabled in D2FileManager and D2ViewStash
 	    ArrayList lReturn = new ArrayList();
 	    lReturn.addAll( iItems );
 	    
@@ -181,6 +190,16 @@ public class D2Stash extends D2ItemListAdapter
         // long lVersionNr = iBR.read(16);
         readItems(lNumItems);
     }
+
+    private void readD2RStashItems() throws Exception
+    {        
+		iBR.set_byte_pos(66);   
+	    
+        long lNumItems = iBR.read(16);
+        // long lVersionNr = iBR.read(16);
+        d2rStash = true;
+        readItems(lNumItems);
+    }
     
     private long calculateAtmaCheckSum()
     {
@@ -210,9 +229,12 @@ public class D2Stash extends D2ItemListAdapter
     private void readItems(long pNumItems) throws Exception
     {
         int lLastItemEnd = 4; // 11;
-        
+        if (d2rStash) {
+            lLastItemEnd = 68;  // byte index 68 after the header of each stash tab
+        }
         for ( int i = 0 ; i < pNumItems ; i++ )
         {
+            // System.err.println("lLastItemEnd: " + lLastItemEnd);
             // int lItemStart = iBR.findNextFlag("JM", lLastItemEnd);
             int lItemStart = lLastItemEnd;
             
@@ -220,11 +242,36 @@ public class D2Stash extends D2ItemListAdapter
             lLastItemEnd = lItemStart + lItem.getItemLength();
             iItems.add(lItem);
         }
+        if (d2rStash) {
+            // while loop.  find next JM and set position, then read items, can't do a recursive call to readItems since lLastItemEnd = 68 is hard-coded
+            int lNextJM = iBR.findNextFlag("JM", lLastItemEnd);
+            long numItems2 = 0;
+            int lItemStart2 = 0;
+            while (lNextJM > 0) {
+                // System.err.println("lNextJM: find JM  " + lNextJM);
+                // get numItems and read items
+                iBR.set_byte_pos(lNextJM + 2);
+                numItems2 = iBR.read(16);
+                // System.err.println("numItems2: " + numItems2);
+
+                lLastItemEnd = lNextJM + 4;  // JM + numItems(2bytes)
+                for ( int i = 0 ; i < numItems2 ; i++ )
+                {
+                    // System.err.println("lLastItemEnd: " + lLastItemEnd);
+                    lItemStart2 = lLastItemEnd;
+                    
+                    D2Item lItem = new D2Item(iFileName, iBR, lItemStart2, iCharLvl);
+                    lLastItemEnd = lItemStart2 + lItem.getItemLength();
+                    iItems.add(lItem);
+                }
+                lNextJM = iBR.findNextFlag("JM", lLastItemEnd);
+            }
+        }
     }
     
     public void saveInternal(D2Project pProject)
     {
-        // backup file
+        // backup file.  This will backup an atma format stash.  (in case the SharedStashV2 is backed up, it will be in atma format)
         D2Backup.backup(pProject, iFileName, iBR);
 
         int size = 0;

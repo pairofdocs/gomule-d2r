@@ -480,8 +480,9 @@ public class D2FileManager extends JFrame
 					D2ItemList iList = ((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getItemLists();
 					iList.ignoreItemListEvents();
 					try{
-
-						if(iList.getFilename().endsWith(".d2s") && getProject().getIgnoreItems()){
+						if (iList.getFilename().endsWith("SharedStashSoftCoreV2.d2i") || iList.getFilename().endsWith("SharedStashHardCoreV2.d2i")) {
+							;
+						}else if(iList.getFilename().endsWith(".d2s") && getProject().getIgnoreItems()){
 
 							for(int x = 0;x<iList.getNrItems();x++){
 
@@ -1350,7 +1351,16 @@ public class D2FileManager extends JFrame
 		((JInternalFrame) pContainer).addInternalFrameListener(new InternalFrameListener(){
 
 			public void internalFrameActivated(InternalFrameEvent arg0) {
-				if(((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith(".d2x")){
+				if (((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith("SharedStashSoftCoreV2.d2i") 
+				    || ((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith("SharedStashHardCoreV2.d2i")) {
+					pickFrom.setEnabled(false);
+					pickChooser.setEnabled(false);
+					dropTo.setEnabled(false);
+					dropChooser.setEnabled(false);
+					dropAll.setEnabled(false);
+					flavieSingle.setEnabled(false);
+					dumpBut.setEnabled(false);
+				}else if(((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith(".d2x")){
 					pickFrom.setEnabled(false);
 					pickChooser.setEnabled(false);
 					dropTo.setEnabled(false);
