@@ -1115,19 +1115,24 @@ public class D2FileManager extends JFrame
 
 	public void saveAllItemLists()
 	{
-		// check if Game.exe is running.  TODO: will this work on Mac OS? Linux?
+		// check if Game.exe is running. 
 		String processName = "D2R.exe";
 		ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
 		try {
-			Process tasklistproc = processBuilder.start();
-			Scanner scanner = new Scanner(tasklistproc.getInputStream(), "UTF-8").useDelimiter("\\A");
-			String strr = scanner.hasNext() ? scanner.next() : "";
-			scanner.close();
+			String strr = "";
+			if (System.getProperty("os.name").contains("Windows")) {
+				Process tasklistproc = processBuilder.start();
+				Scanner scanner = new Scanner(tasklistproc.getInputStream(), "UTF-8").useDelimiter("\\A");
+				strr = scanner.hasNext() ? scanner.next() : "";
+				scanner.close();
+			} // TODO: handle linux processName check. D2R doesn't run on mac os?
+			// https://sysgears.com/articles/get-process-list-unix-based-systems-java/
+			// Process proc = Runtime.getRuntime().exec("ps -ef");    then search for process
 			
-			if (strr.contains(processName)) {
+			if ( strr.contains(processName) ) {
 				JOptionPane.showMessageDialog(null, "D2R must be closed before saving files.", "Save Error", JOptionPane.ERROR_MESSAGE);
 			}else {
-				System.err.println("D2R.exe not found in tasklist. Saving files");
+				// System.err.println("D2R.exe not found in tasklist (Windows OS only). Saving files");
 				checkAll(false);
 
 				iClipboard.saveView();
@@ -1143,7 +1148,8 @@ public class D2FileManager extends JFrame
 				}
 			}
 		}catch(Exception e) {
-			System.err.println("Caught exception when checking for running D2R.exe");
+			System.out.println("Caught exception when checking for running D2R.exe");
+			System.out.println(e);
 		}
 	}
 
