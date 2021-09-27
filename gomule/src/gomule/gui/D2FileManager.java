@@ -1115,18 +1115,35 @@ public class D2FileManager extends JFrame
 
 	public void saveAllItemLists()
 	{
-		checkAll(false);
+		// check if Game.exe is running.  TODO: will this work on Mac OS? Linux?
+		String processName = "D2R.exe";
+		ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
+		try {
+			Process tasklistproc = processBuilder.start();
+			Scanner scanner = new Scanner(tasklistproc.getInputStream(), "UTF-8").useDelimiter("\\A");
+			String strr = scanner.hasNext() ? scanner.next() : "";
+			scanner.close();
+			
+			if (strr.contains(processName)) {
+				JOptionPane.showMessageDialog(null, "D2R must be closed before saving files.", "Save Error", JOptionPane.ERROR_MESSAGE);
+			}else {
+				System.err.println("D2R.exe not found in tasklist. Saving files");
+				checkAll(false);
 
-		iClipboard.saveView();
-		Iterator lIterator = iItemLists.keySet().iterator();
-		while ( lIterator.hasNext() )
-		{
-			String lFileName = (String) lIterator.next();
-			D2ItemList lList = getItemList(lFileName);
-			if ( lList.isModified() )
-			{
-				lList.save(iProject);
+				iClipboard.saveView();
+				Iterator lIterator = iItemLists.keySet().iterator();
+				while ( lIterator.hasNext() )
+				{
+					String lFileName = (String) lIterator.next();
+					D2ItemList lList = getItemList(lFileName);
+					if ( lList.isModified() )
+					{
+						lList.save(iProject);
+					}
+				}
 			}
+		}catch(Exception e) {
+			System.err.println("Caught exception when checking for running D2R.exe");
 		}
 	}
 
