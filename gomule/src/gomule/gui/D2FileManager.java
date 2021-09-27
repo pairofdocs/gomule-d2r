@@ -1117,10 +1117,10 @@ public class D2FileManager extends JFrame
 	{
 		// check if Game.exe is running. 
 		String processName = "D2R.exe";
-		ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
 		try {
 			String strr = "";
 			if (System.getProperty("os.name").contains("Windows")) {
+				ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
 				Process tasklistproc = processBuilder.start();
 				Scanner scanner = new Scanner(tasklistproc.getInputStream(), "UTF-8").useDelimiter("\\A");
 				strr = scanner.hasNext() ? scanner.next() : "";
