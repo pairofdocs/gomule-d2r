@@ -104,7 +104,7 @@ public class D2FileManager extends JFrame
 	int windowHeight = 768;
 	// from D2ViewChar
 	int BG_WIDTH = 626;
-	int BG_HEIGHT = 435;
+	int BG_HEIGHT = 435;  // TODO: does this have to change for a wide- shared stash?
 
 	public static D2FileManager getInstance()
 	{
@@ -1531,6 +1531,8 @@ public class D2FileManager extends JFrame
 			}
 			else
 			{
+				// TODO: add logic here to use D2ViewSharedStash() when filename == SharedStash*.d2i
+
 				lStashView = new D2ViewStash(D2FileManager.this, pStashName);
 				lStashView.setLocation(10 + (iOpenWindows.size() * 10), 10+ (iOpenWindows.size() * 10));
 				addToOpenWindows(lStashView);

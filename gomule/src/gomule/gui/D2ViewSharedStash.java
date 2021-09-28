@@ -36,7 +36,7 @@ import randall.util.*;
  * @author Marco
  *  
  */
-public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2ItemListListener
+public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer, D2ItemListListener
 {
 	/**
 	 * 
@@ -86,7 +86,7 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 	private JPopupMenu rightClickItem;
 	private MouseEvent rightClickEvent;
 
-	public D2ViewChar(D2FileManager pMainFrame, String pFileName)
+	public D2ViewSharedStash(D2FileManager pMainFrame, String pFileName)
 	{
 		super(pFileName, false, true, false, true);
 
@@ -313,10 +313,10 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 								iCharacter.unmarkCharGrid(lTemp);
 								iCharacter.removeCharItem(lItemPanel.getItemIndex());
 								setCursorDropItem();
-								if(lTemp.statModding()){
-									iCharacter.updateCharStats("P", lTemp);
-									paintCharStats();
-								}
+								// if(lTemp.statModding()){
+								// 	iCharacter.updateCharStats("P", lTemp);
+								// 	paintCharStats();
+								// }
 							}
 						}
 					}
@@ -1088,10 +1088,10 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 //									repaint();
 
 									setCursorPickupItem();
-									if(lDropItem.statModding()){
-										iCharacter.updateCharStats("D", lDropItem);
-										paintCharStats();
-									}
+									// if(lDropItem.statModding()){
+									// 	iCharacter.updateCharStats("D", lDropItem);
+									// 	paintCharStats();
+									// }
 									//my_char.show_grid();
 								}
 							}
@@ -1103,7 +1103,7 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 							if (lItemPanel.isItem())
 							{
 
-								rightClickItem.show(D2ViewChar.this, pEvent.getX(), pEvent.getY()+35);
+								rightClickItem.show(D2ViewSharedStash.this, pEvent.getX(), pEvent.getY()+35);
 								rightClickEvent = pEvent;
 							}
 						}
@@ -1283,10 +1283,10 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 					// these items can all be assumed to be 1x1
 					else if (location == 2)
 					{
-						int x = temp_item.get_col();
-						int y = x / 4;
-						x = x % 4;
-						lGraphics.drawImage(lImage, BELT_GRID_X + x * GRID_SIZE + x * GRID_SPACER, BELT_GRID_Y + (3 - y) * GRID_SIZE + (3 - y) * GRID_SPACER, D2CharPainterPanel.this);
+						// int x = temp_item.get_col();
+						// int y = x / 4;
+						// x = x % 4;
+						// lGraphics.drawImage(lImage, BELT_GRID_X + x * GRID_SIZE + x * GRID_SPACER, BELT_GRID_Y + (3 - y) * GRID_SIZE + (3 - y) * GRID_SPACER, D2CharPainterPanel.this);
 					}
 					// on the body
 					else
