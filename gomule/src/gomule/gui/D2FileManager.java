@@ -104,7 +104,7 @@ public class D2FileManager extends JFrame
 	int windowHeight = 768;
 	// from D2ViewChar
 	int BG_WIDTH = 626;
-	int BG_HEIGHT = 435;  // TODO: does this have to change for a wide- shared stash?
+	int BG_HEIGHT = 435;  // TODO: does this have to change for a wide- shared stash?   908 x 309 pixels
 
 	public static D2FileManager getInstance()
 	{

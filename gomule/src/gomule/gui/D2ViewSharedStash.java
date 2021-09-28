@@ -48,11 +48,9 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 	private D2Character         	 iCharacter;
 
 	private JTextArea				 iMessage;
-	private JTextArea				 CJT = new JTextArea();
-	private JTextArea				 MJT = new JTextArea();
-
-	private static final int         BG_WIDTH         = 626; //550;  // TODO: update to 626
-	private static final int         BG_HEIGHT        = 435; //383;  // TODO: update to 457
+	
+	private static final int         BG_WIDTH         = 908; // 626; //550;   908 x 309 pixels
+	private static final int         BG_HEIGHT        = 309; // 435; //383;  
 	private static final int         BG_CURSOR_WIDTH  = 78;
 	private static final int         BG_CURSOR_HEIGHT = 135;
 
