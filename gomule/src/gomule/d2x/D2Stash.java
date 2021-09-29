@@ -139,7 +139,7 @@ public class D2Stash extends D2ItemListAdapter
     {
         if (!d2rStash) {
             iItems.remove(pItem);
-        setModified(true);
+            setModified(true);
         }
     }
     

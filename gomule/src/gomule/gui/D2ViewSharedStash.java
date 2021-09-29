@@ -45,7 +45,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 	private D2CharPainterPanel       iCharPainter;
 	
 	private D2CharCursorPainterPanel iCharCursorPainter;
-	private D2Character         	 iCharacter;
+	private D2SharedStash         	 iSharedStash;
 
 	private JTextArea				 iMessage;
 	
@@ -118,6 +118,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 		
 		JPanel lCursorPanel = new JPanel();
 		lCursorPanel.setLayout(new BorderLayout());
+		// TODO: is this needed for a shared stash?
 		iCharCursorPainter = new D2CharCursorPainterPanel();
 		lCursorPanel.add(new JLabel("For item viewing, no items can be put or removed from here"), BorderLayout.NORTH);
 
@@ -308,11 +309,11 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 							int check = JOptionPane.showConfirmDialog(null, "Delete " + lTemp.getName() + "?");
 							if(check == 0){
-								iCharacter.unmarkCharGrid(lTemp);
-								iCharacter.removeCharItem(lItemPanel.getItemIndex());
+								iSharedStash.unmarkCharGrid(lTemp);
+								iSharedStash.removeCharItem(lItemPanel.getItemIndex());
 								setCursorDropItem();
 								// if(lTemp.statModding()){
-								// 	iCharacter.updateCharStats("P", lTemp);
+								// 	iSharedStash.updateCharStats("P", lTemp);
 								// 	paintCharStats();
 								// }
 							}
@@ -484,26 +485,27 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 	
 	public void connect()
 	{
-		if ( iCharacter != null )
+		if ( iSharedStash != null )
 		{
 			return;
 		}
 		try
 		{
-			iCharacter = (D2Character) iFileManager.addItemList(iFileName, this);
+			iSharedStash = (D2SharedStash) iFileManager.addItemList(iFileName, this);
 
-			iGold.setText(Integer.toString(iCharacter.getGold()));
-			iGoldMax.setText(Integer.toString(iCharacter.getGoldMax()));
-			iGoldBank.setText(Integer.toString(iCharacter.getGoldBank()));
-			iGoldBankMax.setText(Integer.toString(iCharacter.getGoldBankMax()));
+			// TODO set gold for 3 tabs of the shared stash file
+			// iGold.setText(Integer.toString(iSharedStash.getGold()));
+			// iGoldMax.setText(Integer.toString(iSharedStash.getGoldMax()));
+			// iGoldBank.setText(Integer.toString(iSharedStash.getGoldBank()));
+			// iGoldBankMax.setText(Integer.toString(iSharedStash.getGoldBankMax()));
 
-			for ( int i = 0 ; i < iGoldTransferBtns.length ; i++ )
-			{
-				iGoldTransferBtns[i].setEnabled(true);
-			}
+			// for ( int i = 0 ; i < iGoldTransferBtns.length ; i++ )
+			// {
+			// 	iGoldTransferBtns[i].setEnabled(true);
+			// }
 
 			itemListChanged();
-			iMessage.setText("Character loaded");
+			iMessage.setText("Shared Stash loaded");
 		}
 		catch ( Exception pEx )
 		{
@@ -514,12 +516,12 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 	public void disconnect(Exception pEx)
 	{
-		if ( iCharacter != null )
+		if ( iSharedStash != null )
 		{
 			iFileManager.removeItemList(iFileName, this);
 		}
 
-		iCharacter = null;
+		iSharedStash = null;
 
 		String lText = "Character disconnected";
 
@@ -565,13 +567,13 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 				int lGoldMax;
 				if (iConnectGold.isSelected())
 				{
-					lGoldChar = iCharacter.getGold();
-					lGoldMax = iCharacter.getGoldMax();
+					lGoldChar = iSharedStash.getGold();
+					lGoldMax = iSharedStash.getGoldMax();
 				}
 				else
 				{
-					lGoldChar = iCharacter.getGoldBank();
-					lGoldMax = iCharacter.getGoldBankMax();
+					lGoldChar = iSharedStash.getGoldBank();
+					lGoldMax = iSharedStash.getGoldBankMax();
 				}
 				// char limit
 				if (lGoldChar + pGoldTransfer > lGoldMax)
@@ -582,13 +584,13 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 				int lNewGoldBank = lBank - pGoldTransfer;
 				if (iConnectGold.isSelected())
 				{
-					iCharacter.setGold(lNewGold);
-					iGold.setText(Integer.toString(iCharacter.getGold()));
+					iSharedStash.setGold(lNewGold);
+					iGold.setText(Integer.toString(iSharedStash.getGold()));
 				}
 				else
 				{
-					iCharacter.setGoldBank(lNewGold);
-					iGoldBank.setText(Integer.toString(iCharacter.getGoldBank()));
+					iSharedStash.setGoldBank(lNewGold);
+					iGoldBank.setText(Integer.toString(iSharedStash.getGoldBank()));
 				}
 				iFileManager.getProject().setBankValue(lNewGoldBank);
 			}
@@ -609,11 +611,11 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 				int lGoldChar;
 				if (iConnectGold.isSelected())
 				{
-					lGoldChar = iCharacter.getGold();
+					lGoldChar = iSharedStash.getGold();
 				}
 				else
 				{
-					lGoldChar = iCharacter.getGoldBank();
+					lGoldChar = iSharedStash.getGoldBank();
 				}
 
 				if (pGoldTransfer > lGoldChar)
@@ -630,13 +632,13 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 				if (iConnectGold.isSelected())
 				{
-					iCharacter.setGold(lNewGold);
-					iGold.setText(Integer.toString(iCharacter.getGold()));
+					iSharedStash.setGold(lNewGold);
+					iGold.setText(Integer.toString(iSharedStash.getGold()));
 				}
 				else
 				{
-					iCharacter.setGoldBank(lNewGold);
-					iGoldBank.setText(Integer.toString(iCharacter.getGoldBank()));
+					iSharedStash.setGoldBank(lNewGold);
+					iGoldBank.setText(Integer.toString(iSharedStash.getGoldBank()));
 				}
 				iFileManager.getProject().setBankValue(lNewGoldBank);
 			}
@@ -662,12 +664,12 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 	public boolean isHC()
 	{
-		return iCharacter.isHC();
+		return iSharedStash.isHC();
 	}
 
 	public boolean isSC()
 	{
-		return iCharacter.isSC();
+		return iSharedStash.isSC();
 	}
 
 	public String getFileName()
@@ -677,12 +679,12 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 	public boolean isModified()
 	{
-		return iCharacter.isModified();
+		return iSharedStash.isModified();
 	}
 
 	public D2ItemList getItemLists()
 	{
-		return iCharacter;
+		return iSharedStash;
 	}
 
 	public void closeView()
@@ -695,35 +697,35 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 	{
 
 		String lTitle;
-		if ( iCharacter == null )
+		if ( iSharedStash == null )
 		{
 			lTitle = "Disconnected";
 		}
 		else
 		{
-			lTitle = iCharacter.getCharName();
-			if (iCharacter == null)
+			lTitle = "D2R Shared Stash";
+			if (iSharedStash == null)
 			{
 				lTitle += " (Error Reading File)";
 			}
 			else
 			{
-				lTitle += (( iCharacter.isModified() ) ? "*" : "");
-				if (iCharacter.isSC())
+				lTitle += (( iSharedStash.isModified() ) ? "*" : "");
+				if (iSharedStash.isSC())
 				{
 					lTitle += " (SC)";
 				}
-				else if (iCharacter.isHC())
+				else if (iSharedStash.isHC())
 				{
 					lTitle += " (HC)";
 				}
-				lTitle += iCharacter.getTitleString();
+				lTitle += iSharedStash.getTitleString();
 			}
 		}
 		setTitle(lTitle);
-		iCharPainter.build();
+		iCharPainter.build();  // TODO go through build shared stash function 
 		
-		iCharCursorPainter.build();
+		iCharCursorPainter.build(); // TODO: is this needed for a shared stash?
 		
 	}
 
@@ -792,48 +794,57 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 		public boolean isItem()
 		{
+			// TODO: verify this is always false for a shared stash. there can't be a cursor item like there is for a character
 			if ( iIsCursor )
 			{
-				return ( iCharacter.getCursorItem() != null );
+				return ( iSharedStash.getCursorItem() != null );
 			}
-			if (iIsChar)
-			{
-				return iCharacter.checkCharPanel(iPanel, iRow, iCol, null);
-			}
-			if(iIsCorpse)
-			{
-				return iCharacter.checkCorpsePanel(iPanel,iRow, iCol, null);
-			}
-			return iCharacter.checkMercPanel(iPanel, iRow, iCol, null);
+			// if (iIsChar)
+			// {
+			// 	return iSharedStash.checkCharPanel(iPanel, iRow, iCol, null);
+			// }
+			// TODO: verify this will not be needed for a shared stash. there is no merc and no corpse
+			// if(iIsCorpse)
+			// {
+			// 	return iSharedStash.checkCorpsePanel(iPanel,iRow, iCol, null);
+			// }
+			// return iSharedStash.checkMercPanel(iPanel, iRow, iCol, null);
+
+			return iSharedStash.checkCharPanel(iPanel, iRow, iCol, null);
 		}
 
 		public int getItemIndex()
 		{
-			if (iIsChar)
-			{
-				return iCharacter.getCharItemIndex(iPanel, iRow, iCol);
-			}
-			if (iIsCorpse)
-			{
-				return iCharacter.getCorpseItemIndex(iPanel, iRow, iCol);
-			}
-			return iCharacter.getMercItemIndex(iPanel, iRow, iCol);
+			// if (iIsChar)
+			// {
+			// 	return iSharedStash.getCharItemIndex(iPanel, iRow, iCol);
+			// }
+			// if (iIsCorpse)
+			// {
+			// 	return iSharedStash.getCorpseItemIndex(iPanel, iRow, iCol);
+			// }
+			// return iSharedStash.getMercItemIndex(iPanel, iRow, iCol);
+			return iSharedStash.getCharItemIndex(iPanel, iRow, iCol);
 		}
 
 		public D2Item getItem()
 		{
+			// TODO: verify item cannot be a cursor item for a shared stash
 			if ( iIsCursor )
 			{
-				return iCharacter.getCursorItem();
+				return iSharedStash.getCursorItem();
 			}
-			if ( iIsChar )
-			{
-				return iCharacter.getCharItem(iCharacter.getCharItemIndex(iPanel, iRow, iCol));
-			}
-			if(iIsCorpse){
-				return iCharacter.getCorpseItem(iCharacter.getCorpseItemIndex(iPanel, iRow, iCol));
-			}
-			return iCharacter.getMercItem(iCharacter.getMercItemIndex(iPanel, iRow, iCol));
+
+			// if ( iIsChar )
+			// {
+			// 	return iSharedStash.getCharItem(iSharedStash.getCharItemIndex(iPanel, iRow, iCol));
+			// }
+			
+			// if(iIsCorpse){
+			// 	return iSharedStash.getCorpseItem(iSharedStash.getCorpseItemIndex(iPanel, iRow, iCol));
+			// }
+			// return iSharedStash.getMercItem(iSharedStash.getMercItemIndex(iPanel, iRow, iCol));
+			return iSharedStash.getCharItem(iSharedStash.getCharItemIndex(iPanel, iRow, iCol));
 		}
 
 		// calculate which panel (stash, inventory, equipment slot, etc)
@@ -941,7 +952,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 				public void mouseReleased(MouseEvent pEvent)
 				{
-					if ( iCharacter == null )
+					if ( iSharedStash == null )
 					{
 						return;
 					}
@@ -972,26 +983,26 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 								//System.out.println("isEquipped: " + lTemp.isEquipped() + " isABelt: " + lTemp.isABelt()); 
 								if (lTemp.isEquipped() && lTemp.isABelt())
 								{
-									for (int y=0;y<iCharacter.getBeltPotions().size();y++){
-										D2ViewClipboard.addItem((D2Item)iCharacter.getBeltPotions().get(y));
-										iCharacter.unmarkCharGrid((D2Item)iCharacter.getBeltPotions().get(y));
+									for (int y=0;y<iSharedStash.getBeltPotions().size();y++){
+										D2ViewClipboard.addItem((D2Item)iSharedStash.getBeltPotions().get(y));
+										iSharedStash.unmarkCharGrid((D2Item)iSharedStash.getBeltPotions().get(y));
 									}
 									for (int i=0;i<4;i++) {
 										for (int j=1;j<4;j++) {
-											if (iCharacter.getCharItemIndex(2, i, j) != -1) {
-												iCharacter.removeCharItem(iCharacter.getCharItemIndex(2, i, j));
+											if (iSharedStash.getCharItemIndex(2, i, j) != -1) {
+												iSharedStash.removeCharItem(iSharedStash.getCharItemIndex(2, i, j));
 											}
 										}
 									}
 								}
 
 
-								iCharacter.unmarkCharGrid(lTemp);
-								iCharacter.removeCharItem(lItemPanel.getItemIndex());
+								iSharedStash.unmarkCharGrid(lTemp);
+								iSharedStash.removeCharItem(lItemPanel.getItemIndex());
 								D2ViewClipboard.addItem(lTemp);
 								setCursorDropItem();
 								if(lTemp.statModding()){
-									iCharacter.updateCharStats("P", lTemp);
+									iSharedStash.updateCharStats("P", lTemp);
 								}
 
 //								// redraw
@@ -1028,7 +1039,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 									// if that area of the character is empty,
 									// then update fields of the item and set
 									// the 'drop' variable to true
-									if (iCharacter.checkCharGrid(lItemPanel.getPanel(), lItemPanel.getRow(), lItemPanel.getColumn(), lDropItem))
+									if (iSharedStash.checkCharGrid(lItemPanel.getPanel(), lItemPanel.getRow(), lItemPanel.getColumn(), lDropItem))
 									{
 										switch (lItemPanel.getPanel())
 										{
@@ -1061,7 +1072,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 								// (note lack of item-type checking)
 								else
 								{
-									if (!iCharacter.checkCharPanel(lItemPanel.getPanel(), 0, 0, lDropItem))
+									if (!iSharedStash.checkCharPanel(lItemPanel.getPanel(), 0, 0, lDropItem))
 									{
 										lDropItem.set_location((short) 1);
 										lDropItem.set_body_position((short) (lItemPanel.getPanel() - 10));
@@ -1076,10 +1087,10 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 								// if the space to set the item is empty
 								if (drop)
 								{
-									iCharacter.markCharGrid(lDropItem);
+									iSharedStash.markCharGrid(lDropItem);
 									// move the item to a new charcter, if
 									// needed
-									iCharacter.addCharItem(D2ViewClipboard.removeItem());
+									iSharedStash.addCharItem(D2ViewClipboard.removeItem());
 
 									// redraw
 //									build();
@@ -1087,7 +1098,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 									setCursorPickupItem();
 									// if(lDropItem.statModding()){
-									// 	iCharacter.updateCharStats("D", lDropItem);
+									// 	iSharedStash.updateCharStats("D", lDropItem);
 									// 	paintCharStats();
 									// }
 									//my_char.show_grid();
@@ -1124,7 +1135,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			{
 				public void mouseMoved(MouseEvent pEvent)
 				{
-					if ( iCharacter == null )
+					if ( iSharedStash == null )
 					{
 						return;
 					}
@@ -1159,14 +1170,14 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 								if (lItemPanel.getPanel() < 10)
 								{
-									if (iCharacter.checkCharGrid(lItemPanel.getPanel(), lItemPanel.getRow(), lItemPanel.getColumn(), lDropItem))
+									if (iSharedStash.checkCharGrid(lItemPanel.getPanel(), lItemPanel.getRow(), lItemPanel.getColumn(), lDropItem))
 									{
 										drop = true;
 									}
 								}
 								else
 								{
-									if (!iCharacter.checkCharPanel(lItemPanel.getPanel(), 0, 0, lDropItem))
+									if (!iSharedStash.checkCharPanel(lItemPanel.getPanel(), 0, 0, lDropItem))
 									{
 										drop = true;
 									}
@@ -1198,6 +1209,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			});
 		}
 
+		// TODO: this is not used for a shared stash
 		public void setWeaponSlot(int pWeaponSlot)
 		{
 			if(iWeaponSlot == pWeaponSlot){
@@ -1208,8 +1220,6 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			build();
 			//REMOVE ITEMS AND ADD ITEMS
 
-
-			iCharacter.changeWep();
 			
 		}
 
@@ -1235,12 +1245,12 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 			lGraphics.drawImage(lEmptyBackground, 0, 0, D2CharPainterPanel.this);
 
-			if ( iCharacter != null )
+			if ( iSharedStash != null )
 			{
                 // ****TODO:   add logic to determine which stash 1, 2 or 3 to draw the item.
-				for (int i = 0; i < iCharacter.getCharItemNr(); i++)
+				for (int i = 0; i < iSharedStash.getNrItems(); i++)
 				{
-					D2Item temp_item = iCharacter.getCharItem(i);
+					D2Item temp_item = iSharedStash.getCharItem(i);
 					Image lImage = D2ImageCache.getDC6Image(temp_item);
 					int location = temp_item.get_location();
 					// on one of the grids
@@ -1352,6 +1362,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 		}
 	}
 
+	//TODO: is the char cursorpainter needed for a shared stash?
 	class D2CharCursorPainterPanel extends JPanel
 	{
 		/**
@@ -1370,7 +1381,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			{
 				public void mouseReleased(MouseEvent pEvent)
 				{
-					if ( iCharacter == null )
+					if ( iSharedStash == null )
 					{
 						return;
 					}
@@ -1389,8 +1400,8 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 							// if there is an item to grab, grab it
 							if (lItemPanel.isItem())
 							{
-								D2Item lTemp = iCharacter.getCursorItem();
-								iCharacter.setCursorItem(null);
+								D2Item lTemp = iSharedStash.getCursorItem();
+								iSharedStash.setCursorItem(null);
 								D2ViewClipboard.addItem(lTemp);
 								setCursorDropItem();
 
@@ -1400,7 +1411,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 							}
 							else if (D2ViewClipboard.getItem() != null)
 							{
-								iCharacter.setCursorItem(D2ViewClipboard.removeItem());
+								iSharedStash.setCursorItem(D2ViewClipboard.removeItem());
 								build();
 								repaint();
 
@@ -1478,7 +1489,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			{
 				public void mouseMoved(MouseEvent pEvent)
 				{
-					if ( iCharacter == null )
+					if ( iSharedStash == null )
 					{
 						return;
 					}
@@ -1559,9 +1570,9 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 			lGraphics.drawImage(lEmptyBackground, 0, 0, D2CharCursorPainterPanel.this);
 
-			if ( iCharacter != null )
+			if ( iSharedStash != null )
 			{
-				D2Item lCursorItem = iCharacter.getCursorItem();
+				D2Item lCursorItem = iSharedStash.getCursorItem();
 				if ( lCursorItem != null )
 				{
 					Image lImage = D2ImageCache.getDC6Image(lCursorItem);
@@ -1583,19 +1594,19 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 	public void dumpChar() {
         // TODO:  is this needed for shared stashes?
 
-		String iChaString = iCharacter.fullDumpStr().replaceAll("<BR>", "\n");
+		String iChaString = iSharedStash.fullDumpStr().replaceAll("<BR>", "\n");
 		// lDump.setText(iChaString);
 		// lDump.setCaretPosition(0);
 		// lDump.validate();
 	}
 
 	public D2Character getChar(){
-		return iCharacter;
+		return iSharedStash;
 	}
 
 	public void putOnCharacter(int areaCode, ArrayList dropList){
 
-		iCharacter.ignoreItemListEvents();
+		iSharedStash.ignoreItemListEvents();
 		int dPanel = 0;
 		int rMax = 0;
 		int cMax = 0;
@@ -1624,16 +1635,16 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 				D2Item lDropItem = (D2Item) dropList.get(z);
 				for(int x = 0;x<rMax;x++){
 					for(int y = 0;y<cMax;y++){
-						if(iCharacter.checkCharGrid(dPanel, y, x, lDropItem)){
+						if(iSharedStash.checkCharGrid(dPanel, y, x, lDropItem)){
 							lDropItem.set_panel((short) dPanel);
 							lDropItem.set_location((short) 0);
 							lDropItem.set_body_position((short) 0);
 							lDropItem.set_row((short) x);
 							lDropItem.set_col((short) y);
-							iCharacter.markCharGrid(lDropItem);
+							iSharedStash.markCharGrid(lDropItem);
 							D2ViewClipboard.removeItem(lDropItem);
-							iCharacter.addCharItem(lDropItem);
-							iCharacter.equipItem(lDropItem);
+							iSharedStash.addCharItem(lDropItem);
+							iSharedStash.equipItem(lDropItem);
 							// paintCharStats();
 							x = rMax;
 							y = cMax;
@@ -1642,8 +1653,8 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 				}
 			}
 		}finally{
-			iCharacter.listenItemListEvents();
-			iCharacter.fireD2ItemListEvent();	
+			iSharedStash.listenItemListEvents();
+			iSharedStash.fireD2ItemListEvent();	
 		}
 	}
 

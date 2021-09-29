@@ -70,6 +70,8 @@ public class D2FileManager extends JFrame
 	private final static D2FileManager iCurrent = new D2FileManager();
 	private D2ViewClipboard      iClipboard;
 	private D2ViewStash          iViewAll;
+	// TODO: is this needed for a d2r shared stash?
+	private D2ViewSharedStash    iViewSharedAll; 
 	private boolean				 iIgnoreCheckAll = false;
 //	private JMenuBar D2JMenu;
 //	private JMenu file;
@@ -410,6 +412,7 @@ public class D2FileManager extends JFrame
 				if(((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith(".d2s")){
 					reportName = (((D2ViewChar)iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getChar().getCharName() + iProject.getReportName());
 				}else{
+					// TODO: D2R shared stash and flavie report
 					reportName = ((((D2ViewStash)iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame())))).getStashName() + iProject.getReportName());
 					// reportName = reportName.replace(".d2x", "");  // orig
 					reportName = reportName.replace(".d2i", "");
@@ -1030,6 +1033,7 @@ public class D2FileManager extends JFrame
 			if(lList.getFilename().endsWith(".d2s")){
 				lFileName = ((D2Character)lList).getCharName() + ".d2s";
 			}else{
+				// TODO: account for D2R shared stash .d2i
 				lFileName = ((D2Stash)lList).getFileNameEnd();
 			}
 			lFileName = folder + File.separator + lFileName + ".txt";
@@ -1621,6 +1625,21 @@ public class D2FileManager extends JFrame
 				throw new Exception("Stash is not Hardcore (HC), this is a project requirement");
 			}
 			System.err.println("Add Stash: " + pFileName );
+			iItemLists.put(pFileName, lList);
+			iViewProject.notifyItemListRead(pFileName);
+		}
+		else if ( pFileName.endsWith("CoreV2.d2i") ) {
+			lList = new D2SharedStash(pFileName);
+
+			int lType = getProject().getType();
+			if ( lType == D2Project.TYPE_SC && (!lList.isSC() || lList.isHC()) )
+			{
+				throw new Exception("Stash is not Softcore (SC), this is a project requirement");
+			}
+			if ( lType == D2Project.TYPE_HC && (lList.isSC() || !lList.isHC()) )
+			{
+				throw new Exception("Stash is not Hardcore (HC), this is a project requirement");
+			}
 			iItemLists.put(pFileName, lList);
 			iViewProject.notifyItemListRead(pFileName);
 		}
