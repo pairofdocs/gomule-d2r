@@ -110,7 +110,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 		lCharPanel.setLayout(new BorderLayout());
 		iCharPainter = new D2CharPainterPanel();
 		lCharPanel.add(iCharPainter, BorderLayout.CENTER);
-		lTabs.addTab("Character", lCharPanel);
+		lTabs.addTab("D2R Shared Stash", lCharPanel);
 		setContentPane(lTabs);
 		iCharPainter.build();
 
@@ -1218,11 +1218,11 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			Image lEmptyBackground;
 			if (iWeaponSlot == 1)
 			{
-				lEmptyBackground = D2ImageCache.getImage("background.jpg");  //background_10x10
+				lEmptyBackground = D2ImageCache.getImage("background-sharedstash.jpg");  //background_10x10
 			}
 			else
 			{
-				lEmptyBackground = D2ImageCache.getImage("background2.jpg"); //background2_10x10
+				lEmptyBackground = D2ImageCache.getImage("background-sharedstash.jpg"); //background2_10x10
 			}
 
 			int lWidth = lEmptyBackground.getWidth(D2CharPainterPanel.this);

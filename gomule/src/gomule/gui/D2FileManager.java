@@ -1522,23 +1522,48 @@ public class D2FileManager extends JFrame
 				lExisting = lItemContainer;
 			}
 		}
-
-		D2ViewStash lStashView = null;
-		if(load){
-			if (lExisting != null)
-			{
-				lStashView = ((D2ViewStash) lExisting);
+		// add logic here to use D2ViewSharedStash() when filename == SharedStash*.d2i
+		if (!pStashName.endsWith("CoreV2.d2i")) {
+			D2ViewStash lStashView = null;
+			if(load){
+				if (lExisting != null) {
+					lStashView = ((D2ViewStash) lExisting);
+				}
+				else {
+					lStashView = new D2ViewStash(D2FileManager.this, pStashName);
+					lStashView.setLocation(10 + (iOpenWindows.size() * 10), 10+ (iOpenWindows.size() * 10));
+					addToOpenWindows(lStashView);
+				}
+				lStashView.activateView();
+				internalWindowForward(lStashView);
 			}
-			else
-			{
-				// TODO: add logic here to use D2ViewSharedStash() when filename == SharedStash*.d2i
+		}else {
+			if(load){
+				if (lExisting != null) {
+					internalWindowForward(((JInternalFrame) lExisting));
+				}else {
+					int BG_WIDTH2 = 908;  // 908 x 309 pixels
+					int BG_HEIGHT2 = 309;
+					D2ViewSharedStash lSharedStashView = new D2ViewSharedStash(D2FileManager.this, pStashName);
+					if (iOpenWindows.size() == 0) {
+						lSharedStashView.setLocation(0, 0);  // orig had: 10+ x,  10+ y
+					} else if (iOpenWindows.size() == 1) {
+						//BG_WIDTH         = 626; //550;  // TODO: update to 626  // from D2ViewChar
+						//BG_HEIGHT        = 435; //383;  // TODO: update to 457
 
-				lStashView = new D2ViewStash(D2FileManager.this, pStashName);
-				lStashView.setLocation(10 + (iOpenWindows.size() * 10), 10+ (iOpenWindows.size() * 10));
-				addToOpenWindows(lStashView);
+						lSharedStashView.setLocation((BG_WIDTH2 + 16), 0); 
+					} else if (iOpenWindows.size() == 2) {
+						lSharedStashView.setLocation(0, BG_HEIGHT2 + 48);
+					} else if (iOpenWindows.size() == 3) {         // will this be appropriate for 1920x1080 displays?. having the 3,4th windows go under 1st and 2nd
+						lSharedStashView.setLocation((BG_WIDTH2 + 16), BG_HEIGHT2 + 48);
+					} else {
+						// lSharedStashView.setLocation(20 + (iOpenWindows.size() * 10), 20 + (iOpenWindows.size() * 10));  // orig had: 10+ x,  10+ y
+						lSharedStashView.setLocation(((iOpenWindows.size()-4 +1) * 20), BG_HEIGHT2 + 48 + ((iOpenWindows.size()-4 +1) * 20));
+					}
+					addToOpenWindows(lSharedStashView);
+					internalWindowForward(lSharedStashView);
+				}
 			}
-			lStashView.activateView();
-			internalWindowForward(lStashView);
 		}
 
 		iProject.addStash(pStashName);
