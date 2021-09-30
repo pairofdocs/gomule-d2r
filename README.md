@@ -6,7 +6,7 @@ GoMule enabled for D2R
 http://gomule.sourceforge.net/ all credits go to Gohanman, Randall, Silospen, collaborators, ...
 
 Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule/R0.31/GoMuleDocs.pdf  
-***WARNING***: Close D2R when using GoMule. D2R keeps save files open even in the menus since it displays character gear and this prevents GoMule from saving files and moving items properly.  
+***WARNING***: Close D2R when using GoMule. D2R keeps character data open since it displays character gear in the menus and this prevents GoMule from saving files and moving items properly.  
 ***NOTE***: A work-in-progress Atma .d2x stash to D2R .d2i stash converter  is available here https://pairofdocs.github.io/atma-stash-d2r/ and discussions are [here](https://github.com/pairofdocs/gomule-d2r/issues/5)  
 ***NOTE***: The D2R shared stash file `SharedStashSoftCoreV2.d2i` (or HardCore) can be viewed in Gomule-d2r but can't be modified since the format is not fully known yet  
 
