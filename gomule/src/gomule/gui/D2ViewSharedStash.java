@@ -828,7 +828,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			return iSharedStash.getCharItemIndex(iPanel, iRow, iCol, 0);
 		}
 
-		public D2Item getItem()
+		public D2Item getItem(int stashIdx)
 		{
 			// TODO: verify item cannot be a cursor item for a shared stash
 			if ( iIsCursor )
@@ -845,7 +845,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			// 	return iSharedStash.getCorpseItem(iSharedStash.getCorpseItemIndex(iPanel, iRow, iCol));
 			// }
 			// return iSharedStash.getMercItem(iSharedStash.getMercItemIndex(iPanel, iRow, iCol));
-			return iSharedStash.getCharItem(iSharedStash.getCharItemIndex(iPanel, iRow, iCol, 0), 0);  // iSharedStash.() , iStashIdx
+			return iSharedStash.getCharItem(iSharedStash.getCharItemIndex(iPanel, iRow, iCol, stashIdx), stashIdx);  // iSharedStash.() , iStashIdx
 			//                                                            add 4th param to getCharItemIndex
 		}
 
@@ -863,8 +863,8 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 					return D2Character.BODY_CURSOR;
 				}
 				return -1;
-			}
-			if (iIsChar && x >= STASH_X && x < STASH_X + 10 * GRID_SIZE + 10 * GRID_SPACER && y >= STASH_Y && y < STASH_Y + 10 * GRID_SIZE + 10 * GRID_SPACER)
+			} // x > 7pixels  and x < (7px + 10slots ) * 3 for 3 stash tabs
+			if (iIsChar && x >= STASH_X && x < 3*(STASH_X + 10 * GRID_SIZE + 10 * GRID_SPACER) && y >= STASH_Y && y < STASH_Y + 10 * GRID_SIZE + 10 * GRID_SPACER)
 			{
 				return D2Character.BODY_STASH_CONTENT;
 			}
@@ -909,6 +909,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 					//                    }
 					break;
 				case 5: // stash
+					// TODO: account for extra space between stash tabs 1, 2 and 3
 					iRow = (x - STASH_X) / (GRID_SIZE + GRID_SPACER);
 					iCol = (y - STASH_Y) / (GRID_SIZE + GRID_SPACER);
 					//                    if (iChar.check_panel(panel, row, col))
@@ -977,7 +978,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 							// if there is an item to grab, grab it
 							if (lItemPanel.isItem())
 							{
-								D2Item lTemp = lItemPanel.getItem();
+								D2Item lTemp = lItemPanel.getItem(0); //  TODO: logic for stash1, 2, or 3
 
 								/**Code to remove potions when belt is removed!
 								 * Thanks to Krikke.
@@ -988,9 +989,9 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 								iSharedStash.removeCharItem(lItemPanel.getItemIndex());
 								D2ViewClipboard.addItem(lTemp);
 								setCursorDropItem();
-								if(lTemp.statModding()){
-									iSharedStash.updateCharStats("P", lTemp);
-								}
+								// if(lTemp.statModding()){
+								// 	iSharedStash.updateCharStats("P", lTemp);
+								// }
 
 //								// redraw
 //								build();
@@ -1130,12 +1131,21 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 					D2Item lCurrentMouse = null;
 
 					D2ItemPanel lItemPanel = new D2ItemPanel(pEvent, true, false, false);
+					System.err.println("lItemPanel.getPanel(): " +  lItemPanel.getPanel()); // 5 for tab1, then -1 for tab2
 					if (lItemPanel.getPanel() != -1)
 					{
 						if (lItemPanel.isItem())
-						{
-							System.err.println("lItemPanel.isItem() in d2viewSharedStash.java");
-							lCurrentMouse = lItemPanel.getItem();
+						{	
+							System.err.println("mouseMoved d2viewsharedstash pEvent.getX(): " + pEvent.getX());
+							int stashIdx;
+							if (pEvent.getX() < 315) {
+								stashIdx = 0;
+							}else if (pEvent.getX() < 617) {
+								stashIdx = 1;
+							}else{
+								stashIdx = 2;
+							}
+							lCurrentMouse = lItemPanel.getItem(stashIdx); // get x-pos of mouse to set stashIdx
 						}
 
 						if (lItemPanel.isItem())
@@ -1235,8 +1245,8 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 
 			if ( iSharedStash != null )
 			{  // ****TODO:   add logic to determine which stash 1, 2 or 3 to draw the item.
-				for (int j = 0; j < 2; j++) {  
-					for (int i = 0; i < iSharedStash.getNrItems(); i++)
+				for (int j = 0; j < 3; j++) {  
+					for (int i = 0; i < iSharedStash.getNrItems(j); i++)
 					{
 						D2Item temp_item = iSharedStash.getCharItem(i, j);
 						Image lImage = D2ImageCache.getDC6Image(temp_item);

@@ -39,7 +39,7 @@ import randall.d2files.*;
 public class D2SharedStash extends D2ItemListAdapter
 {
 	public static final int BODY_STASH_CONTENT = 5;
-	public static final int STASHSIZEX = 10;
+	public static final int STASHSIZEX = 30; // 10 orig.  10*3 for 3 tabs in the shared stash
 	public static final int STASHSIZEY = 10;
 	
 	private D2BitReader iReader;
@@ -131,7 +131,7 @@ public class D2SharedStash extends D2ItemListAdapter
 
 //		long lWeaponSet = iReader.read(32);
 		
-		iStashGrid = new boolean[STASHSIZEY][STASHSIZEX];
+		iStashGrid = new boolean[STASHSIZEY][STASHSIZEX];   // 3 tabs for shared stash pane
 		
 		clearGrid();
 		iStashIdx = 0;
@@ -139,6 +139,7 @@ public class D2SharedStash extends D2ItemListAdapter
 		iStashIdx ++;
 		outBytePos = readItems(outBytePos);
 		iStashIdx ++;
+		outBytePos = readItems(outBytePos);
 
 		System.err.println("outBytePos: " + outBytePos);
 		// TODO: read items for itemlist2, and 3. and draw item images on background
@@ -199,7 +200,7 @@ public class D2SharedStash extends D2ItemListAdapter
 	
 
 
-
+    // TODO: handle itemlist 1, 2, and 3
 	public ArrayList getItemList(){
 		ArrayList lList = new ArrayList();
 		if ( iStashItems1 != null )lList.addAll( iStashItems1 );
@@ -257,7 +258,7 @@ public class D2SharedStash extends D2ItemListAdapter
 			if ((row + height) > 10)return false;   // ***8*** stash size int and not a variable set here!
 			if ((col + width) > 10)return false;    // ***6*** stash size
 			for (j = row; j < row + height; j++){
-				for (k = col; k < col + width; k++)iStashGrid[j][k] = true;
+				for (k = col; k < col + width; k++)iStashGrid[j][k + iStashIdx*10] = true;
 			}
 			break;
 		}
@@ -321,6 +322,8 @@ public class D2SharedStash extends D2ItemListAdapter
 
 
 	public boolean checkCharPanel(int panel, int x, int y, D2Item pItem){
+		System.err.println("checkCharPanel panel: " + panel);
+		System.err.println("x: " + x + " y: " + y);
 		switch (panel){
 		case BODY_STASH_CONTENT:
 			if (y >= 0 && y < iStashGrid.length){
@@ -344,9 +347,10 @@ public class D2SharedStash extends D2ItemListAdapter
 		
 		// Add logic for checking stash1, 2 and 3
 		for (int i = 0; i < iStashes.get(stashIdx).size(); i++){
-			D2Item temp_item = (D2Item) iStashItems1.get(i);
+			D2Item temp_item = (D2Item) iStashes.get(stashIdx).get(i);
 			if (temp_item.get_panel() == panel)	{
-				int col = temp_item.get_col();
+				// account for x pos (col) for stashes 2, 3
+				int col = temp_item.get_col() + 10*stashIdx;
 				int row = temp_item.get_row();
 				if ((x >= col) && (x <= col + temp_item.get_width() - 1) && (y >= row) && (y <= row + temp_item.get_height() - 1)) {
 					return i;
@@ -368,6 +372,7 @@ public class D2SharedStash extends D2ItemListAdapter
 		// the open file in place of its current item list
 		int lCharSize = 0;
 
+		// TODO: handle stashes 1, 2 and 3
 		for (int i = 0; i < iStashItems1.size(); i++){
 			lCharSize += ((D2Item) iStashItems1.get(i)).get_bytes().length;
 		}
@@ -506,10 +511,12 @@ public class D2SharedStash extends D2ItemListAdapter
 	// TODO: stash2 and 3 logic to be added
 
 	public D2Item getCharItem(int i, int stashIdx){
-		System.err.println("D2SharedStash.java getCharItem() stashIdx: " + stashIdx);
 		return (D2Item) iStashes.get(stashIdx).get(i);
 	}
-	public int getNrItems(){return iStashItems1.size();}  // +size2, +size3     //old: + iMercItems.size()
+	public int getNrItems(int stashIdx){
+		return iStashes.get(stashIdx).size();
+	}  // +size2, +size3     //old: + iMercItems.size()
+
 	// public int getCharItemNr(){return iStashItems1.size();}
 	// public int getMercItemNr(){return iMercItems.size();}
 	// public int getCorpseItemNr(){return iCorpseItems.size();}
