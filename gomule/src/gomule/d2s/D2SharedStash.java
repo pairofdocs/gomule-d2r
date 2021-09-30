@@ -44,9 +44,11 @@ public class D2SharedStash extends D2ItemListAdapter
 	
 	private D2BitReader iReader;
     // need iStashItems1, iStashItems2, iStashItems3
+	private ArrayList<ArrayList> iStashes;
 	private ArrayList iStashItems1;
-    // private ArrayList iStashItems2;
-    // private ArrayList iStashItems3;
+    private ArrayList iStashItems2;
+    private ArrayList iStashItems3;
+	private int iStashIdx;
 
 	private D2Item iCharCursorItem;
 	
@@ -59,7 +61,8 @@ public class D2SharedStash extends D2ItemListAdapter
 	private String iCharClass;
 	private boolean iHC;
 
-	private boolean[][]     iStashGrid;
+	private boolean[][]     iStashGrid; 
+	// grid for stash tab2 and 3?
 	
 //	private int testCounter = 0;
 //	private boolean fullChanged = false;
@@ -77,7 +80,13 @@ public class D2SharedStash extends D2ItemListAdapter
 	public D2SharedStash(String pFileName) throws Exception{
 		super( pFileName );
 		if ( iFileName == null || !iFileName.toLowerCase().endsWith(".d2i"))throw new Exception("Incorrect Stash file name");
+		iStashes = new ArrayList<ArrayList>();
 		iStashItems1 = new ArrayList();
+		iStashItems2 = new ArrayList();
+		iStashItems3 = new ArrayList();
+		iStashes.add(iStashItems1);
+		iStashes.add(iStashItems2);
+		iStashes.add(iStashItems3);
 		
 		iReader = new D2BitReader(iFileName);
 		readStash();
@@ -97,7 +106,7 @@ public class D2SharedStash extends D2ItemListAdapter
 		long lGoldStash1 = iReader.read(32);  // byte pos 12
 		// if (iReader.get_length() != lSize)throw new Exception("Incorrect FileSize: " + lSize);
 
-        // TODO:  checksum.   is checksum as byte pos 16 ?
+        // TODO:  checksum.   is checksum as byte pos 16? --> Yes. (checksum is only on the item block, not the gold#)
 		// long lCheckSum2 = calculateCheckSum();
 		// iReader.set_byte_pos(16);
 		boolean lChecksum = false;
@@ -125,12 +134,19 @@ public class D2SharedStash extends D2ItemListAdapter
 		iStashGrid = new boolean[STASHSIZEY][STASHSIZEX];
 		
 		clearGrid();
-		readItems();
+		iStashIdx = 0;
+		int outBytePos = readItems(32);
+		iStashIdx ++;
+		outBytePos = readItems(outBytePos);
+		iStashIdx ++;
+
+		System.err.println("outBytePos: " + outBytePos);
 		// TODO: read items for itemlist2, and 3. and draw item images on background
 		
 	}
 
 	
+	//TODO calc checksum for the itemblock (3 blocks total in D2R's shared stash file)
 	private long calculateCheckSum(){
 		iReader.set_byte_pos(0);
 		long lCheckSum = 0; // unsigned integer checksum
@@ -146,8 +162,8 @@ public class D2SharedStash extends D2ItemListAdapter
 
 	
 	// TODO
-	private void readItems() throws Exception{
-		int lFirstPos = iReader.findNextFlag("JM", 32);  // byte pos 64 for 1st stash tab/item block
+	private int readItems(int bytePosStart) throws Exception{
+		int lFirstPos = iReader.findNextFlag("JM", bytePosStart);  // byte pos 64 for 1st stash tab/item block
 		System.err.println("lFirstPos: " + lFirstPos);
 		if (lFirstPos == -1)throw new Exception("Character items not found");
 		int lLastItemEnd = lFirstPos + 2;  // byte pos 66
@@ -177,6 +193,7 @@ public class D2SharedStash extends D2ItemListAdapter
 				markCharGrid(lItem);
 			}
 		}
+		return lItemBlockEnd;
 	}
 
 	
@@ -273,12 +290,14 @@ public class D2SharedStash extends D2ItemListAdapter
 
 
 	public void addCharItem(D2Item pItem){
-		iStashItems1.add(pItem);
+		iStashes.get(iStashIdx).add(pItem);
+		// iStashItems1.add(pItem);
 		pItem.setCharLvl((int)iCharLevel);
 		setModified(true);
 	}
 
 	public void removeCharItem(int i){
+		// remove from stash1, 2, or 3
 		iStashItems1.remove(i);
 		setModified(true);
 	}
@@ -312,10 +331,19 @@ public class D2SharedStash extends D2ItemListAdapter
 		return true;
 	}
 
-	
-	public int getCharItemIndex(int panel, int x, int y){  // iRow,  iCol are input
+	// Debug:
+	// -1 out of bounds for length 18
+    //     at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
+    //     at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
+    //     at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
+    //     at java.base/java.util.Objects.checkIndex(Objects.java:372)
+    //     at java.base/java.util.ArrayList.get(ArrayList.java:459)
+    //     at gomule.d2s.D2SharedStash.getCharItem(D2SharedStash.java:502)
+    //     at gomule.gui.D2ViewSharedStash$D2ItemPanel.getItem(D2ViewSharedStash.java:848)
+	public int getCharItemIndex(int panel, int x, int y, int stashIdx){  // iRow,  iCol are input
 		
-		for (int i = 0; i < iStashItems1.size(); i++){
+		// Add logic for checking stash1, 2 and 3
+		for (int i = 0; i < iStashes.get(stashIdx).size(); i++){
 			D2Item temp_item = (D2Item) iStashItems1.get(i);
 			if (temp_item.get_panel() == panel)	{
 				int col = temp_item.get_col();
@@ -330,7 +358,7 @@ public class D2SharedStash extends D2ItemListAdapter
 
 	
 
-	// TODO. save shared Stash file by writing 3 block--stash tabs  (each has a checksum?)
+	// TODO. save shared Stash file by writing 3 block--stash tabs  (each has a checksum)
 	public void saveInternal(D2Project pProject)
 	{
 		// backup file
@@ -347,7 +375,7 @@ public class D2SharedStash extends D2ItemListAdapter
 			lCharSize += iCharCursorItem.get_bytes().length;
 		}
 		
-		// TODO go through byte arrays. only need the headers, itemNum, gold (and checksum?)
+		// TODO go through byte arrays. only need the headers, itemNum, gold (and checksum)
 		byte lWritenBytes[];
 		byte[] lNewbytes = new byte[iBeforeStats.length + lWritenBytes.length + iBeforeItems.length + lCharSize + iBetweenItems.length + lMercSize + iAfterItems.length];
 		int lPos = 0;
@@ -476,7 +504,11 @@ public class D2SharedStash extends D2ItemListAdapter
 
 	
 	// TODO: stash2 and 3 logic to be added
-	public D2Item getCharItem(int i){return (D2Item) iStashItems1.get(i);}
+
+	public D2Item getCharItem(int i, int stashIdx){
+		System.err.println("D2SharedStash.java getCharItem() stashIdx: " + stashIdx);
+		return (D2Item) iStashes.get(stashIdx).get(i);
+	}
 	public int getNrItems(){return iStashItems1.size();}  // +size2, +size3     //old: + iMercItems.size()
 	// public int getCharItemNr(){return iStashItems1.size();}
 	// public int getMercItemNr(){return iMercItems.size();}

@@ -824,7 +824,8 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			// 	return iSharedStash.getCorpseItemIndex(iPanel, iRow, iCol);
 			// }
 			// return iSharedStash.getMercItemIndex(iPanel, iRow, iCol);
-			return iSharedStash.getCharItemIndex(iPanel, iRow, iCol);
+			// TODO: iStashIndex for stash tab 1, 2, or 3
+			return iSharedStash.getCharItemIndex(iPanel, iRow, iCol, 0);
 		}
 
 		public D2Item getItem()
@@ -844,7 +845,8 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			// 	return iSharedStash.getCorpseItem(iSharedStash.getCorpseItemIndex(iPanel, iRow, iCol));
 			// }
 			// return iSharedStash.getMercItem(iSharedStash.getMercItemIndex(iPanel, iRow, iCol));
-			return iSharedStash.getCharItem(iSharedStash.getCharItemIndex(iPanel, iRow, iCol));
+			return iSharedStash.getCharItem(iSharedStash.getCharItemIndex(iPanel, iRow, iCol, 0), 0);  // iSharedStash.() , iStashIdx
+			//                                                            add 4th param to getCharItemIndex
 		}
 
 		// calculate which panel (stash, inventory, equipment slot, etc)
@@ -981,22 +983,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 								 * Thanks to Krikke.
 								 */
 								//System.out.println("isEquipped: " + lTemp.isEquipped() + " isABelt: " + lTemp.isABelt()); 
-								if (lTemp.isEquipped() && lTemp.isABelt())
-								{
-									for (int y=0;y<iSharedStash.getBeltPotions().size();y++){
-										D2ViewClipboard.addItem((D2Item)iSharedStash.getBeltPotions().get(y));
-										iSharedStash.unmarkCharGrid((D2Item)iSharedStash.getBeltPotions().get(y));
-									}
-									for (int i=0;i<4;i++) {
-										for (int j=1;j<4;j++) {
-											if (iSharedStash.getCharItemIndex(2, i, j) != -1) {
-												iSharedStash.removeCharItem(iSharedStash.getCharItemIndex(2, i, j));
-											}
-										}
-									}
-								}
-
-
+								
 								iSharedStash.unmarkCharGrid(lTemp);
 								iSharedStash.removeCharItem(lItemPanel.getItemIndex());
 								D2ViewClipboard.addItem(lTemp);
@@ -1147,6 +1134,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 					{
 						if (lItemPanel.isItem())
 						{
+							System.err.println("lItemPanel.isItem() in d2viewSharedStash.java");
 							lCurrentMouse = lItemPanel.getItem();
 						}
 
@@ -1246,109 +1234,111 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			lGraphics.drawImage(lEmptyBackground, 0, 0, D2CharPainterPanel.this);
 
 			if ( iSharedStash != null )
-			{
-                // ****TODO:   add logic to determine which stash 1, 2 or 3 to draw the item.
-				for (int i = 0; i < iSharedStash.getNrItems(); i++)
-				{
-					D2Item temp_item = iSharedStash.getCharItem(i);
-					Image lImage = D2ImageCache.getDC6Image(temp_item);
-					int location = temp_item.get_location();
-					// on one of the grids
-					// these items have varying height and width
-					// and a variable position, indexed from the
-					// top left
-					if (location == 0)
+			{  // ****TODO:   add logic to determine which stash 1, 2 or 3 to draw the item.
+				for (int j = 0; j < 2; j++) {  
+					for (int i = 0; i < iSharedStash.getNrItems(); i++)
 					{
-						int panel = temp_item.get_panel();
-						int x = temp_item.get_col();
-						int y = temp_item.get_row();
-//						int w = temp_item.get_width();
-//						int h = temp_item.get_height();
-						switch (panel)
+						D2Item temp_item = iSharedStash.getCharItem(i, j);
+						Image lImage = D2ImageCache.getDC6Image(temp_item);
+						int location = temp_item.get_location();
+						// on one of the grids
+						// these items have varying height and width
+						// and a variable position, indexed from the
+						// top left
+						if (location == 0)
 						{
-						// in the inventory
-						case 1:
-							//                    	System.err.println("Item loc 0 - 1 - " +
-							// temp_item.get_name() + " - " + temp_item.get_image()
-							// );
-							// lGraphics.drawImage(lImage, INV_X + x * GRID_SIZE + x * GRID_SPACER, INV_Y + y * GRID_SIZE + y * GRID_SPACER, D2CharPainterPanel.this);
-							break;
-							// in the cube
-						case 4:
-							// lGraphics.drawImage(lImage, CUBE_X + x * GRID_SIZE + x * GRID_SPACER, CUBE_Y + y * GRID_SIZE + y * GRID_SPACER, D2CharPainterPanel.this);
-							break;
-							// in the stash
-						case 5:
-							lGraphics.drawImage(lImage, STASH_X + x * GRID_SIZE + x * GRID_SPACER, STASH_Y + y * GRID_SIZE + y * GRID_SPACER, D2CharPainterPanel.this);
-							break;
+							int panel = temp_item.get_panel();
+							int x = temp_item.get_col();
+							int y = temp_item.get_row();
+	//						int w = temp_item.get_width();
+	//						int h = temp_item.get_height();
+							switch (panel)
+							{
+							// in the inventory
+							case 1:
+								//                    	System.err.println("Item loc 0 - 1 - " +
+								// temp_item.get_name() + " - " + temp_item.get_image()
+								// );
+								// lGraphics.drawImage(lImage, INV_X + x * GRID_SIZE + x * GRID_SPACER, INV_Y + y * GRID_SIZE + y * GRID_SPACER, D2CharPainterPanel.this);
+								break;
+								// in the cube
+							case 4:
+								// lGraphics.drawImage(lImage, CUBE_X + x * GRID_SIZE + x * GRID_SPACER, CUBE_Y + y * GRID_SIZE + y * GRID_SPACER, D2CharPainterPanel.this);
+								break;
+								// in the stash
+							case 5:
+								lGraphics.drawImage(lImage, STASH_X + 304*j +x * GRID_SIZE + x * GRID_SPACER, STASH_Y + y * GRID_SIZE + y * GRID_SPACER, D2CharPainterPanel.this);
+								break;
+							}
 						}
-					}
-					// on the belt
-					// belt row and col is indexed from the top
-					// left, but this displays them from the
-					// bottom right (so the 0th row items get
-					// placed in the bottom belt row)
-					// these items can all be assumed to be 1x1
-					else if (location == 2)
-					{
-						// int x = temp_item.get_col();
-						// int y = x / 4;
-						// x = x % 4;
-						// lGraphics.drawImage(lImage, BELT_GRID_X + x * GRID_SIZE + x * GRID_SPACER, BELT_GRID_Y + (3 - y) * GRID_SIZE + (3 - y) * GRID_SPACER, D2CharPainterPanel.this);
-					}
-					// on the body
-					else
-					{
-						int body_position = temp_item.get_body_position();
-						int w, h, wbias, hbias;
-						switch (body_position)
+						// on the belt
+						// belt row and col is indexed from the top
+						// left, but this displays them from the
+						// bottom right (so the 0th row items get
+						// placed in the bottom belt row)
+						// these items can all be assumed to be 1x1
+						else if (location == 2)
 						{
-						// head (assume 2x2)
-						case 1:
-							
-							break;
-							// neck / amulet (assume 1x1)
-						case 2:
-							
-							break;
-						case 3:
-							// body (assume 2x3
-							
-							break;
-							// right arm (give the whole 2x4)
-							// biases are to center non-2x4 items
-						case 4:
-						case 11:
-							
-							break;
-							// left arm (give the whole 2x4)
-						case 5:
-						case 12:
-							
-							break;
-							// left ring (assume 1x1)
-						case 6:
-							
-							break;
-							// right ring (assume 1x1)
-						case 7:
-							
-							break;
-							// belt (assume 2x1)
-						case 8:
-							
-							break;
-						case 9:
-							// boots (assume 2x2)
-							
-							break;
-							// gloves (assume 2x2)
-						case 10:
-							
-							break;
+							// int x = temp_item.get_col();
+							// int y = x / 4;
+							// x = x % 4;
+							// lGraphics.drawImage(lImage, BELT_GRID_X + x * GRID_SIZE + x * GRID_SPACER, BELT_GRID_Y + (3 - y) * GRID_SIZE + (3 - y) * GRID_SPACER, D2CharPainterPanel.this);
+						}
+						// on the body
+						else
+						{
+							int body_position = temp_item.get_body_position();
+							int w, h, wbias, hbias;
+							switch (body_position)
+							{
+							// head (assume 2x2)
+							case 1:
+								
+								break;
+								// neck / amulet (assume 1x1)
+							case 2:
+								
+								break;
+							case 3:
+								// body (assume 2x3
+								
+								break;
+								// right arm (give the whole 2x4)
+								// biases are to center non-2x4 items
+							case 4:
+							case 11:
+								
+								break;
+								// left arm (give the whole 2x4)
+							case 5:
+							case 12:
+								
+								break;
+								// left ring (assume 1x1)
+							case 6:
+								
+								break;
+								// right ring (assume 1x1)
+							case 7:
+								
+								break;
+								// belt (assume 2x1)
+							case 8:
+								
+								break;
+							case 9:
+								// boots (assume 2x2)
+								
+								break;
+								// gloves (assume 2x2)
+							case 10:
+								
+								break;
+							}
 						}
 					}
 				}
+                
 			}
 			repaint();
 		}
