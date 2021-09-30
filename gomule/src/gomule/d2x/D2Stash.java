@@ -242,7 +242,7 @@ public class D2Stash extends D2ItemListAdapter
             lLastItemEnd = lItemStart + lItem.getItemLength();
             iItems.add(lItem);
         }
-        if (d2rStash) {
+        if (d2rStash) { // **NOTE:  this will not be needed since sharedstash*.d2i uses D2SharedStash.java now
             // while loop.  find next JM and set position, then read items, can't do a recursive call to readItems since lLastItemEnd = 68 is hard-coded
             int lNextJM = iBR.findNextFlag("JM", lLastItemEnd);
             long numItems2 = 0;

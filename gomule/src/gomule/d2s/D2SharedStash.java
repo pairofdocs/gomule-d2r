@@ -44,11 +44,11 @@ public class D2SharedStash extends D2ItemListAdapter
 	
 	private D2BitReader iReader;
     // need iStashItems1, iStashItems2, iStashItems3
+	private static final int NUM_SHARED_TABS  = 3;
 	private ArrayList<ArrayList> iStashes;
 	private ArrayList iStashItems1;
     private ArrayList iStashItems2;
     private ArrayList iStashItems3;
-	private int iStashIdx;
 
 	private D2Item iCharCursorItem;
 	
@@ -70,13 +70,7 @@ public class D2SharedStash extends D2ItemListAdapter
 //	private ArrayList fullSetProps = new ArrayList();
 
 	// private int lWoo;
-    private int headstartFirst;
 	
-	private int iItemEnd1;
-    private int iItemEnd2;
-    private int iItemEnd3;
-	
-
 	public D2SharedStash(String pFileName) throws Exception{
 		super( pFileName );
 		if ( iFileName == null || !iFileName.toLowerCase().endsWith(".d2i"))throw new Exception("Incorrect Stash file name");
@@ -134,12 +128,9 @@ public class D2SharedStash extends D2ItemListAdapter
 		iStashGrid = new boolean[STASHSIZEY][STASHSIZEX];   // 3 tabs for shared stash pane
 		
 		clearGrid();
-		iStashIdx = 0;
-		int outBytePos = readItems(32);
-		iStashIdx ++;
-		outBytePos = readItems(outBytePos);
-		iStashIdx ++;
-		outBytePos = readItems(outBytePos);
+		int outBytePos = readItems(32, 0);
+		outBytePos = readItems(outBytePos, 1);
+		outBytePos = readItems(outBytePos, 2);
 
 		System.err.println("outBytePos: " + outBytePos);
 		// TODO: read items for itemlist2, and 3. and draw item images on background
@@ -163,7 +154,7 @@ public class D2SharedStash extends D2ItemListAdapter
 
 	
 	// TODO
-	private int readItems(int bytePosStart) throws Exception{
+	private int readItems(int bytePosStart, int iStashIdx) throws Exception{
 		int lFirstPos = iReader.findNextFlag("JM", bytePosStart);  // byte pos 64 for 1st stash tab/item block
 		System.err.println("lFirstPos: " + lFirstPos);
 		if (lFirstPos == -1)throw new Exception("Character items not found");
@@ -190,8 +181,8 @@ public class D2SharedStash extends D2ItemListAdapter
 				iCharCursorItem = lItem;
 			}else{
 				// TODO:  add to itemlist1, 2 or 3
-				addCharItem(lItem);
-				markCharGrid(lItem);
+				addCharItem(lItem, iStashIdx);
+				markCharGrid(lItem, iStashIdx);
 			}
 		}
 		return lItemBlockEnd;
@@ -203,19 +194,26 @@ public class D2SharedStash extends D2ItemListAdapter
     // TODO: handle itemlist 1, 2, and 3
 	public ArrayList getItemList(){
 		ArrayList lList = new ArrayList();
-		if ( iStashItems1 != null )lList.addAll( iStashItems1 );
+		if ( iStashes != null ) {
+			for (int i = 0; i < NUM_SHARED_TABS; i++) {
+				lList.addAll( iStashes.get(i) );
+			}
+		}
 		// TODO:  get istash2 and 3 as well
 		// if ( iMercItems != null )lList.addAll( iMercItems );
 		return lList;
 	}
 
 	public boolean containsItem(D2Item pItem){
-		if ( iStashItems1.contains(pItem))return true;
+		for (int i = 0; i < NUM_SHARED_TABS; i++) {
+			if ( iStashes.get(i).contains(pItem))return true;
+		}			
 		// if ( iMercItems.contains(pItem))return true;
 		return false;
 	}
 
 	public void removeItem(D2Item pItem){
+		// TODO: need iStashes.get() then loop and remove
 		if ( iStashItems1.remove(pItem) ){
 			unmarkCharGrid(pItem);
 		}else{
@@ -243,7 +241,7 @@ public class D2SharedStash extends D2ItemListAdapter
 		}
 	}
 
-	public boolean markCharGrid(D2Item i){
+	public boolean markCharGrid(D2Item i, int iStashIdx){
 		short panel = i.get_panel();
 		int row, col, width, height, j, k;
 		switch (panel){
@@ -266,6 +264,7 @@ public class D2SharedStash extends D2ItemListAdapter
 	}
 
 	
+	// TODO: add iStashIdx
 	public boolean unmarkCharGrid(D2Item i){
 		short panel = i.get_panel();
 		int row, col, width, height, j, k;
@@ -290,7 +289,7 @@ public class D2SharedStash extends D2ItemListAdapter
 	}
 
 
-	public void addCharItem(D2Item pItem){
+	public void addCharItem(D2Item pItem, int iStashIdx){
 		iStashes.get(iStashIdx).add(pItem);
 		// iStashItems1.add(pItem);
 		pItem.setCharLvl((int)iCharLevel);
@@ -298,8 +297,8 @@ public class D2SharedStash extends D2ItemListAdapter
 	}
 
 	public void removeCharItem(int i){
-		// remove from stash1, 2, or 3
-		iStashItems1.remove(i);
+		// TODO: remove from stash1, 2, or 3
+		iStashItems1.remove(i);  // input stashIdx then iStashes.get(stashIdx).remove(i)
 		setModified(true);
 	}
 
@@ -322,8 +321,6 @@ public class D2SharedStash extends D2ItemListAdapter
 
 
 	public boolean checkCharPanel(int panel, int x, int y, D2Item pItem){
-		System.err.println("checkCharPanel panel: " + panel);
-		System.err.println("x: " + x + " y: " + y);
 		switch (panel){
 		case BODY_STASH_CONTENT:
 			if (y >= 0 && y < iStashGrid.length){
@@ -334,15 +331,6 @@ public class D2SharedStash extends D2ItemListAdapter
 		return true;
 	}
 
-	// Debug:
-	// -1 out of bounds for length 18
-    //     at java.base/jdk.internal.util.Preconditions.outOfBounds(Preconditions.java:64)
-    //     at java.base/jdk.internal.util.Preconditions.outOfBoundsCheckIndex(Preconditions.java:70)
-    //     at java.base/jdk.internal.util.Preconditions.checkIndex(Preconditions.java:248)
-    //     at java.base/java.util.Objects.checkIndex(Objects.java:372)
-    //     at java.base/java.util.ArrayList.get(ArrayList.java:459)
-    //     at gomule.d2s.D2SharedStash.getCharItem(D2SharedStash.java:502)
-    //     at gomule.gui.D2ViewSharedStash$D2ItemPanel.getItem(D2ViewSharedStash.java:848)
 	public int getCharItemIndex(int panel, int x, int y, int stashIdx){  // iRow,  iCol are input
 		
 		// Add logic for checking stash1, 2 and 3
@@ -373,121 +361,124 @@ public class D2SharedStash extends D2ItemListAdapter
 		int lCharSize = 0;
 
 		// TODO: handle stashes 1, 2 and 3
-		for (int i = 0; i < iStashItems1.size(); i++){
-			lCharSize += ((D2Item) iStashItems1.get(i)).get_bytes().length;
+		for (int i = 0; i < NUM_SHARED_TABS; i++) {
+			for (int j = 0; j < iStashes.get(i).size(); j++){
+				lCharSize += ((D2Item) iStashes.get(i).get(j)).get_bytes().length;
+			}
 		}
+		
 		if ( iCharCursorItem != null ){
 			lCharSize += iCharCursorItem.get_bytes().length;
 		}
 		
-		// TODO go through byte arrays. only need the headers, itemNum, gold (and checksum)
-		byte lWritenBytes[];
-		byte[] lNewbytes = new byte[iBeforeStats.length + lWritenBytes.length + iBeforeItems.length + lCharSize + iBetweenItems.length + lMercSize + iAfterItems.length];
-		int lPos = 0;
-		System.arraycopy(iBeforeStats, 0, lNewbytes, lPos, iBeforeStats.length);
-		lPos += iBeforeStats.length;
+// 		// TODO go through byte arrays. only need the headers, itemNum, gold (and checksum)
+// 		byte lWritenBytes[];
+// 		byte[] lNewbytes = new byte[iBeforeStats.length + lWritenBytes.length + iBeforeItems.length + lCharSize + iBetweenItems.length + lMercSize + iAfterItems.length];
+// 		int lPos = 0;
+// 		System.arraycopy(iBeforeStats, 0, lNewbytes, lPos, iBeforeStats.length);
+// 		lPos += iBeforeStats.length;
 
-		System.arraycopy(lWritenBytes, 0, lNewbytes, lPos, lWritenBytes.length);
-		lPos += lWritenBytes.length;
+// 		System.arraycopy(lWritenBytes, 0, lNewbytes, lPos, lWritenBytes.length);
+// 		lPos += lWritenBytes.length;
 
-		System.arraycopy(iBeforeItems, 0, lNewbytes, lPos, iBeforeItems.length);
-		lPos += iBeforeItems.length;
+// 		System.arraycopy(iBeforeItems, 0, lNewbytes, lPos, iBeforeItems.length);
+// 		lPos += iBeforeItems.length;
 
-		int lCharItemCountPos = lPos - 2;      // <<<<< is this correct for D2R?  subtract 2 for JM ?
-		int lMercItemCountPos = -1;           // <<<<< is this correct for D2R?
-		// Start writing Items after 'JMxx' (JM and numItems)
-		for (int i = 0; i < iStashItems1.size(); i++){
-			byte[] item_bytes = ((D2Item) iStashItems1.get(i)).get_bytes();
-			System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
+// 		int lCharItemCountPos = lPos - 2;      // <<<<< is this correct for D2R?  subtract 2 for JM ?
+// 		int lMercItemCountPos = -1;           // <<<<< is this correct for D2R?
+// 		// Start writing Items after 'JMxx' (JM and numItems)
+// 		for (int i = 0; i < iStashItems1.size(); i++){
+// 			byte[] item_bytes = ((D2Item) iStashItems1.get(i)).get_bytes();
+// 			System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
 			
-			lPos += item_bytes.length;
-		}
-		if ( iCharCursorItem != null ){
-			byte[] item_bytes = iCharCursorItem.get_bytes();
-			// debug print the byte array[].  items end on byte. beginning 4bytes are item flags.
-			// are the item bytes already in Huffman code?   since bytes are read and addItem is used
-			System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
-			lPos += item_bytes.length;
-		}
-		if (hasMerc()){
-			// Merc start jf JM ... and end is kf.
-			System.arraycopy(iBetweenItems, 0, lNewbytes, lPos, iBetweenItems.length); // iBetweenitems is correct (the corpse data)
-			lPos += iBetweenItems.length;
-			lMercItemCountPos = lPos - 2;     // lPos -2 is right when reading merc items.  iBetweenItems contains 'JMxx' for merc numItems
+// 			lPos += item_bytes.length;
+// 		}
+// 		if ( iCharCursorItem != null ){
+// 			byte[] item_bytes = iCharCursorItem.get_bytes();
+// 			// debug print the byte array[].  items end on byte. beginning 4bytes are item flags.
+// 			// are the item bytes already in Huffman code?   since bytes are read and addItem is used
+// 			System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
+// 			lPos += item_bytes.length;
+// 		}
+// 		if (hasMerc()){
+// 			// Merc start jf JM ... and end is kf.
+// 			System.arraycopy(iBetweenItems, 0, lNewbytes, lPos, iBetweenItems.length); // iBetweenitems is correct (the corpse data)
+// 			lPos += iBetweenItems.length;
+// 			lMercItemCountPos = lPos - 2;     // lPos -2 is right when reading merc items.  iBetweenItems contains 'JMxx' for merc numItems
 
-			for (int i = 0; i < iMercItems.size(); i++){
-				byte[] item_bytes = ((D2Item) iMercItems.get(i)).get_bytes();
-				System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
-				lPos += item_bytes.length;
-			}
-		}
-		if (iAfterItems.length > 0){
-			// This array is created up at the top, where items are read from the file
-			System.arraycopy(iAfterItems, 0, lNewbytes, lPos, iAfterItems.length);
-		}
-		iReader.setBytes(lNewbytes); // iReader.getFileContent()
-		iReader.set_byte_pos(lCharItemCountPos);
-		int lCharItemsCount = iStashItems1.size();
-		if ( iCharCursorItem != null ){
-			lCharItemsCount++;
-		}
-		iReader.write(lCharItemsCount, 16);
-		if (hasMerc()){
-			iReader.set_byte_pos(lMercItemCountPos);
-			iReader.write(iMercItems.size(), 16);
-		}
-		// get all the bytes
-		iReader.set_byte_pos(0);
-		byte[] data = iReader.get_bytes(iReader.get_length());
-//		byte[] oldchecksum = { data[12], data[13], data[14], data[15] };
-		// clear the current checksum
-		byte[] checksum = { 0, 0, 0, 0 }; // byte checksum
-		iReader.setBytes(12, checksum);
-		byte[] length = new byte[4];
-		length[3] = (byte) ((0xff000000 & data.length) >>> 24);
-		length[2] = (byte) ((0x00ff0000 & data.length) >>> 16);
-		length[1] = (byte) ((0x0000ff00 & data.length) >>> 8);
-		length[0] = (byte) (0x000000ff & data.length);
-		iReader.setBytes(8, length);
-		iReader.set_byte_pos(0);
-		long lCheckSum = calculateCheckSum();
-		checksum[3] = (byte) ((0xff000000 & lCheckSum) >>> 24);
-		checksum[2] = (byte) ((0x00ff0000 & lCheckSum) >>> 16);
-		checksum[1] = (byte) ((0x0000ff00 & lCheckSum) >>> 8);
-		checksum[0] = (byte) (0x000000ff & lCheckSum);
-		iReader.setBytes(12, checksum);
-		iReader.save();
-		setModified(false);
+// 			for (int i = 0; i < iMercItems.size(); i++){
+// 				byte[] item_bytes = ((D2Item) iMercItems.get(i)).get_bytes();
+// 				System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
+// 				lPos += item_bytes.length;
+// 			}
+// 		}
+// 		if (iAfterItems.length > 0){
+// 			// This array is created up at the top, where items are read from the file
+// 			System.arraycopy(iAfterItems, 0, lNewbytes, lPos, iAfterItems.length);
+// 		}
+// 		iReader.setBytes(lNewbytes); // iReader.getFileContent()
+// 		iReader.set_byte_pos(lCharItemCountPos);
+// 		int lCharItemsCount = iStashItems1.size();
+// 		if ( iCharCursorItem != null ){
+// 			lCharItemsCount++;
+// 		}
+// 		iReader.write(lCharItemsCount, 16);
+// 		if (hasMerc()){
+// 			iReader.set_byte_pos(lMercItemCountPos);
+// 			iReader.write(iMercItems.size(), 16);
+// 		}
+// 		// get all the bytes
+// 		iReader.set_byte_pos(0);
+// 		byte[] data = iReader.get_bytes(iReader.get_length());
+// //		byte[] oldchecksum = { data[12], data[13], data[14], data[15] };
+// 		// clear the current checksum
+// 		byte[] checksum = { 0, 0, 0, 0 }; // byte checksum
+// 		iReader.setBytes(12, checksum);
+// 		byte[] length = new byte[4];
+// 		length[3] = (byte) ((0xff000000 & data.length) >>> 24);
+// 		length[2] = (byte) ((0x00ff0000 & data.length) >>> 16);
+// 		length[1] = (byte) ((0x0000ff00 & data.length) >>> 8);
+// 		length[0] = (byte) (0x000000ff & data.length);
+// 		iReader.setBytes(8, length);
+// 		iReader.set_byte_pos(0);
+// 		long lCheckSum = calculateCheckSum();
+// 		checksum[3] = (byte) ((0xff000000 & lCheckSum) >>> 24);
+// 		checksum[2] = (byte) ((0x00ff0000 & lCheckSum) >>> 16);
+// 		checksum[1] = (byte) ((0x0000ff00 & lCheckSum) >>> 8);
+// 		checksum[0] = (byte) (0x000000ff & lCheckSum);
+// 		iReader.setBytes(12, checksum);
+// 		iReader.save();
+//		setModified(false);
 	}
 
-	public void setGold(int pGold) throws Exception{
-		if ( pGold < 0 )throw new Exception("gold must be greater than zero");
-		if ( pGold > getGoldMax())throw new Exception("gold must be smaller than max" + getGoldMax() );
-		setModified(true);
-	}
+// 	public void setGold(int pGold) throws Exception{
+// 		if ( pGold < 0 )throw new Exception("gold must be greater than zero");
+// 		if ( pGold > getGoldMax())throw new Exception("gold must be smaller than max" + getGoldMax() );
+// 		setModified(true);
+// 	}
 
-	public void setGoldBank(int pGoldBank) throws Exception{
-		if ( pGoldBank < 0 )throw new Exception("gold must be greater than zero");
-		if ( pGoldBank > getGoldBankMax())throw new Exception("gold must be smaller than max" + getGoldBankMax() );
-		setModified(true);
-	}
+// 	public void setGoldBank(int pGoldBank) throws Exception{
+// 		if ( pGoldBank < 0 )throw new Exception("gold must be greater than zero");
+// 		if ( pGoldBank > getGoldBankMax())throw new Exception("gold must be smaller than max" + getGoldBankMax() );
+// 		setModified(true);
+// 	}
 
-	public int getGoldBankMax(){
-		return 2500000;
-//		int lMaxGold = 50000;
-//		for ( int lLvl = 9 ; lLvl <=29 ; lLvl+=10 ){
-//			if ( iCharLevel < lLvl )return lMaxGold;
-//			lMaxGold += 50000;
-//		}
-//		if ( iCharLevel == 30 )return 200000;
-//		if ( iCharLevel == 31 )return 800000;
-//		lMaxGold = 850000;
-//		for ( int lLvl = 33 ; lLvl <=99 ; lLvl+=2 ){
-//			if ( iCharLevel <= lLvl )return lMaxGold;
-//			lMaxGold += 50000;
-//		}
-//		return 0;
-	}
+// 	public int getGoldBankMax(){
+// 		return 2500000;
+// //		int lMaxGold = 50000;
+// //		for ( int lLvl = 9 ; lLvl <=29 ; lLvl+=10 ){
+// //			if ( iCharLevel < lLvl )return lMaxGold;
+// //			lMaxGold += 50000;
+// //		}
+// //		if ( iCharLevel == 30 )return 200000;
+// //		if ( iCharLevel == 31 )return 800000;
+// //		lMaxGold = 850000;
+// //		for ( int lLvl = 33 ; lLvl <=99 ; lLvl+=2 ){
+// //			if ( iCharLevel <= lLvl )return lMaxGold;
+// //			lMaxGold += 50000;
+// //		}
+// //		return 0;
+// 	}
 
 	public void fullDump(PrintWriter pWriter){
 		pWriter.println(fullDumpStr());
@@ -496,11 +487,14 @@ public class D2SharedStash extends D2ItemListAdapter
 	public String fullDumpStr(){
 		StringBuffer out = new StringBuffer();
 		
-		if ( iStashItems1 != null ){
-			for ( int i = 0 ; i < iStashItems1.size() ; i++){
-				D2Item lItem = (D2Item) iStashItems1.get(i);
-				out.append(lItem.itemDump(true));
-				out.append("\n");
+		if ( iStashes != null ){
+			// loop through 3 stash tabs, and items in each tab
+			for (int i = 0; i < NUM_SHARED_TABS; i++) { 
+				for ( int j = 0 ; j < iStashes.get(i).size() ; j++) {
+					D2Item lItem = (D2Item) iStashes.get(i).get(j);
+					out.append(lItem.itemDump(true));
+					out.append("\n");
+				}
 			}
 		}
 		
@@ -508,8 +502,6 @@ public class D2SharedStash extends D2ItemListAdapter
 	}
 
 	
-	// TODO: stash2 and 3 logic to be added
-
 	public D2Item getCharItem(int i, int stashIdx){
 		return (D2Item) iStashes.get(stashIdx).get(i);
 	}

@@ -1381,6 +1381,7 @@ public class D2FileManager extends JFrame
 				if (((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith("SharedStashSoftCoreV2.d2i") 
 				    || ((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith("SharedStashHardCoreV2.d2i")) {
 					pickFrom.setEnabled(false);
+					pickAll.setEnabled(false);
 					pickChooser.setEnabled(false);
 					dropTo.setEnabled(false);
 					dropChooser.setEnabled(false);
