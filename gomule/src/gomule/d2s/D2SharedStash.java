@@ -513,6 +513,14 @@ public class D2SharedStash extends D2ItemListAdapter
 	public D2Item getCharItem(int i, int stashIdx){
 		return (D2Item) iStashes.get(stashIdx).get(i);
 	}
+	// Required method to implement
+	public void addItem(D2Item item){
+		;
+	}
+	// Required method to implement
+	public int getNrItems(){
+		return -1;
+	}
 	public int getNrItems(int stashIdx){
 		return iStashes.get(stashIdx).size();
 	}  // +size2, +size3     //old: + iMercItems.size()
