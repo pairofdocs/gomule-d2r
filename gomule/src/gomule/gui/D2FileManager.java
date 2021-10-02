@@ -70,6 +70,8 @@ public class D2FileManager extends JFrame
 	private final static D2FileManager iCurrent = new D2FileManager();
 	private D2ViewClipboard      iClipboard;
 	private D2ViewStash          iViewAll;
+	// TODO: is this needed for a d2r shared stash?
+	private D2ViewSharedStash    iViewSharedAll; 
 	private boolean				 iIgnoreCheckAll = false;
 //	private JMenuBar D2JMenu;
 //	private JMenu file;
@@ -104,7 +106,7 @@ public class D2FileManager extends JFrame
 	int windowHeight = 768;
 	// from D2ViewChar
 	int BG_WIDTH = 626;
-	int BG_HEIGHT = 435;
+	int BG_HEIGHT = 435;  // TODO: does this have to change for a wide- shared stash?   908 x 309 pixels
 
 	public static D2FileManager getInstance()
 	{
@@ -410,6 +412,7 @@ public class D2FileManager extends JFrame
 				if(((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith(".d2s")){
 					reportName = (((D2ViewChar)iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getChar().getCharName() + iProject.getReportName());
 				}else{
+					// TODO: D2R shared stash and flavie report
 					reportName = ((((D2ViewStash)iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame())))).getStashName() + iProject.getReportName());
 					// reportName = reportName.replace(".d2x", "");  // orig
 					reportName = reportName.replace(".d2i", "");
@@ -1030,6 +1033,7 @@ public class D2FileManager extends JFrame
 			if(lList.getFilename().endsWith(".d2s")){
 				lFileName = ((D2Character)lList).getCharName() + ".d2s";
 			}else{
+				// TODO: account for D2R shared stash .d2i
 				lFileName = ((D2Stash)lList).getFileNameEnd();
 			}
 			lFileName = folder + File.separator + lFileName + ".txt";
@@ -1377,6 +1381,7 @@ public class D2FileManager extends JFrame
 				if (((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith("SharedStashSoftCoreV2.d2i") 
 				    || ((D2ItemContainer) iOpenWindows.get(iOpenWindows.indexOf(iDesktopPane.getSelectedFrame()))).getFileName().endsWith("SharedStashHardCoreV2.d2i")) {
 					pickFrom.setEnabled(false);
+					pickAll.setEnabled(false);
 					pickChooser.setEnabled(false);
 					dropTo.setEnabled(false);
 					dropChooser.setEnabled(false);
@@ -1522,21 +1527,48 @@ public class D2FileManager extends JFrame
 				lExisting = lItemContainer;
 			}
 		}
+		// add logic here to use D2ViewSharedStash() when filename == SharedStash*.d2i
+		if (!pStashName.endsWith("CoreV2.d2i")) {
+			D2ViewStash lStashView = null;
+			if(load){
+				if (lExisting != null) {
+					lStashView = ((D2ViewStash) lExisting);
+				}
+				else {
+					lStashView = new D2ViewStash(D2FileManager.this, pStashName);
+					lStashView.setLocation(10 + (iOpenWindows.size() * 10), 10+ (iOpenWindows.size() * 10));
+					addToOpenWindows(lStashView);
+				}
+				lStashView.activateView();
+				internalWindowForward(lStashView);
+			}
+		}else {
+			if(load){
+				if (lExisting != null) {
+					internalWindowForward(((JInternalFrame) lExisting));
+				}else {
+					int BG_WIDTH2 = 908;  // 908 x 309 pixels
+					int BG_HEIGHT2 = 309;
+					D2ViewSharedStash lSharedStashView = new D2ViewSharedStash(D2FileManager.this, pStashName);
+					if (iOpenWindows.size() == 0) {
+						lSharedStashView.setLocation(0, 0);  // orig had: 10+ x,  10+ y
+					} else if (iOpenWindows.size() == 1) {
+						//BG_WIDTH         = 626; //550;  // TODO: update to 626  // from D2ViewChar
+						//BG_HEIGHT        = 435; //383;  // TODO: update to 457
 
-		D2ViewStash lStashView = null;
-		if(load){
-			if (lExisting != null)
-			{
-				lStashView = ((D2ViewStash) lExisting);
+						lSharedStashView.setLocation((BG_WIDTH2 + 16), 0); 
+					} else if (iOpenWindows.size() == 2) {
+						lSharedStashView.setLocation(0, BG_HEIGHT2 + 48);
+					} else if (iOpenWindows.size() == 3) {         // will this be appropriate for 1920x1080 displays?. having the 3,4th windows go under 1st and 2nd
+						lSharedStashView.setLocation((BG_WIDTH2 + 16), BG_HEIGHT2 + 48);
+					} else {
+						// lSharedStashView.setLocation(20 + (iOpenWindows.size() * 10), 20 + (iOpenWindows.size() * 10));  // orig had: 10+ x,  10+ y
+						lSharedStashView.setLocation(((iOpenWindows.size()-4 +1) * 20), BG_HEIGHT2 + 48 + ((iOpenWindows.size()-4 +1) * 20));
+					}
+					addToOpenWindows(lSharedStashView);
+					internalWindowForward(lSharedStashView);
+				}
 			}
-			else
-			{
-				lStashView = new D2ViewStash(D2FileManager.this, pStashName);
-				lStashView.setLocation(10 + (iOpenWindows.size() * 10), 10+ (iOpenWindows.size() * 10));
-				addToOpenWindows(lStashView);
-			}
-			lStashView.activateView();
-			internalWindowForward(lStashView);
 		}
 
 		iProject.addStash(pStashName);
@@ -1594,6 +1626,21 @@ public class D2FileManager extends JFrame
 				throw new Exception("Stash is not Hardcore (HC), this is a project requirement");
 			}
 			System.err.println("Add Stash: " + pFileName );
+			iItemLists.put(pFileName, lList);
+			iViewProject.notifyItemListRead(pFileName);
+		}
+		else if ( pFileName.endsWith("CoreV2.d2i") ) {
+			lList = new D2SharedStash(pFileName);
+
+			int lType = getProject().getType();
+			if ( lType == D2Project.TYPE_SC && (!lList.isSC() || lList.isHC()) )
+			{
+				throw new Exception("Stash is not Softcore (SC), this is a project requirement");
+			}
+			if ( lType == D2Project.TYPE_HC && (lList.isSC() || !lList.isHC()) )
+			{
+				throw new Exception("Stash is not Hardcore (HC), this is a project requirement");
+			}
 			iItemLists.put(pFileName, lList);
 			iViewProject.notifyItemListRead(pFileName);
 		}

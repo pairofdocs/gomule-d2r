@@ -21,6 +21,7 @@
 package gomule.gui;
 
 import gomule.d2s.D2Character;
+import gomule.d2s.D2SharedStash;
 import gomule.d2x.D2Stash;
 import gomule.item.D2BodyLocations;
 import gomule.item.D2Item;
@@ -358,7 +359,9 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
 
 				public void mouseClicked(MouseEvent arg0) {
 					if(arg0.getButton() == MouseEvent.BUTTON1 && arg0.getClickCount() == 2){
-                        if (!((D2Stash) iStash).d2rStash) {
+                        if (iFileName.equals("all")) {
+                            pickupSelected();
+                        }else if (!((D2Stash) iStash).d2rStash) {
                             pickupSelected();
                         }
 					}
@@ -384,7 +387,7 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
                                     iIconLabel.setIcon(iIcon);
                                 }
                             	String dispStr = iItemModel.getItem(iTable.getSelectedRow()).itemDumpHtml(true).replaceAll("<[/]*html>", "");
-                                if(!isStash()){
+                                if(!isStash()){ // isStash --> !'all' stash
                                 	iItemText.setText("<html><font size=3 face=Dialog><font color = white>Item From: "+(((D2ItemListAll) iStash).getFilename(iItemModel.getItem(iTable.getSelectedRow())))+"</font><br><br>"+dispStr+"</font></html>");
                                 }else{
                                 	iItemText.setText("<html><font size=3 face=Dialog>"+dispStr+"</font></html>");
@@ -549,7 +552,7 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
         {
             public void actionPerformed(ActionEvent pEvent)
             {
-                if (!((D2Stash) iStash).d2rStash) {
+                if (iFileName.equals("all") || !((D2Stash) iStash).d2rStash) {  // TODO d2rStash bool is not used for d2r shared stashes. they are type D2SharedStash
                     Vector lItemList = new Vector();
 
                     int lRows[] = iTable.getSelectedRows();
@@ -565,13 +568,16 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
                             iStash.ignoreItemListEvents();
                             for (int i = 0; i < lItemList.size(); i++)
                             {				
-                        int check = JOptionPane.showConfirmDialog(null, "Delete " + ((D2Item) lItemList.get(i)).getName() + "?");
-                            
-                            if(check == 0){
-                                iStash.removeItem((D2Item) lItemList.get(i));
+                                if ( !(((D2Item) lItemList.get(i)).getFileName().endsWith("CoreV2.d2i")) ) {
+                                    int check = JOptionPane.showConfirmDialog(null, "Delete " + ((D2Item) lItemList.get(i)).getName() + "?");
+                                
+                                    if(check == 0){
+                                        iStash.removeItem((D2Item) lItemList.get(i));
+                                    }
+                                }else {
+                                    JOptionPane.showMessageDialog(null, "Deleting an item from D2R's Shared Stash is disabled in the 'all' stash window", "Warning", JOptionPane.INFORMATION_MESSAGE);
+                                }
                             }
-                            }
-                            
                         }
                         finally
                         {

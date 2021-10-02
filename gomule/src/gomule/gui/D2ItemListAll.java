@@ -7,6 +7,7 @@
 package gomule.gui;
 
 import gomule.d2s.D2Character;
+import gomule.d2s.D2SharedStash;
 import gomule.d2x.D2Stash;
 import gomule.item.*;
 import gomule.util.*;
@@ -123,7 +124,11 @@ public class D2ItemListAll implements D2ItemList
             	if(lItemList.getFilename().toLowerCase().endsWith(".d2s")){
             		return ((D2Character)lItemList).getCharName() + ".d2s";
             	}else{
-            		return ((D2Stash)lItemList).getFileNameEnd();
+                    if (lItemList.getFilename().endsWith("CoreV2.d2i")) {
+                        return ((D2SharedStash)lItemList).getFileNameEnd();
+                    }else {
+                        return ((D2Stash)lItemList).getFileNameEnd();
+                    }
             	}
             }
         }
