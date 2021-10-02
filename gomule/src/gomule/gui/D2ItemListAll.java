@@ -124,7 +124,6 @@ public class D2ItemListAll implements D2ItemList
             	if(lItemList.getFilename().toLowerCase().endsWith(".d2s")){
             		return ((D2Character)lItemList).getCharName() + ".d2s";
             	}else{
-                    System.err.println("lItemList.getFilename(): " + lItemList.getFilename());
                     if (lItemList.getFilename().endsWith("CoreV2.d2i")) {
                         return ((D2SharedStash)lItemList).getFileNameEnd();
                     }else {

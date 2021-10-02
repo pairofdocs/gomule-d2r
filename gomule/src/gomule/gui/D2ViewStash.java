@@ -359,7 +359,6 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
 
 				public void mouseClicked(MouseEvent arg0) {
 					if(arg0.getButton() == MouseEvent.BUTTON1 && arg0.getClickCount() == 2){
-                        System.err.println("Double click:   iFileName:" + iFileName);
                         if (iFileName.equals("all")) {
                             pickupSelected();
                         }else if (!((D2Stash) iStash).d2rStash) {
@@ -553,7 +552,6 @@ public class D2ViewStash extends JInternalFrame implements D2ItemContainer, D2It
         {
             public void actionPerformed(ActionEvent pEvent)
             {
-                System.err.println("filename: " + iFileName);
                 if (iFileName.equals("all") || !((D2Stash) iStash).d2rStash) {  // TODO d2rStash bool is not used for d2r shared stashes. they are type D2SharedStash
                     Vector lItemList = new Vector();
 

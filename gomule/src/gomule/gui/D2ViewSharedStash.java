@@ -779,14 +779,14 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			iPanel = getMousePanel(x, y);
 			// pass info about stash tab 1, 2 or 3 to setRowCol
 			int stashIdx;
-			if (pEvent.getX() < 315) {
+			if (pEvent.getX() < 298) {
 				stashIdx = 0;
-			}else if (pEvent.getX() < 613) {
+			}else if (pEvent.getX() < 599) {
 				stashIdx = 1;
 			}else{
 				stashIdx = 2;
 			}
-			if (pEvent.getX() > 298 && pEvent.getX() < 311) {  // ***NOTE: hard-coded stash tab width here.
+			if (pEvent.getX() > 296 && pEvent.getX() < 313) {  // ***NOTE: hard-coded stash tab width here.
 				iPanel = -1;
 			}else if (pEvent.getX() > 598 && pEvent.getX() < 615) {  // expand spacer between tabs to avoid exceptions with mouseMove
 				iPanel = -1;
@@ -993,9 +993,9 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 						if (lItemPanel.getPanel() != -1)
 						{
 							int stashIdx;
-							if (pEvent.getX() < 315) {
+							if (pEvent.getX() < 298) {
 								stashIdx = 0;
-							}else if (pEvent.getX() < 613) {
+							}else if (pEvent.getX() < 599) {
 								stashIdx = 1;
 							}else{
 								stashIdx = 2;
@@ -1066,8 +1066,6 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 										case 1:
 										case 4:
 										case 5:
-											System.err.println("lItemPanel.getColumn(): " + (lItemPanel.getColumn()));
-											System.err.println("lItemPanel.getRow(): " + lItemPanel.getRow());
 											lDropItem.set_location((short) 0);
 											lDropItem.set_body_position((short) 0);
 											lDropItem.set_row((short) lItemPanel.getColumn());
@@ -1165,9 +1163,9 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 						if (lItemPanel.isItem())
 						{	
 							int stashIdx;
-							if (pEvent.getX() < 315) {
+							if (pEvent.getX() < 298) {
 								stashIdx = 0;
-							}else if (pEvent.getX() < 615) {  // NOTE:  hard-coded px values.  also see D2ItemPanel
+							}else if (pEvent.getX() < 599) {  // NOTE:  hard-coded px values.  also see D2ItemPanel
 								stashIdx = 1;
 							}else{
 								stashIdx = 2;
