@@ -28,6 +28,7 @@ import gomule.util.*;
 import java.awt.Point;
 import java.io.*;
 import java.util.*;
+import java.nio.*;
 
 import randall.d2files.*;
 
@@ -49,7 +50,9 @@ public class D2SharedStash extends D2ItemListAdapter
 	private ArrayList iStashItems1;
     private ArrayList iStashItems2;
     private ArrayList iStashItems3;
-
+	
+	private ArrayList<Long> lTabGolds;
+	
 	private D2Item iCharCursorItem;
 	
 	private String iCharName;
@@ -60,6 +63,9 @@ public class D2SharedStash extends D2ItemListAdapter
 	private long lCharCode;
 	private String iCharClass;
 	private boolean iHC;
+	private boolean iSC;
+
+	private File lFile;
 
 	private boolean[][]     iStashGrid; 
 	// grid for stash tab2 and 3?
@@ -81,14 +87,22 @@ public class D2SharedStash extends D2ItemListAdapter
 		iStashes.add(iStashItems1);
 		iStashes.add(iStashItems2);
 		iStashes.add(iStashItems3);
+		lTabGolds = new ArrayList<Long>();
 		
+		lFile = new File(iFileName);
+        iSC = lFile.getName().toLowerCase().startsWith("sc_");
+        iHC = lFile.getName().toLowerCase().startsWith("hc_");
+        if ( !iSC && !iHC ){
+            iSC = true;
+            iHC = true;
+        }
+
 		iReader = new D2BitReader(iFileName);
 		readStash();
 		// clear status
 		setModified(false);
 	}
 
-    // TODO: make this read a byte array for each shared stash
 	private void readStash() throws Exception{
         // 55 aa 55 aa header    4 bytes 00     4bytes version
 		iReader.set_byte_pos(8);
@@ -97,10 +111,10 @@ public class D2SharedStash extends D2ItemListAdapter
 		if (lVersion != 97)throw new Exception("Incorrect Shared Stash version: " + lVersion);
 
 		// iReader.set_byte_pos(8);
-		long lGoldStash1 = iReader.read(32);  // byte pos 12
+		// long lTabGold1 = iReader.read(32);  // byte pos 12
 		// if (iReader.get_length() != lSize)throw new Exception("Incorrect FileSize: " + lSize);
 
-        // TODO:  checksum.   is checksum as byte pos 16? --> Yes. (checksum is only on the item block, not the gold#)
+        //  checksum.   is checksum as byte pos 16? --> Yes. (checksum is only on the item block, not the gold#)
 		// long lCheckSum2 = calculateCheckSum();
 		// iReader.set_byte_pos(16);
 		boolean lChecksum = false;
@@ -128,33 +142,34 @@ public class D2SharedStash extends D2ItemListAdapter
 		iStashGrid = new boolean[STASHSIZEY][STASHSIZEX];   // 3 tabs for shared stash pane
 		
 		clearGrid();
-		int outBytePos = readItems(32, 0);
+		int outBytePos = readItems(0, 0);
 		outBytePos = readItems(outBytePos, 1);
 		outBytePos = readItems(outBytePos, 2);
 
 		System.err.println("outBytePos: " + outBytePos);
-		// TODO: read items for itemlist2, and 3. and draw item images on background
-		
 	}
 
 	
-	//TODO calc checksum for the itemblock (3 blocks total in D2R's shared stash file)
-	private long calculateCheckSum(){
-		iReader.set_byte_pos(0);
-		long lCheckSum = 0; // unsigned integer checksum
-		for (int i = 0; i < iReader.get_length(); i++){
-			long lByte = iReader.read(8);
-			if (i >= 12 && i <= 15)lByte = 0;
-			long upshift = lCheckSum << 33 >>> 32;
-			long add = lByte + ((lCheckSum >>> 31) == 1 ? 1 : 0);
-			lCheckSum = upshift + add;
-		}
-		return lCheckSum;
-	}
+	// Not used in D2R
+	// private long calculateCheckSum(){
+	// 	iReader.set_byte_pos(0);
+	// 	long lCheckSum = 0; // unsigned integer checksum
+	// 	for (int i = 0; i < iReader.get_length(); i++){
+	// 		long lByte = iReader.read(8);
+	// 		if (i >= 12 && i <= 15)lByte = 0;
+	// 		long upshift = lCheckSum << 33 >>> 32;
+	// 		long add = lByte + ((lCheckSum >>> 31) == 1 ? 1 : 0);
+	// 		lCheckSum = upshift + add;
+	// 	}
+	// 	return lCheckSum;
+	// }
 
-	
-	// TODO
 	private int readItems(int bytePosStart, int iStashIdx) throws Exception{
+		iReader.set_byte_pos(bytePosStart + 12);
+		long lTabGold1 = iReader.read(32);  // byte pos 12
+		lTabGolds.add(lTabGold1);
+		System.err.println("lTabGold1: " +  lTabGold1);
+		
 		int lFirstPos = iReader.findNextFlag("JM", bytePosStart);  // byte pos 64 for 1st stash tab/item block
 		System.err.println("lFirstPos: " + lFirstPos);
 		if (lFirstPos == -1)throw new Exception("Character items not found");
@@ -180,7 +195,7 @@ public class D2SharedStash extends D2ItemListAdapter
 				if ( iCharCursorItem != null )throw new Exception("Double cursor item found");
 				iCharCursorItem = lItem;
 			}else{
-				// TODO:  add to itemlist1, 2 or 3
+				// add to itemlist1, 2 or 3
 				addCharItem(lItem, iStashIdx);
 				markCharGrid(lItem, iStashIdx);
 			}
@@ -189,9 +204,7 @@ public class D2SharedStash extends D2ItemListAdapter
 	}
 
 	
-
-
-    // TODO: handle itemlist 1, 2, and 3
+    // handle itemlist 1, 2, and 3
 	public ArrayList getItemList(){
 		ArrayList lList = new ArrayList();
 		if ( iStashes != null ) {
@@ -199,8 +212,6 @@ public class D2SharedStash extends D2ItemListAdapter
 				lList.addAll( iStashes.get(i) );
 			}
 		}
-		// TODO:  get istash2 and 3 as well
-		// if ( iMercItems != null )lList.addAll( iMercItems );
 		return lList;
 	}
 
@@ -213,12 +224,12 @@ public class D2SharedStash extends D2ItemListAdapter
 	}
 
 	public void removeItem(D2Item pItem){
-		// TODO: need iStashes.get() then loop and remove
-		if ( iStashItems1.remove(pItem) ){
-			unmarkCharGrid(pItem);
-		}else{
-			// unmarkMercGrid(pItem);
-			// iMercItems.remove(pItem);
+		// need iStashes.get() then loop and remove
+		for (int i = 0; i < NUM_SHARED_TABS; i++) {
+			if ( iStashes.get(i).remove(pItem) ){
+				unmarkCharGrid(pItem, i);
+				break;
+			}
 		}
 		setModified(true);
 	}
@@ -253,8 +264,9 @@ public class D2SharedStash extends D2ItemListAdapter
 			col = (int) i.get_col();
 			width = (int) i.get_width();
 			height = (int) i.get_height();
+			// TODO: check if col is input as 30 or as 10 for stash 3.  row, col < 10 for items
 			if ((row + height) > 10)return false;   // ***8*** stash size int and not a variable set here!
-			if ((col + width) > 10)return false;    // ***6*** stash size
+			if ((col + width) > 30)return false;    // ***6*** stash size
 			for (j = row; j < row + height; j++){
 				for (k = col; k < col + width; k++)iStashGrid[j][k + iStashIdx*10] = true;
 			}
@@ -264,8 +276,7 @@ public class D2SharedStash extends D2ItemListAdapter
 	}
 
 	
-	// TODO: add iStashIdx
-	public boolean unmarkCharGrid(D2Item i){
+	public boolean unmarkCharGrid(D2Item i, int iStashIdx){
 		short panel = i.get_panel();
 		int row, col, width, height, j, k;
 		switch (panel){
@@ -277,11 +288,12 @@ public class D2SharedStash extends D2ItemListAdapter
 			col = (int) i.get_col();
 			width = (int) i.get_width();
 			height = (int) i.get_height();
+			// TODO: check if col is input as 30 or as 10 for stash 3.  item's row and col are < 10
 			if ((row + height) > 10)return false;     // orig > 8
 			if ((col + width) > 10)return false;      // orig > 6
 			for (j = row; j < row + height; j++){
 				for (k = col; k < col + width; k++)
-					iStashGrid[j][k] = false;
+					iStashGrid[j][k + iStashIdx*10] = false;
 			}
 			break;
 		}
@@ -296,9 +308,9 @@ public class D2SharedStash extends D2ItemListAdapter
 		setModified(true);
 	}
 
-	public void removeCharItem(int i){
-		// TODO: remove from stash1, 2, or 3
-		iStashItems1.remove(i);  // input stashIdx then iStashes.get(stashIdx).remove(i)
+	public void removeCharItem(int i, int iStashIdx){
+		// remove from stash1, 2, or 3
+		iStashes.get(iStashIdx).remove(i);  // input stashIdx then iStashes.get(stashIdx).remove(i)
 		setModified(true);
 	}
 
@@ -321,6 +333,7 @@ public class D2SharedStash extends D2ItemListAdapter
 
 
 	public boolean checkCharPanel(int panel, int x, int y, D2Item pItem){
+		// System.err.println("checkCharPanel() x, y: " + x + " , " + y);  // x,y:  29, 6  which is applicable to iStashGrid
 		switch (panel){
 		case BODY_STASH_CONTENT:
 			if (y >= 0 && y < iStashGrid.length){
@@ -348,9 +361,7 @@ public class D2SharedStash extends D2ItemListAdapter
 		return -1;
 	}
 
-	
 
-	// TODO. save shared Stash file by writing 3 block--stash tabs  (each has a checksum)
 	public void saveInternal(D2Project pProject)
 	{
 		// backup file
@@ -358,18 +369,126 @@ public class D2SharedStash extends D2ItemListAdapter
 		// build an a byte array that contains the
 		// entire item list and insert it into
 		// the open file in place of its current item list
-		int lCharSize = 0;
-
-		// TODO: handle stashes 1, 2 and 3
-		for (int i = 0; i < NUM_SHARED_TABS; i++) {
-			for (int j = 0; j < iStashes.get(i).size(); j++){
-				lCharSize += ((D2Item) iStashes.get(i).get(j)).get_bytes().length;
+		// header for stash tabs. // int8 not uint8.  12-16 is gold, 16-20 is stash byte len, then JM and 2 bytes for itemNr
+		byte stashHeader[] = {85, -86, 85, -86, 0, 0, 0, 0, 97, 0, 0, 0, 0, 0, 0, 0, -58, 1, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 74, 77, 00, 00};
+		System.err.println("stashHeader.length: " + stashHeader.length);   // length 68 -v'
+		
+		// total stash tab size. e.g. totalTabSize: 762
+		int totalTabSize = 0;
+		for (int j = 0; j < NUM_SHARED_TABS ; j++){
+			for (int i = 0; i < iStashes.get(j).size(); i++){
+				byte[] item_bytes = ((D2Item) iStashes.get(j).get(i)).get_bytes();
+				totalTabSize += item_bytes.length;
 			}
 		}
+		System.err.println("totalTabSize: " + totalTabSize);
 		
-		if ( iCharCursorItem != null ){
-			lCharSize += iCharCursorItem.get_bytes().length;
+		byte[] lNewbytes = new byte[NUM_SHARED_TABS*stashHeader.length + totalTabSize]; // bytes of 3 stash tabs and 3 
+		System.err.println("lNewbytes.length: " + lNewbytes.length);
+		
+		// write gold tab1
+		System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(lTabGolds.get(0).intValue()).array(), 0, stashHeader, 12, 4);
+		System.err.println("stashHeader: " + stashHeader[12] + " " + stashHeader[12+1] + " " + stashHeader[12+2] + " " + stashHeader[12+3] + " " + stashHeader[12+4] + " " + stashHeader[12+5] + " ");
+		System.err.println("lTabGolds.get(0).intValue(): " + lTabGolds.get(0).intValue());
+		// write tab byte length, account for 85 bytes of header (includes JM and item count)
+		int lTabSize1 = 68;
+		for (int j = 0; j < iStashes.get(0).size(); j++){
+			lTabSize1 += ((D2Item) iStashes.get(0).get(j)).get_bytes().length;
 		}
+		System.err.println("lTabSize1: " + lTabSize1);
+		System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(lTabSize1).array(), 0, stashHeader, 12+4, 4);
+		System.err.println("stashHeader: " + stashHeader[16] + " " + stashHeader[16+1] + " " + stashHeader[16+2] + " " + stashHeader[16+3] + " " + stashHeader[16+4] + " " + stashHeader[16+5] + " ");
+		// write item number.  stashIdx
+		System.err.println("iStashes.get(0).size(): " + iStashes.get(0).size());
+		// TODO: is uint16 needed here?
+		System.err.println("iStashes.get(0).size(): " + iStashes.get(0).size());
+		System.arraycopy(ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort((short)iStashes.get(0).size()).array(), 0, stashHeader, 66, 2);
+		System.err.println("stashHeader: " + stashHeader[66] + " " + stashHeader[66+1]);
+		// write items to lNewbytes (include header)
+		System.arraycopy(stashHeader, 0, lNewbytes, 0, stashHeader.length);
+		int lPos = stashHeader.length;
+		for (int i = 0; i < iStashes.get(0).size(); i++){
+			byte[] item_bytes = ((D2Item) iStashes.get(0).get(i)).get_bytes();
+			System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
+			lPos += item_bytes.length;
+		}
+
+		System.err.println("lNewbytes: " + lNewbytes[68] + " " + lNewbytes[68+1] + " " + lNewbytes[68+2] + " " + lNewbytes[68+3] + " " + lNewbytes[68+4] + " " + lNewbytes[68+5] + " ");
+		
+		// write tab2, 3
+		// int tt = 1;
+		// lTabSize1 = 68;
+		// System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(lTabGolds.get(tt).intValue()).array(), 0, stashHeader, 12, 4);
+		
+		// for (int j = 0; j < iStashes.get(tt).size(); j++){
+		// 	lTabSize1 += ((D2Item) iStashes.get(tt).get(j)).get_bytes().length;
+		// }
+		// System.err.println("lTabSize1: " + lTabSize1);
+		// System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(lTabSize1).array(), 0, stashHeader, 12+4, 4);
+		// // write item number.  stashIdx
+		// System.arraycopy(ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort((short)iStashes.get(tt).size()).array(), 0, stashHeader, 66, 2);
+		// // write items to lNewbytes (include header)
+		// System.arraycopy(stashHeader, 0, lNewbytes, 0, stashHeader.length);
+		// lPos = lPos + stashHeader.length;
+		// for (int i = 0; i < iStashes.get(tt).size(); i++){
+		// 	byte[] item_bytes = ((D2Item) iStashes.get(tt).get(i)).get_bytes();
+		// 	System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
+		// 	lPos += item_bytes.length;
+		// }
+		
+		for (int tt = 1; tt < NUM_SHARED_TABS; tt++) {
+			lTabSize1 = 68;
+			// write gold
+			System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(lTabGolds.get(tt).intValue()).array(), 0, stashHeader, 12, 4);
+			for (int j = 0; j < iStashes.get(tt).size(); j++){
+				lTabSize1 += ((D2Item) iStashes.get(tt).get(j)).get_bytes().length;
+			}
+			System.err.println("lTabSize1: " + lTabSize1);
+			// write tab byte length, account for 85 bytes of header (includes JM and item count)
+			System.arraycopy(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(lTabSize1).array(), 0, stashHeader, 12+4, 4);
+			// write item number.  stashIdx
+			System.arraycopy(ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort((short)iStashes.get(tt).size()).array(), 0, stashHeader, 66, 2);
+			// write items to lNewbytes (include header)
+			System.arraycopy(stashHeader, 0, lNewbytes, lPos, stashHeader.length);
+			lPos = lPos + stashHeader.length;
+			for (int i = 0; i < iStashes.get(tt).size(); i++){
+				byte[] item_bytes = ((D2Item) iStashes.get(tt).get(i)).get_bytes();
+				System.arraycopy(item_bytes, 0, lNewbytes, lPos, item_bytes.length);
+				lPos += item_bytes.length;
+			}
+		}
+		System.err.println("lNewbytes: " + lNewbytes[850] + " " + lNewbytes[850+1] + " " + lNewbytes[850+2] + " " + lNewbytes[850+3] + " " + lNewbytes[850+4] + " " + lNewbytes[850+5] + " ");
+
+		iReader.setBytes(lNewbytes);
+		iReader.set_byte_pos(0);
+		iReader.save();
+		setModified(false);
+		
+// 		// copy bytes into c
+// 		byte[] c = new byte[a.length + b.length];
+// 		System.arraycopy(a, 0, c, 0, a.length);
+// 		System.arraycopy(b, 0, c, a.length, b.length);
+
+
+		//  byte[] result = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(55446).array();
+		//  System.err.println("result: " + result[0] + " " + result[1] + " " + result[2] + " ");
+
+		 
+
+// 		
+// 		int lTabSize2 = 0;
+// 		int lTabSize3 = 0;
+
+// 		// TODO: handle stashes 1, 2 and 3
+// 		for (int j = 0; j < iStashes.get(0).size(); j++){
+// 			lTabSize1 += ((D2Item) iStashes.get(0).get(j)).get_bytes().length;
+// 		}
+// 		for (int j = 0; j < iStashes.get(1).size(); j++){
+// 			lTabSize2 += ((D2Item) iStashes.get(1).get(j)).get_bytes().length;
+// 		}
+// 		for (int j = 0; j < iStashes.get(2).size(); j++){
+// 			lTabSize3 += ((D2Item) iStashes.get(2).get(j)).get_bytes().length;
+// 		}
 		
 // 		// TODO go through byte arrays. only need the headers, itemNum, gold (and checksum)
 // 		byte lWritenBytes[];
@@ -448,7 +567,7 @@ public class D2SharedStash extends D2ItemListAdapter
 // 		checksum[0] = (byte) (0x000000ff & lCheckSum);
 // 		iReader.setBytes(12, checksum);
 // 		iReader.save();
-//		setModified(false);
+// 		setModified(false);
 	}
 
 // 	public void setGold(int pGold) throws Exception{
@@ -497,7 +616,6 @@ public class D2SharedStash extends D2ItemListAdapter
 				}
 			}
 		}
-		
 		return out.toString();
 	}
 
@@ -539,11 +657,14 @@ public class D2SharedStash extends D2ItemListAdapter
 
 	public D2Item getCursorItem(){return iCharCursorItem;}
 
-	// TODO: read shared stash name  if "SoftCore" in str then HC = false
 	public boolean isSC(){return !iHC;}
 	public boolean isHC(){return iHC;}
 	
 	public String getTitleString(){return iTitleString;}
 	public String getFilename()	{return iFileName;}
+	public String getFileNameEnd(){
+		System.err.println("lFile.getName(): " + lFile.getName());
+		return lFile.getName();
+	}
 	
 }

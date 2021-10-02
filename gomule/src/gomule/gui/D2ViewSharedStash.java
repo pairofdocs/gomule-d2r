@@ -726,7 +726,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			}
 		}
 		setTitle(lTitle);
-		iCharPainter.build();  // TODO go through build shared stash function 
+		iCharPainter.build();
 		
 		// iCharCursorPainter.build(); // TODO: is this needed for a shared stash?
 		
@@ -841,7 +841,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			// 	return iSharedStash.getCorpseItemIndex(iPanel, iRow, iCol);
 			// }
 			// return iSharedStash.getMercItemIndex(iPanel, iRow, iCol);
-			// TODO: iStashIndex for stash tab 1, 2, or 3
+			// iStashIndex for stash tab 1, 2, or 3
 			return iSharedStash.getCharItemIndex(iPanel, iRow, iCol, iStashIdx);
 		}
 
@@ -978,140 +978,149 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 					}
 					//                    System.err.println("Mouse Clicked: " + pEvent.getX() + ",
 					// " + pEvent.getY() );
-					// TODO: implement move, delete item when saving the shared stash is working
-// 					if (pEvent.getButton() == MouseEvent.BUTTON1 /*
-// 					 * &&
-// 					 * pEvent.getClickCount() ==
-// 					 * 1
-// 					 */)
-// 					{
-// 						int lX = pEvent.getX();
-// 						int lY = pEvent.getY();
+					if (pEvent.getButton() == MouseEvent.BUTTON1 /*
+					 * &&
+					 * pEvent.getClickCount() ==
+					 * 1
+					 */)
+					{
+						int lX = pEvent.getX();
+						int lY = pEvent.getY();
 						
-// 						// determine where the mouse click is.
-//                         // TODO:      need to determine which stash is clicked based on x position (greater than multiple of stash width)
-// 						D2ItemPanel lItemPanel = new D2ItemPanel(pEvent, true, false, false);
-// 						if (lItemPanel.getPanel() != -1)
-// 						{
-// 							// if there is an item to grab, grab it
-// 							if (lItemPanel.isItem())
-// 							{
-// 								D2Item lTemp = lItemPanel.getItem(0); //  TODO: logic for stash1, 2, or 3
+						// determine where the mouse click is.
+                        // determine which stash is clicked based on x position (greater than multiple of stash width)
+						D2ItemPanel lItemPanel = new D2ItemPanel(pEvent, true, false, false);
+						if (lItemPanel.getPanel() != -1)
+						{
+							int stashIdx;
+							if (pEvent.getX() < 315) {
+								stashIdx = 0;
+							}else if (pEvent.getX() < 613) {
+								stashIdx = 1;
+							}else{
+								stashIdx = 2;
+							}
+							// if there is an item to grab, grab it
+							if (lItemPanel.isItem())
+							{
+								D2Item lTemp = lItemPanel.getItem(stashIdx);
 
-// 								/**Code to remove potions when belt is removed!
-// 								 * Thanks to Krikke.
-// 								 */
-// 								//System.out.println("isEquipped: " + lTemp.isEquipped() + " isABelt: " + lTemp.isABelt()); 
+								/**Code to remove potions when belt is removed!
+								 * Thanks to Krikke.
+								 */
+								//System.out.println("isEquipped: " + lTemp.isEquipped() + " isABelt: " + lTemp.isABelt()); 
 								
-// 								iSharedStash.unmarkCharGrid(lTemp);
-// 								iSharedStash.removeCharItem(lItemPanel.getItemIndex());  // iStashIdx needed
-// 								D2ViewClipboard.addItem(lTemp);
-// 								setCursorDropItem();
-// 								// if(lTemp.statModding()){
-// 								// 	iSharedStash.updateCharStats("P", lTemp);
-// 								// }
+								iSharedStash.unmarkCharGrid(lTemp, stashIdx);
+								iSharedStash.removeCharItem(lItemPanel.getItemIndex(stashIdx), stashIdx);
+								D2ViewClipboard.addItem(lTemp);
+								setCursorDropItem();
+								// if(lTemp.statModding()){
+								// 	iSharedStash.updateCharStats("P", lTemp);
+								// }
 
-// //								// redraw
-// //								build();
-// //								repaint();
-// 							}
-// 							else if (D2ViewClipboard.getItem() != null)
-// 							{
-// 								//	                    	System.err.println("Drop item");
-// 								// since there is an item on the mouse, try to
-// 								// drop it here
+//								// redraw
+//								build();
+//								repaint();
+							}
+							else if (D2ViewClipboard.getItem() != null)
+							{
+								//	                    	System.err.println("Drop item");
+								// since there is an item on the mouse, try to
+								// drop it here
 
-// 								D2Item lDropItem = D2ViewClipboard.getItem();
-// 								//		                        int lDropWidth = lDropItem.get_width();
-// 								//		                        int lDropHeight = lDropItem.get_height();
-// 								//	                        int r = 0, c = 0;
-// 								boolean drop = false;
-// 								// non-equipped items, handle differently
-// 								// because they require a row and column
-// 								if (lItemPanel.getPanel() < 10)
-// 								{
-// 									// calculate row and column for the given
-// 									// panel
-// 									// with mouse coords x and y (split into an
-// 									// int for
-// 									// convenience)
-// 									//	                            int temp = find_grid(panel, x, y);
-// 									//	                            r = temp >> 16;
-// 									//	                            c = temp & 0xffff;
-// 									//                            r -= (D2MouseItem.get_mouse_x() /
-// 									// GRID_SIZE);
-// 									//                            c -= (D2MouseItem.get_mouse_y() /
-// 									// GRID_SIZE);
-// 									// if that area of the character is empty,
-// 									// then update fields of the item and set
-// 									// the 'drop' variable to true
-// 									if (iSharedStash.checkCharGrid(lItemPanel.getPanel(), lItemPanel.getRow(), lItemPanel.getColumn(), lDropItem))
-// 									{
-// 										switch (lItemPanel.getPanel())
-// 										{
-// 										case 2:
-// 											lDropItem.set_location((short) 2);
-// 											lDropItem.set_body_position((short) 0);
-// 											lDropItem.set_col((short) (4 * lItemPanel.getColumn() + lItemPanel.getRow()));
-// 											lDropItem.set_row((short) 0);
-// 											lDropItem.set_panel((short) 0);
-// 											break;
-// 										case 1:
-// 										case 4:
-// 										case 5:
-// 											lDropItem.set_location((short) 0);
-// 											lDropItem.set_body_position((short) 0);
-// 											lDropItem.set_row((short) lItemPanel.getColumn());
-// 											lDropItem.set_col((short) lItemPanel.getRow());
-// 											lDropItem.set_panel((short) lItemPanel.getPanel());
-// 											break;
-// 										}
-// 										drop = true;
-// 									}
-// 								}
-// 								// equipped items, a bit simpler
-// 								// if that equipment slot is empty, update the
-// 								// item's fields and set drop to true
-// 								// r and c are set to width and height
-// 								// for find_corner to deal with variable-size
-// 								// objects in the hands
-// 								// (note lack of item-type checking)
-// 								else
-// 								{
-// 									if (!iSharedStash.checkCharPanel(lItemPanel.getPanel(), 0, 0, lDropItem))
-// 									{
-// 										lDropItem.set_location((short) 1);
-// 										lDropItem.set_body_position((short) (lItemPanel.getPanel() - 10));
-// 										lDropItem.set_col((short) 0);
-// 										lDropItem.set_row((short) 0);
-// 										lDropItem.set_panel((short) 0);
-// 										drop = true;
-// 										//	                                r = lDropWidth;
-// 										//	                                c = lDropHeight;
-// 									}
-// 								}
-// 								// if the space to set the item is empty
-// 								if (drop)
-// 								{
-// 									iSharedStash.markCharGrid(lDropItem);
-// 									// move the item to a new charcter, if
-// 									// needed
-// 									iSharedStash.addCharItem(D2ViewClipboard.removeItem());
+								D2Item lDropItem = D2ViewClipboard.getItem();
+								//		                        int lDropWidth = lDropItem.get_width();
+								//		                        int lDropHeight = lDropItem.get_height();
+								//	                        int r = 0, c = 0;
+								boolean drop = false;
+								// non-equipped items, handle differently
+								// because they require a row and column
+								if (lItemPanel.getPanel() < 10)
+								{
+									// calculate row and column for the given
+									// panel
+									// with mouse coords x and y (split into an
+									// int for
+									// convenience)
+									//	                            int temp = find_grid(panel, x, y);
+									//	                            r = temp >> 16;
+									//	                            c = temp & 0xffff;
+									//                            r -= (D2MouseItem.get_mouse_x() /
+									// GRID_SIZE);
+									//                            c -= (D2MouseItem.get_mouse_y() /
+									// GRID_SIZE);
+									// if that area of the character is empty,
+									// then update fields of the item and set
+									// the 'drop' variable to true
+									if (iSharedStash.checkCharGrid(lItemPanel.getPanel(), lItemPanel.getRow(), lItemPanel.getColumn(), lDropItem))
+									{
+										switch (lItemPanel.getPanel())
+										{
+										case 2:
+											lDropItem.set_location((short) 2);
+											lDropItem.set_body_position((short) 0);
+											lDropItem.set_col((short) (4 * lItemPanel.getColumn() + lItemPanel.getRow()));
+											lDropItem.set_row((short) 0);
+											lDropItem.set_panel((short) 0);
+											break;
+										case 1:
+										case 4:
+										case 5:
+											System.err.println("lItemPanel.getColumn(): " + (lItemPanel.getColumn()));
+											System.err.println("lItemPanel.getRow(): " + lItemPanel.getRow());
+											lDropItem.set_location((short) 0);
+											lDropItem.set_body_position((short) 0);
+											lDropItem.set_row((short) lItemPanel.getColumn());
+											lDropItem.set_col((short) (lItemPanel.getRow() - 10*stashIdx)); // getRow outputs the 'x' pos
+											lDropItem.set_panel((short) lItemPanel.getPanel());
+											break;
+										}
+										drop = true;
+									}
+								}
+								// equipped items, a bit simpler
+								// if that equipment slot is empty, update the
+								// item's fields and set drop to true
+								// r and c are set to width and height
+								// for find_corner to deal with variable-size
+								// objects in the hands
+								// (note lack of item-type checking)
+								else
+								{
+									if (!iSharedStash.checkCharPanel(lItemPanel.getPanel(), 0, 0, lDropItem))
+									{
+										lDropItem.set_location((short) 1);
+										lDropItem.set_body_position((short) (lItemPanel.getPanel() - 10));
+										lDropItem.set_col((short) 0);
+										lDropItem.set_row((short) 0);
+										lDropItem.set_panel((short) 0);
+										drop = true;
+										//	                                r = lDropWidth;
+										//	                                c = lDropHeight;
+									}
+								}
+								// if the space to set the item is empty
+								if (drop)
+								{
+									iSharedStash.markCharGrid(lDropItem, stashIdx);
+									// move the item to a new charcter, if
+									// needed
+									iSharedStash.addCharItem(D2ViewClipboard.removeItem(), stashIdx);
 
-// 									// redraw
-// //									build();
-// //									repaint();
+									// redraw
+//									build();
+//									repaint();
 
-// 									setCursorPickupItem();
-// 									// if(lDropItem.statModding()){
-// 									// 	iSharedStash.updateCharStats("D", lDropItem);
-// 									// 	paintCharStats();
-// 									// }
-// 									//my_char.show_grid();
-// 								}
-// 							}
-// 						}
-// 					} 
+									setCursorPickupItem();
+									// if(lDropItem.statModding()){
+									// 	iSharedStash.updateCharStats("D", lDropItem);
+									// 	paintCharStats();
+									// }
+									//my_char.show_grid();
+								}
+							}
+						}
+					} 
 					// TODO:  implement deleting, moving items  when saving shared stash file works
 					// else if (pEvent.getButton() == MouseEvent.BUTTON3){
 					// 	D2ItemPanel lItemPanel = new D2ItemPanel(pEvent, true, false, false);
@@ -1225,7 +1234,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			});
 		}
 
-		// TODO: this is not used for a shared stash
+		// not used for a shared stash
 		public void setWeaponSlot(int pWeaponSlot)
 		{
 			if(iWeaponSlot == pWeaponSlot){
@@ -1262,7 +1271,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 			lGraphics.drawImage(lEmptyBackground, 0, 0, D2CharPainterPanel.this);
 
 			if ( iSharedStash != null )
-			{  // ****TODO:   add logic to determine which stash 1, 2 or 3 to draw the item.
+			{  // draw the item for stash 1, 2 or 3 
 				for (int j = 0; j < NUM_SHARED_TABS; j++) {  
 					for (int i = 0; i < iSharedStash.getNrItems(j); i++)
 					{
@@ -1610,8 +1619,7 @@ public class D2ViewSharedStash extends JInternalFrame implements D2ItemContainer
 // 	}
 
 	public void dumpChar() {
-        // TODO:  is this needed for shared stashes?
-
+        // not needed for shared D2R stash. there is no "dumpChar" tab at the top of the window
 		String iChaString = iSharedStash.fullDumpStr().replaceAll("<BR>", "\n");
 		// lDump.setText(iChaString);
 		// lDump.setCaretPosition(0);
