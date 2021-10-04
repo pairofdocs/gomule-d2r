@@ -1547,24 +1547,9 @@ public class D2FileManager extends JFrame
 				if (lExisting != null) {
 					internalWindowForward(((JInternalFrame) lExisting));
 				}else {
-					int BG_WIDTH2 = 908;  // 908 x 309 pixels
-					int BG_HEIGHT2 = 309;
 					D2ViewSharedStash lSharedStashView = new D2ViewSharedStash(D2FileManager.this, pStashName);
-					if (iOpenWindows.size() == 0) {
-						lSharedStashView.setLocation(0, 0);  // orig had: 10+ x,  10+ y
-					} else if (iOpenWindows.size() == 1) {
-						//BG_WIDTH         = 626; //550;  // TODO: update to 626  // from D2ViewChar
-						//BG_HEIGHT        = 435; //383;  // TODO: update to 457
-
-						lSharedStashView.setLocation((BG_WIDTH2 + 16), 0); 
-					} else if (iOpenWindows.size() == 2) {
-						lSharedStashView.setLocation(0, BG_HEIGHT2 + 48);
-					} else if (iOpenWindows.size() == 3) {         // will this be appropriate for 1920x1080 displays?. having the 3,4th windows go under 1st and 2nd
-						lSharedStashView.setLocation((BG_WIDTH2 + 16), BG_HEIGHT2 + 48);
-					} else {
-						// lSharedStashView.setLocation(20 + (iOpenWindows.size() * 10), 20 + (iOpenWindows.size() * 10));  // orig had: 10+ x,  10+ y
-						lSharedStashView.setLocation(((iOpenWindows.size()-4 +1) * 20), BG_HEIGHT2 + 48 + ((iOpenWindows.size()-4 +1) * 20));
-					}
+					// cascade opening shared stashes. not tiling like with char windows
+					lSharedStashView.setLocation(5 + (iOpenWindows.size() * 25), 5+ (iOpenWindows.size() * 25));
 					addToOpenWindows(lSharedStashView);
 					internalWindowForward(lSharedStashView);
 				}
