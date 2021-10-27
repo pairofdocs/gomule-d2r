@@ -1,9 +1,9 @@
 ## Gomule-d2r [![Build Status](https://travis-ci.com/pairofdocs/gomule-d2r.svg?branch=main)](https://travis-ci.com/pairofdocs/gomule-d2r)
-GoMule enabled for D2R
+GoMule enabled for D2R which is a fork from the original app https://sourceforge.net/projects/gomule/
 
 
 ### Original GoMule App
-http://gomule.sourceforge.net/ all credits go to Gohanman, Randall, Silospen, collaborators, ...  
+All credits go to Gohanman, Randall, Silospen, collaborators, ...  
 - ***Update***: D2R support has been added to the official Gomule here https://gomule.sourceforge.io/
 
 Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule/R0.31/GoMuleDocs.pdf  
