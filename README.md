@@ -7,6 +7,7 @@ All credits go to Gohanman, Randall, Silospen, collaborators, ...
 - ***Update***: D2R support has been added to the official Gomule here https://gomule.sourceforge.io/
 
 Original usage docs: https://managedway.dl.sourceforge.net/project/gomule/gomule/R0.31/GoMuleDocs.pdf  
+- ***Warning***: Putting more than one Hellfire Torch into a character's personal stash causes the torches to disappear. D2R doesn't allow you to carry more than one torch in your combined inventory/personal stash. [Issue](https://github.com/pairofdocs/gomule-d2r/issues/17) by `jongad`  
 - ***Warning***: Close D2R when using GoMule. D2R keeps character data open since it displays character gear in the menus and this prevents GoMule from saving files and moving items properly.  
 - ***Note***: A work-in-progress Atma .d2x stash to D2R .d2i stash converter  is available here https://pairofdocs.github.io/atma-stash-d2r/ and discussions are [here](https://github.com/pairofdocs/gomule-d2r/issues/5)  
 
