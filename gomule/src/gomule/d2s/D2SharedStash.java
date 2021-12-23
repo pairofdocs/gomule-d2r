@@ -40,8 +40,8 @@ import randall.d2files.*;
 public class D2SharedStash extends D2ItemListAdapter
 {
 	public static final int BODY_STASH_CONTENT = 5;
-	public static final int STASHSIZEX = 30; // 10 orig.  10*3 for 3 tabs in the shared stash
-	public static final int STASHSIZEY = 10;
+	public static final int STASHSIZEX = 16*3; // 10 orig.  10*3 for 3 tabs in the shared stash
+	public static final int STASHSIZEY = 16;
 	
 	private D2BitReader iReader;
     // need iStashItems1, iStashItems2, iStashItems3
