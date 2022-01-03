@@ -22,14 +22,17 @@ package gomule.gui;
 
 import gomule.d2s.*;
 import gomule.item.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.event.*;
+
 import randall.util.*;
 
 /**
@@ -1310,6 +1313,17 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 					{
 						int lX = pEvent.getX();
 						int lY = pEvent.getY();
+						// m4ke
+						if(lX>=309 && lX <=340 && lY>=392 && lY <=423)
+							setStash(0);
+						else if(lX>=346 && lX <=377 && lY>=392 && lY <=423)
+							setStash(1);
+						else if(lX>=383 && lX <=414 && lY>=392 && lY <=423)
+							setStash(2);
+						else if(lX>=420 && lX <=451 && lY>=392 && lY <=423)
+							setStash(3);
+						// /m4ke
+
 						if (((lX >= 16 + 308 && lX <= 45 + 308) || (lX >= 247 + 308 && lX <= 276 + 308)) && (lY >= 24 && lY <= 44))
 						{
 							setWeaponSlot(1);
@@ -1577,6 +1591,13 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 //			repaint();
 		}
 
+		// m4ke
+		public void setStash(int n) {
+			iCharacter.setStashPage(n);
+			build();
+		}
+		// /m4ke
+
 		public void build()
 		{
 			Image lEmptyBackground;
@@ -1601,9 +1622,38 @@ public class D2ViewChar extends JInternalFrame implements D2ItemContainer, D2Ite
 
 			if ( iCharacter != null )
 			{
-				for (int i = 0; i < iCharacter.getCharItemNr(); i++)
+				// m4ke
+				Font font = new Font("Lucida", Font.BOLD, 20);
+				lGraphics.setFont(font);
+				lGraphics.setColor(Color.BLACK);
+				lGraphics.drawString("P", 318, 415); 		
+				lGraphics.drawString("S1", 350, 415); 		
+				lGraphics.drawString("S2", 386, 415); 		
+				lGraphics.drawString("S3", 423, 415); 		
+				lGraphics.setColor(Color.WHITE);
+				lGraphics.drawString("Stash: "+iCharacter.getStashPageNum(), 460, 415); 		
+
+				ArrayList<D2Item> tempList = new ArrayList<>();
+				for(int i=0; i<iCharacter.getCharItemNr(); i++) {
+					D2Item d2i = iCharacter.getCharItem(i);
+					if(iCharacter.getStashPageNum()==0 || d2i.get_panel()!=5) {
+						tempList.add(d2i);
+					}
+				}
+				if(iCharacter.getStashPageNum()!=0) {
+					for(int i=0; i<iCharacter.getCurrSharedPageItems().size(); i++) {
+						tempList.add(iCharacter.getCurrSharedPage().getItemAt(i));
+					}
+				}
+
+				//for (int i = 0; i < iCharacter.getCharItemNr(); i++)
+				// /m4ke
+				for (int i = 0; i < tempList.size(); i++)
+				// /m4ke
 				{
-					D2Item temp_item = iCharacter.getCharItem(i);
+					// m4ke
+					//D2Item temp_item = iCharacter.getCharItem(i);
+					D2Item temp_item = tempList.get(i);
 					Image lImage = D2ImageCache.getDC6Image(temp_item);
 					int location = temp_item.get_location();
 					// on one of the grids

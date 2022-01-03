@@ -66,6 +66,16 @@ public class D2Character extends D2ItemListAdapter
 	public static final int CUBESIZEX = 3;
 	public static final int CUBESIZEY = 4;
 
+	// m4ke
+	public static final int NUM_SHAREDPAGES = 3;
+	private ArrayList<SharedStashPage> sharedStash;
+	private SharedStashPage currSharedPage;
+	private int currSharedPageNum;
+	private int currStashPage;
+	private String sharedStashFileName;
+	private ArrayList<D2Item> currStashItems;
+	// /m4ke
+
 	private D2BitReader iReader;
 	private ArrayList iCharItems;
 	private D2Item iCharCursorItem;
@@ -133,9 +143,94 @@ public class D2Character extends D2ItemListAdapter
 		iMercItems = new ArrayList();
 		iReader = new D2BitReader(iFileName);
 		readChar();
+		
+		// m4ke
+		sharedStash = new ArrayList<>();
+		currStashItems = new ArrayList<>();
+		currStashPage = 0;
+		if(iHC) sharedStashFileName = "SharedStashHardCoreV2.d2i";
+		else sharedStashFileName = "SharedStashSoftCoreV2.d2i";
+		sharedStashFileName = pFileName.substring(0, pFileName.lastIndexOf(File.separator)+1) + sharedStashFileName;
+		readSharedStash();
+		// /m4ke
+
 		// clear status
 		setModified(false);
 	}
+
+	// m4ke
+	public void setStashPage(int num) {
+		if(currStashPage==0) {
+			for(int i=0; i<iCharItems.size(); i++) {
+				D2Item d2i = (D2Item)iCharItems.get(i);
+				if(d2i.get_panel()==5)
+					unmarkCharGrid(d2i);
+			}
+			
+		} else {
+			for(int i=0; i<currSharedPage.getItems().size(); i++) {
+				unmarkCharGrid(currSharedPage.getItemAt(i));
+			}
+		}
+
+		if(num==0) {
+			for(int i=0; i<iCharItems.size(); i++) {
+				D2Item d2i = (D2Item)iCharItems.get(i);
+				if(d2i.get_panel()==5)
+					markCharGrid(d2i);
+			}
+		} else {
+			currSharedPage = sharedStash.get(num-1);
+			currSharedPageNum = num-1;
+			for(int i=0; i<currSharedPage.getItems().size(); i++) {
+				markCharGrid(currSharedPage.getItemAt(i));
+			}
+		}
+		currStashPage = num;
+	}
+	public int getStashPageNum() {
+		return currStashPage;
+	}
+	public ArrayList getCurrSharedPageItems() {
+		return currSharedPage.getItems();
+	}
+	public SharedStashPage getCurrSharedPage() {
+		return currSharedPage;
+	}
+	private void readSharedStash() throws Exception {
+		D2BitReader br = new D2BitReader(sharedStashFileName);
+		int lLastItemEnd = 0x40;
+		int lNextJM = br.findNextFlag("JM", lLastItemEnd);
+        long numItems2 = 0;
+        int lItemStart2 = 0;
+        int i = 0;
+
+        while (lNextJM > 0) {
+            // System.err.println("lNextJM: find JM  " + lNextJM);
+            // get numItems and read items
+            br.set_byte_pos(lNextJM + 2);
+            numItems2 = br.read(16);
+            // System.err.println("numItems2: " + numItems2);
+
+            lLastItemEnd = lNextJM + 4;  // JM + numItems(2bytes)
+            SharedStashPage ssp = new SharedStashPage(); 
+            for ( int j = 0 ; j < numItems2 ; j++ )
+            {
+                // System.err.println("lLastItemEnd: " + lLastItemEnd);
+                lItemStart2 = lLastItemEnd;
+
+                D2Item lItem = new D2Item(sharedStashFileName, br, lItemStart2, 1);
+                lLastItemEnd = lItemStart2 + lItem.getItemLength();
+                ssp.addItem(lItem);
+            }
+            sharedStash.add(ssp);
+            lNextJM = br.findNextFlag("JM", lLastItemEnd);
+            i++;
+        }
+		currSharedPage = sharedStash.get(0);
+		currSharedPageNum = 0;
+	}
+	// /m4ke
 
 	private void readChar() throws Exception{
 		iReader.set_byte_pos(4);
@@ -1048,7 +1143,11 @@ public class D2Character extends D2ItemListAdapter
 	}
 
 	public void addCharItem(D2Item pItem){
-		iCharItems.add(pItem);
+		int panel = pItem.get_panel();
+		if(pItem.get_panel()!=5 || currStashPage==0)
+			iCharItems.add(pItem);
+		else
+			currSharedPage.addItem(pItem);
 		pItem.setCharLvl((int)iCharLevel);
 		setModified(true);
 	}
@@ -1066,7 +1165,10 @@ public class D2Character extends D2ItemListAdapter
 	}
 
 	public void removeCharItem(int i){
-		iCharItems.remove(i);
+		if(i >= iCharItems.size())
+			currSharedPage.removeItemAt(i - iCharItems.size());
+		else
+			iCharItems.remove(i);
 		setModified(true);
 	}
 
@@ -1291,16 +1393,28 @@ public class D2Character extends D2ItemListAdapter
 				}
 			}
 		}else{
-			for (int i = 0; i < iCharItems.size(); i++){
-				D2Item temp_item = (D2Item) iCharItems.get(i);
-				if (temp_item.get_panel() == panel)	{
-					int col = temp_item.get_col();
-					int row = temp_item.get_row();
-					if ((x >= col) && (x <= col + temp_item.get_width() - 1) && (y >= row) && (y <= row + temp_item.get_height() - 1)) {
-						return i;
+			// m4ke
+			if(currStashPage>0 && panel == 5) {
+				for (int i = 0; i < currSharedPage.getItems().size(); i++){
+					//D2Item temp_item = (D2Item) iCharItems.get(i);
+					D2Item temp_item = (D2Item) currSharedPage.getItemAt(i);
+					if (temp_item.get_panel() == panel)	{
+						int row = temp_item.get_col();
+						int col = temp_item.get_row();
+						if (x >= row && x <= row + temp_item.get_width() - 1 && y >= col && y <= col + temp_item.get_height() - 1)return iCharItems.size() + i;
+					}
+				}
+			} else {
+				for (int i = 0; i < iCharItems.size(); i++){
+					D2Item temp_item = (D2Item) iCharItems.get(i);
+					if (temp_item.get_panel() == panel)	{
+						int row = temp_item.get_col();
+						int col = temp_item.get_row();
+						if (x >= row && x <= row + temp_item.get_width() - 1 && y >= col && y <= col + temp_item.get_height() - 1)return i;
 					}
 				}
 			}
+			// /m4ke
 		}
 		return -1;
 	}
@@ -1680,7 +1794,18 @@ public class D2Character extends D2ItemListAdapter
 
 	public void addItem(D2Item item){equipItem(item);};
 	public D2Item getCursorItem(){return iCharCursorItem;}
-	public D2Item getCharItem(int i){return (D2Item) iCharItems.get(i);}
+	// m4ke
+	//public D2Item getCharItem(int i){return (D2Item) iCharItems.get(i);}
+	public D2Item getCharItem(int i) {
+		D2Item d2i = null;
+		if(i>=iCharItems.size()) {
+			d2i = currSharedPage.getItemAt(i - iCharItems.size());
+		} else {
+			d2i = (D2Item) iCharItems.get(i);
+		}
+		return d2i;
+	}
+	// /m4ke
 	public D2Item getMercItem(int i){return (D2Item) iMercItems.get(i);}
 	public D2Item getCorpseItem(int i){return (D2Item) iCorpseItems.get(i);}
 	public D2Item getGolemItem() {return golemItem;}
